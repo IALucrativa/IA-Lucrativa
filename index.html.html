@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA Lucrativa – Como Ganhar Dinheiro na Internet com Inteligência Artificial</title>
+<meta name="description" content="Descubra como utilizar Inteligência Artificial para criar novas fontes de renda na internet. Guia prático, linguagem simples, acesso imediato.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #04070f;
+    --surface: #0b1120;
+    --surface2: #101928;
+    --border: rgba(99,179,255,0.12);
+    --accent: #00c6ff;
+    --accent2: #7b5ea7;
+    --gold: #f5c842;
+    --text: #e8f0fe;
+    --muted: #8899bb;
+    --cta: #00e5a0;
+    --cta-dark: #00b87d;
+    --danger: #ff6b6b;
+    --radius: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3,h4 { font-family: 'Syne', sans-serif; line-height: 1.15; }
+
+  /* ─── GRID BG ─── */
+  .grid-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,198,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,198,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .glow-orb {
+    position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0;
+    animation: orbFloat 12s ease-in-out infinite alternate;
+  }
+  .orb1 { width: 500px; height: 500px; background: rgba(0,198,255,0.07); top: -100px; left: -100px; }
+  .orb2 { width: 400px; height: 400px; background: rgba(123,94,167,0.09); bottom: 100px; right: -100px; animation-delay: -6s; }
+  @keyframes orbFloat { from { transform: translate(0,0); } to { transform: translate(30px,40px); } }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(4,7,15,0.85); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem;
+    background: linear-gradient(90deg, var(--accent), var(--cta));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-cta {
+    background: var(--cta); color: #04070f;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.78rem;
+    padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer;
+    text-decoration: none; letter-spacing: 0.04em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 20px rgba(0,229,160,0.35);
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 0 32px rgba(0,229,160,0.55); }
+
+  /* ─── SECTIONS ─── */
+  section { position: relative; z-index: 1; }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 20px 80px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,198,255,0.08) 0%, transparent 70%);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(245,200,66,0.12); border: 1px solid rgba(245,200,66,0.3);
+    color: var(--gold); font-size: 0.8rem; font-weight: 600;
+    padding: 8px 18px; border-radius: 50px; margin-bottom: 32px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,200,66,0.3); } 50% { box-shadow: 0 0 0 8px rgba(245,200,66,0); } }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 800;
+    margin-bottom: 24px; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.2rem); color: var(--muted);
+    max-width: 680px; margin: 0 auto 44px; font-weight: 400;
+  }
+  .price-block {
+    display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 32px;
+  }
+  .price-original {
+    font-size: 1rem; color: var(--muted); text-decoration: line-through;
+  }
+  .price-main {
+    font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800;
+    color: var(--cta); line-height: 1;
+  }
+  .price-main span { font-size: 1.4rem; }
+  .price-note { font-size: 0.85rem; color: var(--muted); }
+  .btn-hero {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--cta), #00b87d);
+    color: #03080e; font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.05rem; letter-spacing: 0.06em;
+    padding: 18px 48px; border-radius: 50px; text-decoration: none;
+    box-shadow: 0 0 40px rgba(0,229,160,0.45), 0 8px 24px rgba(0,0,0,0.4);
+    transition: transform 0.25s, box-shadow 0.25s;
+    animation: btnGlow 3s ease-in-out infinite;
+  }
+  @keyframes btnGlow {
+    0%,100% { box-shadow: 0 0 40px rgba(0,229,160,0.45), 0 8px 24px rgba(0,0,0,0.4); }
+    50% { box-shadow: 0 0 70px rgba(0,229,160,0.7), 0 8px 32px rgba(0,0,0,0.5); }
+  }
+  .btn-hero:hover { transform: translateY(-3px) scale(1.02); }
+  .hero-trust {
+    margin-top: 36px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;
+    font-size: 0.82rem; color: var(--muted);
+  }
+  .trust-item { display: flex; align-items: center; gap: 6px; }
+  .trust-item svg { color: var(--cta); }
+
+  /* ─── SECTION HEADER ─── */
+  .sec-header { text-align: center; margin-bottom: 56px; }
+  .sec-tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+    padding: 6px 16px; border-radius: 50px;
+    background: rgba(0,198,255,0.08); border: 1px solid rgba(0,198,255,0.2);
+  }
+  .sec-title { font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em; }
+  .sec-sub { color: var(--muted); margin-top: 14px; font-size: 1.05rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+  /* ─── BENEFITS ─── */
+  .benefits { padding: 100px 0; }
+  .benefits-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;
+  }
+  .benefit-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 30px 26px; position: relative; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .benefit-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--cta));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .benefit-card:hover { transform: translateY(-6px); border-color: rgba(0,198,255,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .benefit-card:hover::before { opacity: 1; }
+  .benefit-icon {
+    width: 52px; height: 52px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(0,198,255,0.15), rgba(123,94,167,0.15));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 18px;
+    border: 1px solid rgba(0,198,255,0.2);
+  }
+  .benefit-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+  .benefit-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
+
+  /* ─── WHY ─── */
+  .why { padding: 100px 0; background: linear-gradient(180deg, transparent, var(--surface) 30%, var(--surface) 70%, transparent); }
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .why-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 22px 20px;
+  }
+  .why-num {
+    font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;
+    color: var(--accent); opacity: 0.35; line-height: 1; min-width: 36px;
+  }
+  .why-item h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .why-item p { color: var(--muted); font-size: 0.87rem; line-height: 1.6; }
+
+  /* ─── INCLUDES ─── */
+  .includes { padding: 100px 0; }
+  .includes-box {
+    background: var(--surface); border: 1px solid rgba(0,198,255,0.18);
+    border-radius: 24px; padding: 52px 44px;
+    box-shadow: 0 0 80px rgba(0,198,255,0.05);
+    position: relative; overflow: hidden;
+  }
+  .includes-box::after {
+    content: ''; position: absolute;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,160,0.06), transparent 70%);
+    bottom: -100px; right: -60px; pointer-events: none;
+  }
+  .includes-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 36px; }
+  .includes-list li {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--surface2); border-radius: 12px; padding: 18px 20px;
+    border: 1px solid var(--border);
+  }
+  .check-icon { color: var(--cta); font-size: 1.1rem; margin-top: 2px; flex-shrink: 0; }
+  .includes-list li strong { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+  .includes-list li span { color: var(--muted); font-size: 0.85rem; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials { padding: 100px 0; }
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .testi-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 30px; position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .testi-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
+  .stars { color: var(--gold); font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+  .testi-text { color: #c8d8f0; font-size: 0.95rem; line-height: 1.7; margin-bottom: 22px; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: #fff;
+    flex-shrink: 0;
+  }
+  .testi-name { font-weight: 700; font-size: 0.9rem; }
+  .testi-role { color: var(--muted); font-size: 0.78rem; }
+
+  /* ─── FAQ ─── */
+  .faq { padding: 100px 0; }
+  .faq-list { display: flex; flex-direction: column; gap: 12px; max-width: 720px; margin: 0 auto; }
+  .faq-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+  }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 24px; cursor: pointer; font-weight: 600; font-size: 0.97rem;
+    transition: color 0.2s; user-select: none;
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-arrow { transition: transform 0.3s; font-size: 1.1rem; color: var(--muted); }
+  .faq-item.open .faq-arrow { transform: rotate(45deg); color: var(--accent); }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s;
+    color: var(--muted); font-size: 0.92rem; line-height: 1.7;
+    padding: 0 24px;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
+
+  /* ─── URGENCY ─── */
+  .urgency {
+    padding: 80px 0;
+    background: linear-gradient(135deg, rgba(255,107,107,0.06) 0%, rgba(245,200,66,0.06) 100%);
+    border-top: 1px solid rgba(255,107,107,0.15);
+    border-bottom: 1px solid rgba(255,107,107,0.15);
+    text-align: center;
+  }
+  .urgency-badge {
+    display: inline-block; background: rgba(255,107,107,0.15); color: var(--danger);
+    border: 1px solid rgba(255,107,107,0.3); border-radius: 50px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 7px 18px; margin-bottom: 24px;
+    animation: pulse-red 2s ease-in-out infinite;
+  }
+  @keyframes pulse-red { 0%,100% { box-shadow: 0 0 0 0 rgba(255,107,107,0.3); } 50% { box-shadow: 0 0 0 8px rgba(255,107,107,0); } }
+  .urgency h2 { font-size: clamp(1.5rem, 3.5vw, 2.4rem); font-weight: 800; margin-bottom: 16px; }
+  .urgency p { color: var(--muted); margin-bottom: 36px; font-size: 1.05rem; }
+
+  /* ─── FINAL CTA ─── */
+  .final-cta {
+    padding: 100px 0; text-align: center;
+    background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(0,198,255,0.08) 0%, transparent 70%);
+  }
+  .final-cta h2 { font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.02em; max-width: 700px; margin: 0 auto 24px; }
+  .final-price-block { margin: 32px 0 36px; }
+  .final-old-price { color: var(--muted); text-decoration: line-through; font-size: 1.1rem; margin-bottom: 4px; }
+  .final-new-price { font-family: 'Syne', sans-serif; font-size: 3.5rem; font-weight: 800; color: var(--cta); line-height: 1; }
+  .final-new-price span { font-size: 1.6rem; }
+  .btn-final {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--cta), #00b87d);
+    color: #03080e; font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.15rem; letter-spacing: 0.06em;
+    padding: 20px 56px; border-radius: 50px; text-decoration: none;
+    box-shadow: 0 0 50px rgba(0,229,160,0.5), 0 12px 28px rgba(0,0,0,0.4);
+    transition: transform 0.25s, box-shadow 0.25s;
+    animation: btnGlow 3s ease-in-out infinite;
+  }
+  .btn-final:hover { transform: translateY(-3px) scale(1.02); }
+  .final-guarantee { margin-top: 28px; color: var(--muted); font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border); padding: 36px 20px;
+    text-align: center; color: var(--muted); font-size: 0.82rem;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  /* ─── STICKY MOBILE CTA ─── */
+  .sticky-mobile {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+    background: rgba(4,7,15,0.96); backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding: 14px 20px;
+    flex-direction: column; align-items: center; gap: 6px;
+  }
+  .sticky-mobile .price-row { display: flex; align-items: center; gap: 12px; }
+  .sticky-mobile .old { color: var(--muted); text-decoration: line-through; font-size: 0.85rem; }
+  .sticky-mobile .new { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--cta); font-size: 1.3rem; }
+  .sticky-mobile a {
+    display: block; width: 100%; text-align: center;
+    background: linear-gradient(135deg, var(--cta), #00b87d);
+    color: #03080e; font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 0.95rem; letter-spacing: 0.05em;
+    padding: 14px 20px; border-radius: 50px; text-decoration: none;
+    box-shadow: 0 0 24px rgba(0,229,160,0.45);
+    animation: btnGlow 3s ease-in-out infinite;
+  }
+
+  @media (max-width: 640px) {
+    .sticky-mobile { display: flex; }
+    body { padding-bottom: 120px; }
+    .includes-box { padding: 32px 22px; }
+    .hero { padding: 110px 20px 100px; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px; background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+    margin: 0;
+  }
+
+  /* ─── SOCIAL PROOF BAR ─── */
+  .social-proof-bar {
+    background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 18px 20px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 32px;
+    font-size: 0.83rem; color: var(--muted);
+  }
+  .sp-item { display: flex; align-items: center; gap: 8px; }
+  .sp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cta); animation: blink 1.5s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+</style>
+</head>
+<body>
+
+<!-- Ambiance -->
+<div class="grid-bg"></div>
+<div class="glow-orb orb1"></div>
+<div class="glow-orb orb2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">IA Lucrativa</div>
+  <a href="https://pay.cakto.com.br/op2j3bo_917615" class="nav-cta">ACESSAR AGORA</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      ⚡ Oferta Especial por Tempo Limitado
+    </div>
+
+    <h1 class="reveal">Descubra Como Pessoas Comuns Estão Utilizando Inteligência Artificial Para Criar Novas Fontes de Renda na Internet</h1>
+
+    <p class="hero-sub reveal reveal-delay-1">Aprenda estratégias práticas, ferramentas acessíveis e métodos que podem ajudar você a transformar o potencial da IA em oportunidades digitais reais — mesmo começando do zero.</p>
+
+    <div class="price-block reveal reveal-delay-2">
+      <div class="price-original">De R$ 97,90</div>
+      <div class="price-main"><span>R$&nbsp;</span>27,90</div>
+      <div class="price-note">Acesso imediato após a compra • Pagamento seguro</div>
+    </div>
+
+    <a href="https://pay.cakto.com.br/op2j3bo_917615" class="btn-hero reveal reveal-delay-3">⚡ QUERO ACESSAR AGORA</a>
+
+    <div class="hero-trust reveal reveal-delay-4">
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        PDF completo
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Acesso imediato
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Leitura pelo celular
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Linguagem para iniciantes
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF BAR -->
+<div class="social-proof-bar">
+  <div class="sp-item"><div class="sp-dot"></div> Mais de 1.200 pessoas já acessaram</div>
+  <div class="sp-item"><div class="sp-dot"></div> Avaliação média: ★ 4,9 / 5</div>
+  <div class="sp-item"><div class="sp-dot"></div> Conteúdo em constante atualização</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- BENEFITS -->
+<section class="benefits">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-tag">O Que Você Vai Aprender</div>
+      <h2 class="sec-title">Conteúdo Prático, Direto e Aplicável</h2>
+      <p class="sec-sub">Cada módulo foi pensado para que você entenda e aplique imediatamente — sem enrolação, sem termos técnicos complicados.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon">🚀</div>
+        <h3>IA para Aumentar Produtividade</h3>
+        <p>Aprenda como usar ferramentas de IA para fazer mais em menos tempo e focar no que realmente importa no seu dia a dia.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon">✍️</div>
+        <h3>Criação de Conteúdo com IA</h3>
+        <p>Descubra como criar textos, imagens e materiais digitais de qualidade usando inteligência artificial como aliada.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-3">
+        <div class="benefit-icon">💡</div>
+        <h3>Oportunidades Digitais com IA</h3>
+        <p>Entenda quais portas a IA está abrindo no mercado digital e como você pode se posicionar para explorar essas oportunidades.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon">🛠️</div>
+        <h3>Ferramentas para Iniciantes</h3>
+        <p>Conheça as melhores ferramentas de IA disponíveis hoje — incluindo opções gratuitas — e saiba exatamente como começar a usá-las.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon">📋</div>
+        <h3>Estratégias Práticas e Aplicáveis</h3>
+        <p>Métodos simples, organizados em passo a passo, que você pode colocar em prática logo após a leitura.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-3">
+        <div class="benefit-icon">🎯</div>
+        <h3>Posicionamento no Mercado Digital</h3>
+        <p>Entenda como a IA está transformando o cenário digital e como se preparar para aproveitar essa mudança de forma estratégica.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY -->
+<section class="why">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-tag">Por Que Este Guia?</div>
+      <h2 class="sec-title">Por Que Este Guia Está Fazendo Sucesso?</h2>
+      <p class="sec-sub">Não é mais um conteúdo superficial que você encontra em qualquer lugar. Este guia foi criado com um propósito claro: ser útil e acessível para qualquer pessoa.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-item reveal reveal-delay-1">
+        <div class="why-num">01</div>
+        <div>
+          <h4>Linguagem Simples</h4>
+          <p>Sem jargões técnicos complicados. Explicamos tudo de forma clara para que qualquer pessoa possa entender e aplicar.</p>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-2">
+        <div class="why-num">02</div>
+        <div>
+          <h4>Passo a Passo Organizado</h4>
+          <p>Conteúdo estruturado de forma lógica, do básico ao mais avançado, sem você se perder no meio do caminho.</p>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-3">
+        <div class="why-num">03</div>
+        <div>
+          <h4>Ideal para Iniciantes</h4>
+          <p>Mesmo que você nunca tenha usado uma ferramenta de IA, o guia foi pensado para te acompanhar do zero.</p>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-1">
+        <div class="why-num">04</div>
+        <div>
+          <h4>Direto ao Ponto</h4>
+          <p>Sem rodeios e sem conteúdo desnecessário. Cada página foi pensada para agregar valor real à sua leitura.</p>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-2">
+        <div class="why-num">05</div>
+        <div>
+          <h4>Aplicação Prática Imediata</h4>
+          <p>O foco é na ação. As orientações foram pensadas para você testar e colocar em prática ainda durante a leitura.</p>
+        </div>
+      </div>
+      <div class="why-item reveal reveal-delay-3">
+        <div class="why-num">06</div>
+        <div>
+          <h4>Conteúdo Atualizado</h4>
+          <p>A IA evolui rápido. Por isso o guia traz informações relevantes para o momento atual do mercado digital.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INCLUDES -->
+<section class="includes">
+  <div class="container">
+    <div class="includes-box reveal">
+      <div class="sec-header" style="margin-bottom: 0;">
+        <div class="sec-tag">O Que Está Incluso</div>
+        <h2 class="sec-title">Ao Adquirir o Guia Você Receberá</h2>
+        <p class="sec-sub">Tudo o que você precisa para começar a explorar o mundo da inteligência artificial com segurança e clareza.</p>
+      </div>
+      <ul class="includes-list">
+        <li>
+          <div class="check-icon">✅</div>
+          <div><strong>PDF Completo</strong><span>Arquivo digital de alta qualidade, compatível com celular, tablet e computador. Leia onde e quando quiser.</span></div>
+        </li>
+        <li>
+          <div class="check-icon">✅</div>
+          <div><strong>Lista de Ferramentas Recomendadas</strong><span>Um guia curado com as melhores ferramentas de IA disponíveis hoje, incluindo opções gratuitas para começar.</span></div>
+        </li>
+        <li>
+          <div class="check-icon">✅</div>
+          <div><strong>Estratégias Práticas Detalhadas</strong><span>Orientações aplicáveis que você pode começar a testar imediatamente, sem precisar de experiência prévia.</span></div>
+        </li>
+        <li>
+          <div class="check-icon">✅</div>
+          <div><strong>Conteúdo Atualizado</strong><span>Informações relevantes para o cenário atual da inteligência artificial e do mercado digital.</span></div>
+        </li>
+        <li>
+          <div class="check-icon">✅</div>
+          <div><strong>Acesso Imediato</strong><span>Após a confirmação da compra, você recebe acesso instantâneo ao material. Sem espera.</span></div>
+        </li>
+        <li>
+          <div class="check-icon">✅</div>
+          <div><strong>Leitura em Qualquer Dispositivo</strong><span>Compatível com Android, iPhone, iPad, Windows e Mac. Acesse do jeito que preferir.</span></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MID CTA -->
+<section style="padding: 60px 0; text-align: center; background: linear-gradient(180deg, transparent, rgba(0,229,160,0.04), transparent);">
+  <div class="container">
+    <p class="reveal" style="color: var(--muted); margin-bottom: 10px; font-size: 0.9rem;">Aproveite antes que o preço seja atualizado</p>
+    <div class="reveal reveal-delay-1" style="margin-bottom: 20px;">
+      <span style="color: var(--muted); text-decoration: line-through; font-size: 1rem;">R$ 97,90</span>
+      &nbsp;→&nbsp;
+      <span style="font-family: 'Syne', sans-serif; font-weight: 800; color: var(--cta); font-size: 1.8rem;">R$ 27,90</span>
+    </div>
+    <a href="https://pay.cakto.com.br/op2j3bo_917615" class="btn-hero reveal reveal-delay-2">✅ GARANTIR MEU ACESSO AGORA</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-tag">Depoimentos</div>
+      <h2 class="sec-title">O Que Quem Leu Está Dizendo</h2>
+      <p class="sec-sub">Veja a experiência de pessoas que já tiveram acesso ao conteúdo do guia.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Conteúdo muito bem explicado e fácil de aplicar. Finalmente entendi como as ferramentas de IA funcionam na prática. Recomendo para quem está começando agora."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">M</div>
+          <div>
+            <div class="testi-name">Mariana S.</div>
+            <div class="testi-role">Empreendedora digital • São Paulo, SP</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Gostei muito da organização e das dicas apresentadas. O material é claro, objetivo e direto ao ponto. Terminei a leitura com diversas ideias para colocar em prática."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">R</div>
+          <div>
+            <div class="testi-name">Ricardo T.</div>
+            <div class="testi-role">Freelancer • Belo Horizonte, MG</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-3">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Excelente material para quem quer entender melhor o uso da IA. Sem enrolação, sem termos difíceis. Consegui entender tudo mesmo sem experiência prévia."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">C</div>
+          <div>
+            <div class="testi-name">Camila F.</div>
+            <div class="testi-role">Criadora de conteúdo • Curitiba, PR</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Achei que seria mais do mesmo, mas me surpreendi. As ferramentas indicadas são reais e funcionam. Ótimo custo-benefício pelo preço que paguei."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">P</div>
+          <div>
+            <div class="testi-name">Pedro A.</div>
+            <div class="testi-role">Estudante universitário • Recife, PE</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Material muito bem estruturado. Aprendi sobre ferramentas que nem conhecia. O guia abre os olhos para o quanto a IA pode ser útil no dia a dia profissional."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">F</div>
+          <div>
+            <div class="testi-name">Fernanda L.</div>
+            <div class="testi-role">Assistente administrativa • Rio de Janeiro, RJ</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-3">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Conteúdo atualizado e com exemplos práticos. Já apliquei algumas das dicas no meu trabalho e percebi diferença imediata na minha produtividade. Vale cada centavo."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">L</div>
+          <div>
+            <div class="testi-name">Lucas M.</div>
+            <div class="testi-role">Designer • Porto Alegre, RS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-tag">Dúvidas Frequentes</div>
+      <h2 class="sec-title">Perguntas Frequentes</h2>
+      <p class="sec-sub">Tire suas principais dúvidas antes de garantir seu acesso.</p>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <div class="faq-q">Preciso ter experiência prévia com tecnologia ou IA?<span class="faq-arrow">+</span></div>
+        <div class="faq-a">Não! O guia foi criado especialmente para iniciantes. Todo o conteúdo é explicado de forma simples e progressiva, do básico ao mais completo. Você não precisa ter nenhum conhecimento prévio.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">O acesso ao material é imediato após a compra?<span class="faq-arrow">+</span></div>
+        <div class="faq-a">Sim! Assim que o seu pagamento for confirmado, você receberá acesso ao guia em PDF de forma imediata. Sem burocracia e sem espera.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Posso acessar o guia pelo celular?<span class="faq-arrow">+</span></div>
+        <div class="faq-a">Com certeza! O guia é um arquivo PDF compatível com qualquer dispositivo — celular Android ou iPhone, tablet, notebook ou computador. Leia onde e quando quiser.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">As ferramentas indicadas são fáceis de usar?<span class="faq-arrow">+</span></div>
+        <div class="faq-a">Sim. As ferramentas recomendadas foram selecionadas justamente por serem acessíveis e intuitivas. O guia explica como acessar e começar a utilizá-las de forma simples, incluindo opções gratuitas.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">O conteúdo é realmente para iniciantes?<span class="faq-arrow">+</span></div>
+        <div class="faq-a">Sim, absolutamente. A linguagem foi pensada para quem está começando do zero. Se você já tem alguma experiência, o guia também traz estratégias que podem complementar o que você já sabe.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Quanto tempo leva para ler o guia?<span class="faq-arrow">+</span></div>
+        <div class="faq-a">O conteúdo é objetivo e direto ao ponto. A maioria dos leitores conclui o guia em poucas horas, mas você pode avançar no seu próprio ritmo, retornando quantas vezes quiser.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- URGENCY -->
+<section class="urgency">
+  <div class="container">
+    <div class="urgency-badge reveal">⚠️ Atenção — Oferta Limitada</div>
+    <h2 class="reveal">A Oferta Promocional Pode Ser Encerrada A Qualquer Momento</h2>
+    <p class="reveal reveal-delay-1">Aproveite o valor promocional de <strong style="color: var(--cta);">R$ 27,90</strong> antes de futuras atualizações de preço. O preço original é R$ 97,90 — e pode voltar a qualquer momento.</p>
+    <a href="https://pay.cakto.com.br/op2j3bo_917615" class="btn-hero reveal reveal-delay-2">🔒 GARANTIR MEU ACESSO</a>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <div class="sec-tag reveal">Hora de Agir</div>
+    <h2 class="reveal">Comece Hoje Mesmo a Aprender Como Utilizar Inteligência Artificial de Forma Estratégica</h2>
+    <p class="reveal reveal-delay-1" style="color: var(--muted); max-width: 580px; margin: 0 auto;">O mercado digital está mudando rapidamente. Quanto antes você entender como usar a IA a seu favor, mais preparado você estará para as oportunidades que surgem.</p>
+    <div class="final-price-block reveal reveal-delay-2">
+      <div class="final-old-price">De R$ 97,90</div>
+      <div class="final-new-price"><span>R$&nbsp;</span>27,90</div>
+      <p style="color: var(--muted); margin-top: 8px; font-size: 0.88rem;">Pagamento único • Acesso imediato • Sem mensalidade</p>
+    </div>
+    <a href="https://pay.cakto.com.br/op2j3bo_917615" class="btn-final reveal reveal-delay-3">⚡ COMPRAR AGORA</a>
+    <div class="final-guarantee reveal reveal-delay-4">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Pagamento 100% seguro • Plataforma criptografada
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p style="font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 12px; background: linear-gradient(90deg, var(--accent), var(--cta)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">IA Lucrativa</p>
+    <p>Este guia tem caráter exclusivamente educativo e informativo. Não garantimos resultados financeiros específicos. Os resultados dependem exclusivamente do esforço, dedicação e contexto de cada leitor.</p>
+    <p style="margin-top: 12px;">© 2025 IA Lucrativa. Todos os direitos reservados. &nbsp;|&nbsp; <a href="#">Política de Privacidade</a> &nbsp;|&nbsp; <a href="#">Termos de Uso</a></p>
+  </div>
+</footer>
+
+<!-- STICKY MOBILE CTA -->
+<div class="sticky-mobile">
+  <div class="price-row">
+    <span class="old">R$ 97,90</span>
+    <span class="new">R$ 27,90</span>
+    <span style="color: var(--muted); font-size: 0.75rem;">pagamento único</span>
+  </div>
+  <a href="https://pay.cakto.com.br/op2j3bo_917615">⚡ COMPRAR AGORA</a>
+</div>
+
+<script>
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Open first FAQ by default
+  document.querySelector('.faq-item').classList.add('open');
+</script>
+</body>
+</html>
