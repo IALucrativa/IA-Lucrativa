@@ -36,6 +36,7 @@
 2. **Defeito engraçado:** medroso (morre de medo do escuro, mas os bilhetes só chegam de noite; passa o dia em poço de elevador e treme com um papel passando por baixo da porta).
    **O que mais quer:** recomeçar do zero (por isso a mudança).
 3. **Visual de hoje (estado atual):** macacão azul de trabalho com "RODNEI" bordado, molho enorme de chaves na cintura, lanterna sempre no bolso.
-4. **Segredo:** já aconteceu antes. Ele recebeu bilhetes assim em outro prédio, anos atrás, e nunca contou.
+4. **Segredo:** a chave mestra. Ele tem a chave de todos os apartamentos (por causa do trabalho no elevador) e nunca disse a ninguém.
+   - Corrigido pela pessoa: a primeira escolha era "já aconteceu antes" (bilhetes em outro prédio, anos atrás).
 
 **Checklist do Bloco 3, item pendente:** [x] Protagonista carismático mesmo errando: o medo é a graça, e ele enfrenta mesmo assim, toda noite.
