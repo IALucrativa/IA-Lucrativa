@@ -15,3 +15,18 @@
 2. **O que prende:** o público votar, o personagem que se enrola, acompanhar o progresso.
 3. **Tom:** mistério.
 4. **O que não quer:** política ou religião.
+
+## Bloco 3: A premissa (2026-11-08)
+- **Mistério:** os bilhetes anônimos (alguém deixa um bilhete na porta dele toda noite).
+- **Prazo e progresso:** até uma data (o dia da mudança, 30 dias) + uma lista de perguntas que vão sendo riscadas.
+- **O que o público decide:** em quem confiar.
+- **Premissa escolhida (B, "A mudança"):** "Ele se muda do prédio em 30 dias. Desde que avisou, um bilhete anônimo aparece toda noite. Ele não vai embora sem saber quem é."
+  - Outras opções apresentadas: A "O bilhete com data"; C "Os bilhetes que sabem".
+
+**Checklist:**
+- [x] Cabe na bio (cerca de 125 letras).
+- [x] Prazo e meta mensuráveis (30 dias + lista de perguntas riscadas).
+- [x] O público muda o resultado (em quem confiar muda as pistas).
+- [x] Tem 10+ problemas possíveis (a completar no Bloco 8).
+- [ ] Protagonista carismático mesmo errando: a decidir no Bloco 4.
+- [x] 100% original.
