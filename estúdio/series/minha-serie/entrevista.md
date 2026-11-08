@@ -30,3 +30,12 @@
 - [x] Tem 10+ problemas possíveis (a completar no Bloco 8).
 - [ ] Protagonista carismático mesmo errando: a decidir no Bloco 4.
 - [x] 100% original.
+
+## Bloco 4: O protagonista (2026-11-08)
+1. **Nome, idade, profissão:** Rodnei, 41 anos, técnico de elevador (conhece todo prédio por dentro, menos o próprio).
+2. **Defeito engraçado:** medroso (morre de medo do escuro, mas os bilhetes só chegam de noite; passa o dia em poço de elevador e treme com um papel passando por baixo da porta).
+   **O que mais quer:** recomeçar do zero (por isso a mudança).
+3. **Visual de hoje (estado atual):** macacão azul de trabalho com "RODNEI" bordado, molho enorme de chaves na cintura, lanterna sempre no bolso.
+4. **Segredo:** já aconteceu antes. Ele recebeu bilhetes assim em outro prédio, anos atrás, e nunca contou.
+
+**Checklist do Bloco 3, item pendente:** [x] Protagonista carismático mesmo errando: o medo é a graça, e ele enfrenta mesmo assim, toda noite.
