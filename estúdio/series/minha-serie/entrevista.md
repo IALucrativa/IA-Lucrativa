@@ -58,3 +58,11 @@
    - Usar a chave mestra à toa: ele nunca entra na casa de ninguém sem um voto do público.
    - Adiar a mudança: a data é fixa.
    - Uma noite sem bilhete: toda noite tem bilhete, sem exceção.
+
+## Bloco 7: O voto (2026-11-08)
+1. **Tipo de escolha:** em quem o Rodnei confia (já decidido no Bloco 3).
+2. **Primeiro voto:** "Contar" ou "Esconder" (ele conta sobre os bilhetes para alguém ou guarda segredo?).
+3. **Como mostra o progresso:** a lista de perguntas riscadas até o dia da mudança (já decidido no Bloco 3).
+4. **Como o público vota:** pelos comentários do Reels.
+
+**Regras do voto (explicadas):** duas opções de uma palavra; o resultado é sempre o real; o voto nunca é punido (o episódio de quem venceu é uma vitória); quem perde piora em silêncio; dois problemas e recurso para um só (duas portas, uma chave).
