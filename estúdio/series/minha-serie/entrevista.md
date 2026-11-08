@@ -48,3 +48,13 @@
    - **Tânia, do 501:** suspeita; chegou ao prédio na mesma semana em que os bilhetes começaram.
    - Nenhum coadjuvante ajuda: quem ajuda o Rodnei é o público.
 3. **Lugar fixo:** o elevador (o "território" dele: conversas, pistas e encontros).
+
+## Bloco 6: O mundo e as regras (2026-11-08)
+1. **Recurso limitado:** as chaves. Ele começa com 12 chaves do trabalho; a síndica Marlene toma uma por vez, e cada chave abre uma pista. A chave mestra (o segredo) é a única que ela não sabe que existe.
+   - Conta: 12 chaves para 30 noites, então nem toda noite custa uma chave.
+2. **Tempo:** 1 noite por episódio, com um bilhete por episódio (30 noites = 30 episódios).
+3. **O que nunca pode acontecer:**
+   - Mostrar o rosto da sombra antes do final.
+   - Usar a chave mestra à toa: ele nunca entra na casa de ninguém sem um voto do público.
+   - Adiar a mudança: a data é fixa.
+   - Uma noite sem bilhete: toda noite tem bilhete, sem exceção.
