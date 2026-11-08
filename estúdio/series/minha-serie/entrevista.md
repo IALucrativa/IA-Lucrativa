@@ -66,3 +66,25 @@
 4. **Como o público vota:** pelos comentários do Reels.
 
 **Regras do voto (explicadas):** duas opções de uma palavra; o resultado é sempre o real; o voto nunca é punido (o episódio de quem venceu é uma vitória); quem perde piora em silêncio; dois problemas e recurso para um só (duas portas, uma chave).
+
+## Bloco 8: Problemas e sementes (2026-11-08)
+1. **Problemas (17, todos aprovados):**
+   1. A Marlene cobra mais uma chave.
+   2. A luz do corredor queima (e ele tem medo do escuro).
+   3. O elevador para entre dois andares com ele dentro.
+   4. O bilhete chega molhado e metade da pista fica borrada.
+   5. A Tânia vê o Rodnei rondando a porta dela e acha que ele é o autor.
+   6. A fita das caixas da mudança acaba e uma caixa rasga no corredor.
+   7. Um barulho estranho no poço do elevador de madrugada.
+   8. Um bilhete cita algo que só quem tem a chave mestra saberia: o segredo dele corre risco.
+   9. A empresa de mudança muda o horário e pede um sinal adiantado.
+   10. O gato do prédio pega o bilhete antes dele.
+   11. Uma pista falsa: a letra parece a de um vizinho inocente.
+   12. Uma reunião de condomínio sobre um "invasor" no prédio.
+   13. A lanterna falha no pior momento.
+   14. Um chamado de trabalho de madrugada em outro prédio, e o bilhete chega mesmo assim.
+   15. Alguém troca a fechadura de uma porta que ele precisava abrir.
+   16. A Marlene instala uma câmera no corredor, e a sombra não aparece na gravação.
+   17. O vizinho de baixo reclama do barulho das caixas.
+2. **Problema que cresce quieto:** a câmera da Marlene (ela vai juntando gravações do Rodnei andando de madrugada).
+3. **Sementes:** um bilhete que chega em papel de outra cor; um objeto na porta do 501 (da Tânia) que muda de lugar entre os episódios.
