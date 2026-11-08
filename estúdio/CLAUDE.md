@@ -39,6 +39,7 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 - O trabalho pesado roda no computador (render, transcrição, mixagem): rode o script e leia só o resumo.
 - Depois de cada episódio publicado, atualize a bíblia com o "estado após o episódio" e o resultado do voto.
 - Quando a pessoa corrigir algo importante, pergunte se deve virar regra neste arquivo.
+- Confira cada coisa criada. Se der erro, leia a mensagem inteira, explique em uma linha (sem termo técnico) e tente corrigir. Se a correção precisar baixar algo, avise antes com o tamanho.
 
 ## Dinheiro e downloads
 - Nunca use API paga nem crie conta sem a pessoa pedir.
