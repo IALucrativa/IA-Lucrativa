@@ -40,3 +40,11 @@
    - Corrigido pela pessoa: a primeira escolha era "já aconteceu antes" (bilhetes em outro prédio, anos atrás).
 
 **Checklist do Bloco 3, item pendente:** [x] Protagonista carismático mesmo errando: o medo é a graça, e ele enfrenta mesmo assim, toda noite.
+
+## Bloco 5: O elenco (2026-11-08)
+1. **A meta (quem escreve os bilhetes):** aparece só como uma sombra, uma silhueta no fim do corredor que some quando ele acende a lanterna.
+2. **Coadjuvantes (as duas são suspeitas):**
+   - **Marlene, a síndica:** atrapalha; quer de volta todas as chaves dele antes da mudança.
+   - **Tânia, do 501:** suspeita; chegou ao prédio na mesma semana em que os bilhetes começaram.
+   - Nenhum coadjuvante ajuda: quem ajuda o Rodnei é o público.
+3. **Lugar fixo:** o elevador (o "território" dele: conversas, pistas e encontros).
