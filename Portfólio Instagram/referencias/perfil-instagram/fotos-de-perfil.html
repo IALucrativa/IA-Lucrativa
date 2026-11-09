@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Foto de perfil</title>
+<style>
+body{margin:0;background:#1d1d22;font-family:Inter,Arial,sans-serif;color:#f2f2f2}
+#folha{display:inline-block;padding:28px}
+h1{margin:0 0 18px;font-size:26px}
+.linha{display:flex;gap:40px}
+.op{display:flex;flex-direction:column;align-items:center;gap:14px}
+.grande{width:360px;height:360px;border-radius:50%;overflow:hidden}
+.peq{display:flex;align-items:center;gap:12px;font-size:14px;color:#b9b9c4}
+.peq div{width:44px;height:44px;border-radius:50%;overflow:hidden}
+.rot{font-size:20px;font-weight:bold}
+svg{display:block;width:100%;height:100%}
+.solo{width:1080px;height:1080px}
+</style></head><body>
+<div id="folha"><h1>Você Decide Aí · foto de perfil (3 opções)</h1><div class="linha" id="linha"></div></div>
+<div id="solos"></div>
+<script>
+// Balão de comentário com uma setinha de "play" dentro. Tudo dentro do círculo central.
+const balao = (fundo, fundo2, cor, contorno, play, extra='') => `
+<svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs><radialGradient id="g${cor.slice(1)}${fundo.slice(1)}" cx="0.5" cy="0.4" r="0.7">
+    <stop offset="0" stop-color="${fundo2}"/><stop offset="1" stop-color="${fundo}"/></radialGradient></defs>
+  <rect width="1080" height="1080" fill="url(#g${cor.slice(1)}${fundo.slice(1)})"/>
+  <g transform="translate(540,520)">
+    <path d="M-300,-230 Q-300,-280 -250,-280 L250,-280 Q300,-280 300,-230 L300,150 Q300,200 250,200 L-40,200 L-170,320 L-140,200 L-250,200 Q-300,200 -300,150 Z"
+      fill="${cor}" stroke="${contorno}" stroke-width="34" stroke-linejoin="round"/>
+    <path d="M-70,-150 L130,-40 L-70,70 Z" fill="${play}" stroke="${play}" stroke-width="40" stroke-linejoin="round"/>
+    ${extra}
+  </g>
+</svg>`;
+const ops = [
+  ['A · Amarelo no roxo', balao('#2a2440', '#5d5486', '#ffcc33', '#1b1b2a', '#1b1b2a')],
+  ['B · Contorno no escuro', balao('#0f0e18', '#2a2440', '#1b1b2a', '#ffcc33', '#ffcc33')],
+  ['C · Escuro no amarelo', balao('#f2a91c', '#ffd75a', '#1b1b2a', '#1b1b2a', '#ffcc33')],
+];
+const linha = document.getElementById('linha'), solos = document.getElementById('solos');
+ops.forEach(([nome, svg], i) => {
+  linha.insertAdjacentHTML('beforeend', `<div class="op"><div class="grande">${svg}</div>
+    <div class="peq"><div>${svg}</div> tamanho no feed</div><div class="rot">${nome}</div></div>`);
+  solos.insertAdjacentHTML('beforeend', `<div class="solo" id="solo${i}">${svg}</div>`);
+});
+</script></body></html>
