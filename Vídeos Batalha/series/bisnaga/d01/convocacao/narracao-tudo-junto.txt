@@ -1,0 +1,39 @@
+BISNAGA · DESAFIO 1 · CONVOCAÇÃO
+Narração inteira, para gerar de uma vez só no ElevenLabs
+
+COMO GERAR
+- Voz: a do narrador da série (grave, calma, de documentário).
+- Modelo: Eleven Multilingual v2. Ajustes: Estabilidade 50 · Similaridade 75 · Estilo 0 · Velocidade 0,95.
+- Copie todo o texto entre as linhas tracejadas.
+- Baixe em MP3 com o nome narracao.mp3 e salve em: series/bisnaga/d01/convocacao/audios/
+- Eu corto o áudio nas pausas e encaixo cada trecho na sua cena.
+
+------------------------------------------------------------
+Dez mil pinguins de geladeira... acabaram de ganhar vida.
+
+E o único que pode parar eles... está dormindo.
+
+Esse é o Bisnaga, gato da padaria. E o exército dele... quem monta é você.
+
+Sozinho, ele não segura nem o primeiro pinguim.
+
+Cada comentário... é um gato a mais.
+
+Se comentar açougue, chega o mais forte do bairro... mas ele só luta depois de comer.
+
+Se comentar feirante, chega um que grita mais alto que a feira inteira... até ficar rouco.
+
+Lotérica acerta tudo sem querer... e erra tudo quando tenta.
+
+E salão luta com estilo... mas foge se despentear.
+
+Os pinguins: vinte centímetros de louça. Não sentem frio. E escorregam mais rápido do que qualquer gato corre.
+
+Se passar de quinhentos comentários... vocês vão ouvir uma musiquinha. E o bairro inteiro vai abrir a janela.
+
+Vocês têm vinte e quatro horas. Amanhã, ao meio-dia, a gente conta comentário por comentário. Nem um gato a mais, nem um a menos. E quem tiver mais pedidos... abre a fila.
+
+Por enquanto, o exército do Bisnaga... é o Bisnaga. E os pinguins já desceram da geladeira.
+
+Quem você convoca?
+------------------------------------------------------------
