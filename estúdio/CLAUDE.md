@@ -13,8 +13,15 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 
 ## Antes de qualquer episódio
 1. Leia a `biblia.md` e o `banco-de-problemas.md` da série.
-2. Confira o resultado do voto com a pessoa. O resultado é sempre o real.
+2. Confira com a pessoa o resultado do voto **de cada plataforma** (Instagram e TikTok). O resultado é sempre o real.
 3. Roteiro curto (o texto da narração) → aprovação → só então a produção.
+
+## Duas plataformas: Instagram e TikTok
+- Cada plataforma é uma **linha da história própria**, que segue o voto do seu público.
+- Enquanto os votos forem iguais nas duas, faça **um vídeo só** e use nos dois lugares.
+- No primeiro voto diferente, a história **se separa** e não se junta mais: dali em diante, cada plataforma tem o seu roteiro, a sua narração, o seu vídeo, a sua capa e a sua legenda, mesmo que os votos voltem a coincidir.
+- A bíblia guarda **um estado, um placar e um histórico de votos para cada plataforma**. Ao separar, copie o estado comum para as duas e siga cada uma.
+- Pastas depois da separação: `series/<nome>/epNN-instagram/` e `epNN-tiktok/`; entregas em `entregas/AAAA-MM-DD_nome-epNN-instagram/` e `...-tiktok/`. Antes da separação, `epNN/` serve às duas.
 
 ## Regras de criação
 - Fale em português do Brasil.
