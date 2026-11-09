@@ -93,3 +93,8 @@
 1. **Desenho:** a decidir na prancha de estilos (a mesma cena em 3 estilos, no fim da entrevista).
 2. **Narrador:** narrador de suspense (voz grave e séria, tipo filme de mistério, contando coisas que às vezes são bobas).
 3. **Voz:** gerada no ElevenLabs. A pessoa gera o áudio com a própria conta e manda o arquivo; o Claude não cria conta nem usa serviço pago sem pedido.
+
+## Bloco 10: Ritmo (2026-11-09)
+1. **Episódios por semana:** 7 (um por dia; o público vive os 30 dias junto com o Rodnei).
+2. **Horário fixo:** 12h.
+3. **Roteiro adiantado:** topa. Sempre um roteiro pronto antes de prometer data.
