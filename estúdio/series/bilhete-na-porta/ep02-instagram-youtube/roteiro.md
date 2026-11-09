@@ -1,4 +1,4 @@
-# Ep. 2 (Instagram + YouTube): "Ninguém sabe" (roteiro, aguardando aprovação)
+# Ep. 2 (Instagram + YouTube): "Ninguém sabe" (roteiro aprovado em 2026-11-09)
 
 - **Linha:** IG+YT · voto do Ep. 1: **Esconder** (vitória: esconder deu certo).
 - **Noite:** 2 de 30 · **Chaves:** 12 · **Bilhetes:** 2 → 3

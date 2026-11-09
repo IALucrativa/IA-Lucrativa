@@ -1,4 +1,4 @@
-# Ep. 2 (TikTok): "A letra T" (roteiro, aguardando aprovação)
+# Ep. 2 (TikTok): "A letra T" (roteiro aprovado em 2026-11-09)
 
 - **Linha:** TT · voto do Ep. 1: **Contar** (vitória: a Marlene acreditou e ajudou).
 - **Noite:** 2 de 30 · **Chaves:** 12 · **Bilhetes:** 2 → 3
