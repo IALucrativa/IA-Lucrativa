@@ -1,39 +1,45 @@
-# Ep. 1: "O elevador parou" (roteiro aprovado em 2026-11-09)
+# Ep. 1: "O que é meu" (roteiro v2, aprovado em 2026-11-09)
 
-- **Noite:** 1 de 30 · **Chaves:** 12 · **Bilhetes:** 0 → 1
-- **Problema usado:** #3 do banco (o elevador para entre dois andares com ele dentro).
-- **Duração alvo:** cerca de 55 segundos.
-- **Narrador:** suspense, voz grave e séria (gerada no ElevenLabs pela pessoa).
+> A v1 ("O elevador parou", em `roteiro-v1-reprovado.md`) foi reprovada no vídeo final: o começo não explicava nada, o elevador travado e a mão tremendo não levavam a história para frente, e o bilhete não ameaçava nada. Virou regra no CLAUDE.md: começo que explica, toda cena empurra, final com ameaça.
 
-| # | Tempo | O que aparece | Narração |
-|---|---|---|---|
-| 1. Gancho | 0–3 s | Dentro do elevador. A luz pisca e apaga. Só o rosto do Rodnei no escuro. | "Para um técnico de elevador, isso deveria ser normal." |
-| 2. Quem e prazo | 3–11 s | Flashback rápido de dia: o Rodnei cola o aviso "Me mudo dia 30" no elevador. Um vizinho passa sem olhar. | "Rodnei. Quarenta e um anos. Conhece todos os prédios da cidade por dentro. Menos o dele. Hoje, avisou que vai embora. Ninguém leu." |
-| 3. Problema | 11–17 s | De volta à noite. Visor entre dois números. Rodnei abraçado ao molho de chaves. | "Onze da noite. O elevador parou entre dois andares. Com ele dentro." |
-| 4. Tentativa 1 | 17–25 s | Ele abre o painel com toda a calma... a mão treme, o molho de 12 chaves cai, barulho alto. Ele pula. | "Ele sabe exatamente o que fazer. O problema é a mão." |
-| 5. Tentativa 2 | 25–32 s | Lanterna na boca, mãos firmes, um clique. A luz volta. | "Plano B: lanterna na boca. Funcionou. Claro que funcionou." |
-| 6. Virada | 32–40 s | A porta abre no andar dele. Corredor escuro. No chão, encostado na porta do apartamento, um papel dobrado. Lá no fim do corredor, uma sombra some. | "A porta abriu no andar dele. E alguém tinha chegado primeiro." |
-| 7. O bilhete | 40–47 s | Close do bilhete na mão trêmula. A letra aparece na tela. | (lendo devagar) "Eu parei o elevador. Queria ver se você ia ter coragem." |
-| 8. Placar | 47–51 s | Placar entra: NOITE 1/30 · 🔑 12 · PERGUNTAS: ☐ Quem escreve? | "Faltam vinte e nove noites." |
-| 9. Voto | 51–56 s | Rodnei olha o bilhete, depois a porta da vizinhança. Na tela: **CONTAR** ou **ESCONDER**? | "Ele conta para alguém... ou esconde? Comente: contar ou esconder." |
+- **Noite:** 1 de 30 · **Chaves:** 12 · **Bilhetes:** 0 → 2
+- **Duração alvo:** 45 a 55 segundos.
+- **Narrador:** suspense, voz grave e séria.
+- **Medo do Rodnei:** só no rosto (olhos, sobrancelhas, uma gota de suor). Sem corpo tremendo.
+
+| # | O que aparece | Narração |
+|---|---|---|
+| 1. Quem é | De dia, no hall do térreo. O Rodnei de macacão, com o molho de chaves. | "Esse é o Rodnei. Técnico de elevador. Mora no térreo deste prédio." |
+| 2. O que ele quer | Ele cola o aviso "ME MUDO DIA 30" na porta do elevador. | "Daqui a trinta dias, ele vai embora daqui. Hoje, colou o aviso." |
+| 3. O que acontece | Noite, sala dele cheia de caixas. Um papel desliza por baixo da porta. Ele congela. | "Às onze da noite, alguém passou isto por baixo da porta dele." |
+| 4. O 1º bilhete | Close do bilhete. | (lendo) "Você não vai embora antes de devolver o que é meu." |
+| 5. A sombra | Ele abre a porta. No fim do corredor, uma sombra entra no elevador. | "Quando ele abriu a porta, só deu tempo de ver alguém entrando no elevador." |
+| 6. A pista | Close do visor do elevador subindo: 1, 2, 3, 4... 5. Para. | "O elevador subiu... e parou no quinto andar." |
+| 7. A suspeita | A porta do 501. | "No quinto andar mora a Tânia. Ela se mudou pra cá faz uma semana." |
+| 8. A dúvida | Rodnei olhando o bilhete, no corredor. | "Devolver o quê? O Rodnei nunca pegou nada de ninguém." |
+| 9. A ameaça | Ele volta para casa: na porta, outro bilhete no chão. Close. | "Quando ele voltou, tinha outro." (lendo) "Se contar pra alguém, eu conto o seu segredo." |
+| 10. Placar | NOITE 1/30 · 🔑 12 · PERGUNTAS: ☐ Quem escreve? ☐ O que é "meu"? | "Noite um. Faltam vinte e nove." |
+| 11. Voto | CONTAR ou ESCONDER? | "Ele conta pra síndica... ou esconde? Comente: contar ou esconder." |
 
 ## Texto na tela
-- Aviso no elevador: "ME MUDO DIA 30. Obrigado!"
-- Bilhete: "Eu parei o elevador. Queria ver se você ia ter coragem."
-- Voto: "CONTAR ou ESCONDER? Comente 👇"
+- Aviso: "ME MUDO DIA 30. Obrigado!"
+- Bilhete 1: "Você não vai embora antes de devolver o que é meu."
+- Bilhete 2: "Se contar pra alguém, eu conto o seu segredo."
+- Voto: "Ele conta pra síndica ou esconde? CONTAR ou ESCONDER"
 
 ## Legenda do post (rascunho)
-> Noite 1 de 30. Alguém parou o elevador só pra ver se ele tinha coragem. 🔦
-> Ele conta pra alguém ou esconde? Comente **CONTAR** ou **ESCONDER**. O próximo episódio é o que vocês escolherem.
+> Ele vai se mudar em 30 dias. Na primeira noite, já chegaram dois bilhetes. 📝
+> Ele conta pra síndica ou esconde? Comente **CONTAR** ou **ESCONDER**. O próximo episódio é o que vocês escolherem.
 
-## Para depois do voto
+## Continuidade
+- O segredo (a chave mestra) **não** é revelado: o público só sabe que existe um segredo.
+- A Tânia vira a primeira suspeita. O elevador parou no 5º andar.
+- Pergunta nova na lista: "O que é 'meu'?"
 - Se ganhar **Contar** ou **Esconder**, o Ep. 2 precisa ser uma vitória da opção escolhida.
-- Quem perde piora em silêncio.
 
-## Decidido antes da produção
-- **Câmera da Marlene:** não aparece no Ep. 1. Ela entra mais tarde, num episódio próprio (problema #16).
-- **Andar do Rodnei:** térreo. À noite ele volta pela garagem (subsolo) e o elevador para entre a garagem e o térreo; a porta abre no térreo, no andar dele.
+## Precisa de narração nova
+O texto mudou, então a narração do ElevenLabs precisa ser gerada de novo, depois da aprovação.
 
 ## Produção
-- 2026-11-09: prévia em folha de quadros e prévia em vídeo sem som **aprovadas** (`previa-folha-de-quadros.png`, `previa-sem-som.mp4`).
-- Próximo passo: a pessoa gera a narração no ElevenLabs com `narracao-para-elevenlabs.txt` e manda o áudio. Depois: acertar os tempos pela voz, efeitos pontuais, mixagem em −14 LUFS e render final em 1080×1920.
+- 2026-11-09: prévia v2 (folha de quadros e vídeo sem som) **aprovada**.
+- Próximo passo: narração nova no ElevenLabs (texto em `narracao-para-elevenlabs.txt`), depois acertar os tempos pela voz, efeitos, −14 LUFS e render final.

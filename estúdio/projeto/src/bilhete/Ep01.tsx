@@ -107,7 +107,7 @@ const QuemE: React.FC = () => {
 // 2. O que ele quer: cola o aviso da mudança.
 const Aviso: React.FC = () => {
   const f = useCurrentFrame();
-  const baixar = interpolate(f, [70, 90], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const baixar = interpolate(f, [118, 136], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <Tela>
       <HallDia avisoColado />
@@ -119,7 +119,7 @@ const Aviso: React.FC = () => {
         bracoD={misturar({ombro: -148, cotovelo: 30}, SOLTO_D, baixar)}
         medo={false}
         boca="aliviada"
-        olhar={f < 80 ? [1, -0.6] : [0.3, 0]}
+        olhar={f < 125 ? [1, -0.6] : [0.3, 0]}
       />
     </Tela>
   );
@@ -152,7 +152,7 @@ const Sala: React.FC = () => {
 
 // 4. O primeiro bilhete.
 const Bilhete1: React.FC = () => (
-  <BilheteClose linhas={['Você não vai embora', 'antes de devolver', 'o que é meu.']} de={8} ate={95} fundo="sala" />
+  <BilheteClose linhas={['Você não vai embora', 'antes de devolver', 'o que é meu.']} de={9} ate={92} fundo="sala" />
 );
 
 // 5. Ele abre a porta; alguém entra no elevador.
@@ -231,7 +231,7 @@ const Voltou: React.FC = () => {
 };
 
 const Bilhete2: React.FC = () => (
-  <BilheteClose linhas={['Se contar pra alguém,', 'eu conto', 'o seu segredo.']} de={6} ate={85} fundo="corredor" />
+  <BilheteClose linhas={['Se contar pra alguém,', 'eu conto', 'o seu segredo.']} de={6} ate={86} fundo="corredor" />
 );
 
 // 10. Placar.
@@ -283,30 +283,54 @@ const Voto: React.FC = () => {
   );
 };
 
-// ---------- linha do tempo ----------
-// [nome, cena, duração em quadros, legendas (segundos relativos ao começo da cena)]
+// ---------- linha do tempo (acertada pela narração) ----------
+// Cada parte: cena, duração em quadros, trecho da narração [de, até] em segundos do áudio,
+// quando a fala começa dentro da cena (s), legendas com os tempos do áudio, e posição da legenda.
 // Nos closes dos bilhetes não tem legenda: o texto já está na tela.
-type Parte = [string, React.FC, number, [number, number, string][], ('alto' | 'baixo')?];
+type Parte = {
+  nome: string;
+  Cena: React.FC;
+  dur: number;
+  fala: [number, number];
+  atraso: number;
+  legendas: [number, number, string][];
+  pos?: 'alto' | 'baixo';
+};
 export const PARTES: Parte[] = [
-  ['quem', QuemE, 144, [[0.2, 1.4, 'Esse é o Rodnei.'], [1.4, 2.8, 'Técnico de elevador.'], [2.8, 4.6, 'Mora no térreo deste prédio.']]],
-  ['aviso', Aviso, 126, [[0.1, 2.6, 'Daqui a trinta dias, ele vai embora daqui.'], [2.6, 4.1, 'Hoje, colou o aviso.']]],
-  ['sala', Sala, 126, [[0.2, 4.0, 'Às onze da noite, alguém passou isto por baixo da porta dele.']], 'alto'],
-  ['bilhete1', Bilhete1, 114, []],
-  ['sombra', Sombra, 138, [[0.2, 2.0, 'Quando ele abriu a porta,'], [2.0, 4.4, 'só deu tempo de ver alguém entrando no elevador.']]],
-  ['visor', Visor, 108, [[0.2, 1.6, 'O elevador subiu...'], [1.8, 3.4, '...e parou no quinto andar.']]],
-  ['tania', Tania, 132, [[0.2, 2.0, 'No quinto andar mora a Tânia.'], [2.1, 4.2, 'Ela se mudou pra cá faz uma semana.']]],
-  ['duvida', Duvida, 114, [[0.2, 1.4, 'Devolver o quê?'], [1.5, 3.7, 'O Rodnei nunca pegou nada de ninguém.']]],
-  ['voltou', Voltou, 66, [[0.1, 2.1, 'Quando ele voltou, tinha outro.']]],
-  ['bilhete2', Bilhete2, 114, []],
-  ['placar', PlacarCena, 90, [[0.2, 2.8, 'Noite um. Faltam vinte e nove.']]],
-  ['voto', Voto, 168, [[0.2, 2.2, 'Ele conta pra síndica...'], [2.3, 3.3, '...ou esconde?'], [3.5, 5.5, 'Comente: contar ou esconder.']]],
+  {nome: 'quem', Cena: QuemE, dur: 152, fala: [0, 4.65], atraso: 0.1,
+    legendas: [[0, 1.23, 'Esse é o Rodnei.'], [1.74, 2.83, 'Técnico de elevador.'], [3.25, 4.65, 'Mora no térreo deste prédio.']]},
+  {nome: 'aviso', Cena: Aviso, dur: 147, fala: [5.27, 9.66], atraso: 0.2,
+    legendas: [[5.27, 7.68, 'Daqui a trinta dias, ele vai embora daqui.'], [8.35, 9.66, 'Hoje, colou o aviso.']]},
+  {nome: 'sala', Cena: Sala, dur: 125, fala: [10.12, 13.69], atraso: 0.2, pos: 'alto',
+    legendas: [[10.12, 13.69, 'Às onze da noite, alguém passou isto por baixo da porta dele.']]},
+  {nome: 'bilhete1', Cena: Bilhete1, dur: 106, fala: [14.32, 17.16], atraso: 0.3, legendas: []},
+  {nome: 'sombra', Cena: Sombra, dur: 129, fala: [17.86, 21.62], atraso: 0.2,
+    legendas: [[17.86, 19.2, 'Quando ele abriu a porta,'], [19.2, 21.62, 'só deu tempo de ver alguém entrando no elevador.']]},
+  {nome: 'visor', Cena: Visor, dur: 108, fala: [22.3, 25.28], atraso: 0.1,
+    legendas: [[22.3, 23.6, 'O elevador subiu...'], [24.03, 25.28, '...e parou no quinto andar.']]},
+  {nome: 'tania', Cena: Tania, dur: 129, fala: [25.91, 29.68], atraso: 0.2,
+    legendas: [[25.91, 27.51, 'No quinto andar mora a Tânia.'], [27.85, 29.68, 'Ela se mudou pra cá faz uma semana.']]},
+  {nome: 'duvida', Cena: Duvida, dur: 111, fala: [30.25, 33.39], atraso: 0.2,
+    legendas: [[30.25, 31.25, 'Devolver o quê?'], [31.55, 33.39, 'O Rodnei nunca pegou nada de ninguém.']]},
+  {nome: 'voltou', Cena: Voltou, dur: 63, fala: [33.98, 35.68], atraso: 0.1,
+    legendas: [[33.98, 35.68, 'Quando ele voltou, tinha outro.']]},
+  {nome: 'bilhete2', Cena: Bilhete2, dur: 99, fala: [36.21, 38.88], atraso: 0.2, legendas: []},
+  {nome: 'placar', Cena: PlacarCena, dur: 90, fala: [39.56, 41.83], atraso: 0.3,
+    legendas: [[39.56, 41.83, 'Noite um. Faltam vinte e nove.']]},
+  {nome: 'voto', Cena: Voto, dur: 179, fala: [42.34, 47.39], atraso: 0.3,
+    legendas: [[42.34, 43.71, 'Ele conta pra síndica...'], [44.1, 44.74, '...ou esconde?'], [45.22, 47.39, 'Comente: contar ou esconder.']]},
 ];
 
-const INICIOS = PARTES.reduce<number[]>((acc, _p, i) => [...acc, i === 0 ? 0 : acc[i - 1] + PARTES[i - 1][2]], []);
-export const DURACAO_EP01 = INICIOS[INICIOS.length - 1] + PARTES[PARTES.length - 1][2];
+const INICIOS = PARTES.reduce<number[]>((acc, _p, i) => [...acc, i === 0 ? 0 : acc[i - 1] + PARTES[i - 1].dur], []);
+export const DURACAO_EP01 = INICIOS[INICIOS.length - 1] + PARTES[PARTES.length - 1].dur;
+const inicio = (nome: string) => INICIOS[PARTES.findIndex((p) => p.nome === nome)];
 
+// legenda: [quadro inicial, quadro final, texto, posição em px]
 const LEGENDAS: [number, number, string, number][] = PARTES.flatMap((p, i) =>
-  p[3].map(([a, b, txt]) => [INICIOS[i] + s(a), INICIOS[i] + s(b), txt, p[4] === 'alto' ? 640 : 1640] as [number, number, string, number]),
+  p.legendas.map(([a, b, txt]) => {
+    const base = INICIOS[i] + s(p.atraso) - s(p.fala[0]);
+    return [base + s(a), base + s(b) + 4, txt, p.pos === 'alto' ? 640 : 1640] as [number, number, string, number];
+  }),
 );
 
 const Legenda: React.FC = () => {
@@ -335,16 +359,29 @@ const Legenda: React.FC = () => {
   );
 };
 
-// Áudio: preenchido quando a narração nova chegar.
-// Fala: [início no áudio (s), fim no áudio (s), quando entra no vídeo (quadro)].
-export const FALAS: [number, number, number][] = [];
-export const EFEITOS: [string, number, number, number?][] = [];
+// Efeitos pontuais e fundo baixo: [arquivo, quadro em que entra, volume, duração máxima em quadros]
+const EFEITOS: [string, number, number, number?][] = [
+  ['papel', inicio('aviso') + 10, 0.25],
+  ['suspense_longo', inicio('sala'), 0.16, inicio('voto') + 179 - inicio('sala')],
+  ['papel', inicio('sala') + 45, 0.55],
+  ['papel', inicio('bilhete1') + 2, 0.35],
+  ['clique', inicio('sombra') + 2, 0.5],
+  ['luz_volta', inicio('sombra') + 60, 0.25],
+  ['bip', inicio('visor') + 0, 0.3],
+  ['bip', inicio('visor') + 14, 0.3],
+  ['bip', inicio('visor') + 28, 0.3],
+  ['bip', inicio('visor') + 42, 0.3],
+  ['luz_volta', inicio('visor') + 56, 0.35],
+  ['impacto', inicio('voltou'), 0.6],
+  ['papel', inicio('bilhete2') + 2, 0.35],
+  ['uuush', inicio('voto') + 4, 0.3],
+];
 
 const Sons: React.FC = () => (
   <>
-    {FALAS.map(([de, ate, em], i) => (
-      <Sequence key={`fala${i}`} from={em} durationInFrames={s(ate - de)}>
-        <Audio src={staticFile('ep01-narracao.mp3')} trimBefore={s(de)} />
+    {PARTES.map((p, i) => (
+      <Sequence key={`fala${i}`} from={INICIOS[i] + s(p.atraso)} durationInFrames={s(p.fala[1] - p.fala[0]) + 6}>
+        <Audio src={staticFile('ep01-narracao.mp3')} trimBefore={s(p.fala[0])} />
       </Sequence>
     ))}
     {EFEITOS.map(([arq, em, vol, max], i) => (
@@ -355,15 +392,15 @@ const Sons: React.FC = () => (
   </>
 );
 
-export const Ep01: React.FC = () => (
+export const Ep01: React.FC<{semLegenda?: boolean}> = ({semLegenda = false}) => (
   <AbsoluteFill style={{background: '#000'}}>
-    {PARTES.map(([nome, Cena, dur], i) => (
+    {PARTES.map(({nome, Cena, dur}, i) => (
       <Sequence key={nome} from={INICIOS[i]} durationInFrames={dur}>
         <Cena />
         {i > 0 && <Entrada />}
       </Sequence>
     ))}
-    <Legenda />
+    {!semLegenda && <Legenda />}
     <Sons />
   </AbsoluteFill>
 );
