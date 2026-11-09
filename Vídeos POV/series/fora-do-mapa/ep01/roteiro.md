@@ -1,6 +1,6 @@
 # Fora do Mapa · Parte 1: "O aviso" (roteiro, versão 1)
 
-> Para aprovar. Duração prevista: cerca de 2 minutos. Sem narrador: só as falas.
+> ✅ Aprovado em 2026-11-09. Duração prevista: cerca de 2 minutos. Sem narrador: só as falas.
 > Estilo: noturno realista, câmera nos olhos do Motoca (lente curva).
 > Placar de saída: NOITE 1/15 · DEVE R$ 5.000 · CAIXA R$ 0.
 
@@ -13,7 +13,7 @@
 | **O menino** | criança de 8 anos, tranquila demais | azul-claro |
 | **GPS** | voz de aplicativo | cinza, com ícone 📍 |
 
-> "Seu Vando" é uma proposta de nome para o agiota. Se aprovar, entra na bíblia.
+> "Seu Vando": nome do agiota aprovado em 2026-11-09.
 
 ---
 

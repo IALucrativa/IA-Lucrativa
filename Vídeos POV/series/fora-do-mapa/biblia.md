@@ -21,10 +21,10 @@
 - **Fala pouco:** frases curtas, com voz própria.
 - **Segredo:** a decidir.
 
-### O agiota
+### Seu Vando, o agiota
 - **Nunca aparece.** Só existe por áudio e mensagem no celular, até o fim.
 - Cobra a dívida de R$ 5 mil em 15 noites.
-- Nome, jeito de falar e voz: a decidir na prancha de vozes.
+- Calmo e educado demais: chama o Motoca de "meu querido" e nunca ameaça direto.
 
 ### Os clientes do endereço fora do mapa
 - **Uma pessoa diferente por noite.** Cada uma é estranha de um jeito e sabe algo do Motoca (o nome, a dívida, algo que ele fez).
@@ -33,6 +33,15 @@
 
 ### Aliados
 - **Nenhum.** Quem ajuda o Motoca é o público, com as escolhas.
+
+## Vozes e cores de legenda
+| Personagem | Voz (ElevenLabs) | Cor da legenda |
+|---|---|---|
+| Motoca | homem jovem, cansado, fala curta · voz: a anotar | branco |
+| Seu Vando | homem de uns 60 anos, calmo e educado demais · voz: a anotar | amarelo, com 🎙️ |
+| Atendente da lanchonete | mulher de uns 50 anos, jeito de mãe · voz: a anotar | laranja-claro |
+| O menino (Parte 1) | criança de uns 8 anos, tranquila demais · voz: a anotar | azul-claro |
+| GPS | voz de aplicativo | cinza, com 📍 |
 
 ## Lugares
 - **O quarto alugado (lugar fixo):** ele volta no fim da noite, conta o dinheiro e olha o saldo. É onde os objetos guardados se acumulam.

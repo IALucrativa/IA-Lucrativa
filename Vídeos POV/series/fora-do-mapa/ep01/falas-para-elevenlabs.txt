@@ -1,0 +1,83 @@
+FORA DO MAPA · PARTE 1: "O AVISO"
+Falas para gerar no ElevenLabs, em português do Brasil.
+
+COMO FAZER
+1. Para cada personagem, escolha UMA voz no ElevenLabs e use sempre a mesma (anote o nome da voz aqui embaixo, ao lado do personagem).
+2. Gere uma fala por vez: copie só o texto que está depois de "TEXTO:".
+3. O que está entre parênteses é o tom. NÃO copie para o ElevenLabs; use para escolher a voz e ajustar a emoção.
+4. Salve cada áudio em  series/fora-do-mapa/ep01/audios/  com o nome indicado (ex.: 01-menino.mp3).
+5. Se uma fala sair estranha, gere de novo. Pode mandar mais de uma versão (ex.: 01-menino-b.mp3).
+
+VOZES
+- MOTOCA: homem jovem (20 e poucos anos), voz cansada, fala baixa e curta.          Voz escolhida: ____________
+- SEU VANDO (o agiota, por áudio de celular): homem de uns 60 anos, calmo, educado demais, sorrindo enquanto ameaça.   Voz escolhida: ____________
+- ATENDENTE: mulher de uns 50 anos, carinhosa, jeito de mãe, meio apressada.        Voz escolhida: ____________
+- MENINO: criança de uns 8 anos, tranquila demais, sem pressa nenhuma.              Voz escolhida: ____________
+- GPS: voz feminina de aplicativo, neutra.                                         Voz escolhida: ____________
+
+======================================================================
+
+01-menino.mp3
+(perto, quase sussurrando, muito calmo; abertura do vídeo)
+TEXTO: Não passa pela avenida amanhã.
+
+02-vando.mp3
+(áudio de celular; calmo, simpático, cada frase com uma pausa)
+TEXTO: Motoca, meu querido. Cinco mil. Quinze noites. A primeira começa agora.
+
+03-motoca.mp3
+(cansado, meio sem paciência, falando sozinho para o celular)
+TEXTO: Tô correndo, Seu Vando. Tô correndo.
+
+04-atendente.mp3
+(carinhosa e apressada, atrás do balcão)
+TEXTO: Mais um pra Vila Nova, Motoca. E come alguma coisa, que você tá pálido.
+
+05-motoca.mp3
+(sem graça, contando moedas)
+TEXTO: Hoje não dá, não.
+
+06-motoca.mp3
+(estranhando, lendo a tela do celular)
+TEXTO: Rua sem nome?
+
+07-gps.mp3
+(voz de aplicativo, neutra; a segunda vez igual à primeira)
+TEXTO: Recalculando... Recalculando...
+
+08-motoca.mp3
+(baixinho, assustado, sem acreditar)
+TEXTO: Isso aqui era um muro.
+
+09-menino.mp3
+(tranquilo, como se conhecesse ele há anos)
+TEXTO: Demorou, Motoca.
+
+10-motoca.mp3
+(surpreso, a frase fica no meio)
+TEXTO: Como você sabe o meu...
+
+11-menino.mp3
+(interrompendo, calmo, um pouco triste)
+TEXTO: É pro meu pai. Ele ainda não chegou.
+
+12-motoca.mp3
+(sem jeito, querendo ir embora)
+TEXTO: Tá pago no app?
+
+13-menino.mp3
+(sério, devagar)
+TEXTO: Eu pago de outro jeito.
+
+14-menino.mp3
+(olhando nos olhos, devagar, cada parte com uma pausa; o momento mais importante)
+TEXTO: Amanhã, às dez da noite, não passa pela avenida.
+
+15-motoca.mp3
+(quase sem voz, lendo a mensagem do Seu Vando)
+TEXTO: ...Na avenida.
+
+======================================================================
+Total: 15 falas (Motoca 7, Menino 5, Seu Vando 1, Atendente 1, GPS 1 com duas repetições).
+A mensagem escrita do Seu Vando ("Amanhã, 22h, na avenida. Traz o que tiver.") aparece só na tela, sem voz.
+Os sons de ambiente (moto, rua, apito do celular, porta) eu faço aqui no estúdio; não precisa gerar.
