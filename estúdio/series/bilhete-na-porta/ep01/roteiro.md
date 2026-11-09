@@ -39,3 +39,7 @@
 
 ## Precisa de narração nova
 O texto mudou, então a narração do ElevenLabs precisa ser gerada de novo, depois da aprovação.
+
+## Produção
+- 2026-11-09: prévia v2 (folha de quadros e vídeo sem som) **aprovada**.
+- Próximo passo: narração nova no ElevenLabs (texto em `narracao-para-elevenlabs.txt`), depois acertar os tempos pela voz, efeitos, −14 LUFS e render final.
