@@ -131,8 +131,23 @@ export const Corredor: React.FC<{
   sombraOp: number;
   bilheteNoChao: boolean;
   feixe: boolean;
-}> = ({sombraOp, bilheteNoChao, feixe}) => (
+  aberturaElevador?: number; // 0 fechado, 1 aberto
+  sombraElevador?: number; // sombra dentro do elevador
+  portaAberta?: boolean; // porta do apartamento do Rodnei aberta
+}> = ({sombraOp, bilheteNoChao, feixe, aberturaElevador = 0, sombraElevador = 0, portaAberta = false}) => {
+  // bordas de cima e de baixo da porta do elevador (em perspectiva)
+  const yCima = (x: number) => 412 - (x - 400) * (39 / 90);
+  const yBaixo = (x: number) => 587 + (x - 400) * (150 / 90);
+  const xe = 445 - 45 * aberturaElevador;
+  const xd = 445 + 45 * aberturaElevador;
+  const folha = (a: number, b: number) => `${a},${yCima(a)} ${b},${yCima(b)} ${b},${yBaixo(b)} ${a},${yBaixo(a)}`;
+  return (
   <g>
+    <defs>
+      <clipPath id="folhaDireita">
+        <polygon points={folha(xd, 490)} />
+      </clipPath>
+    </defs>
     <defs>
       <radialGradient id="lampCorredor" cx="0.5" cy="0" r="0.8">
         <stop offset="0" stopColor={C.luz} stopOpacity={0.35} />
@@ -162,11 +177,22 @@ export const Corredor: React.FC<{
     <ellipse cx={300} cy={246} rx={24} ry={8} fill={C.papel} {...Tf} />
     <polygon points="276,250 324,250 420,520 180,520" fill="url(#lampCorredor)" />
     {/* porta do apartamento do Rodnei */}
-    <polygon points="50,367 150,400 150,632 50,757" fill="#a0623a" {...T} />
-    <polygon points="64,400 136,424 136,500 64,500" fill="#874f2c" opacity={0.6} />
-    <polygon points="64,540 136,548 136,600 64,640" fill="#874f2c" opacity={0.6} />
-    <circle cx={132} cy={545} r={5} fill={C.chave} {...Tf} />
-    <circle cx={100} cy={455} r={4} fill="#2a2440" {...Tf} />
+    {portaAberta ? (
+      <g>
+        {/* porta aberta: a luz da sala dele aparece e a folha da porta fica para dentro */}
+        <polygon points="50,367 150,400 150,632 50,757" fill="#f3c97a" {...T} />
+        <polygon points="50,367 82,360 82,742 50,757" fill="#a0623a" {...T} />
+        <polygon points="50,757 150,632 230,690 120,850" fill="#f3c97a" opacity={0.35} />
+      </g>
+    ) : (
+      <g>
+        <polygon points="50,367 150,400 150,632 50,757" fill="#a0623a" {...T} />
+        <polygon points="64,400 136,424 136,500 64,500" fill="#874f2c" opacity={0.6} />
+        <polygon points="64,540 136,548 136,600 64,640" fill="#874f2c" opacity={0.6} />
+        <circle cx={132} cy={545} r={5} fill={C.chave} {...Tf} />
+        <circle cx={100} cy={455} r={4} fill="#2a2440" {...Tf} />
+      </g>
+    )}
     {bilheteNoChao && (
       <g>
         <polygon points="80,720 108,685 126,694 98,730" fill={C.papel} {...Tf} />
@@ -176,18 +202,26 @@ export const Corredor: React.FC<{
     )}
     {/* elevador do térreo, de onde ele saiu */}
     <polygon points="392,404 498,360 498,742 392,592" fill="#8793a3" {...T} />
-    <polygon points="400,412 490,373 490,737 400,587" fill="#a9b4c2" {...T} />
-    <line x1={445} y1={392} x2={445} y2={662} stroke={C.linha} strokeWidth={2} />
+    {/* dentro do elevador (aparece quando a porta abre) */}
+    <polygon points="400,412 490,373 490,737 400,587" fill="#e9e3c8" {...T} />
+    <g opacity={sombraElevador}>
+      <circle cx={445} cy={470} r={13} fill="#0d0b14" />
+      <path d="M428,484 Q445,476 462,484 L468,650 L422,630 Z" fill="#0d0b14" />
+    </g>
+    <polygon points={folha(400, xe)} fill="#a9b4c2" {...T} />
+    <polygon points={folha(xd, 490)} fill="#a9b4c2" {...T} />
     <polygon points="430,372 462,358 462,376 430,389" fill="#222" {...Tf} />
     <text x={0} y={0} fontSize={13} fontWeight="bold" fill={C.acento} transform="translate(441,384) skewY(-23)" fontFamily="Inter, Arial">
       T
     </text>
-    <g transform="translate(452,470) skewY(-23)">
+    <g clipPath="url(#folhaDireita)">
+    <g transform={`translate(${452 + 45 * aberturaElevador},${470 - 45 * aberturaElevador * (39 / 90)}) skewY(-23)`}>
       <rect x={0} y={0} width={32} height={40} fill={C.papel} {...Tf} />
       <rect x={11} y={-4} width={10} height={6} fill={C.acento} opacity={0.7} />
       <text x={16} y={13} fontSize={6.5} fontWeight="bold" textAnchor="middle" fill="#333" fontFamily="Inter, Arial">ME MUDO</text>
       <text x={16} y={23} fontSize={6.5} fontWeight="bold" textAnchor="middle" fill="#333" fontFamily="Inter, Arial">DIA 30</text>
       <text x={16} y={33} fontSize={5} textAnchor="middle" fill="#555" fontFamily="Inter, Arial">Obrigado!</text>
+    </g>
     </g>
     <rect x={503} y={520} width={10} height={20} rx={2} fill="#8793a3" {...Tf} />
     {/* caixas da mudança apoiadas no chão */}
@@ -210,7 +244,8 @@ export const Corredor: React.FC<{
       <path d="M287,472 Q300,466 313,472 L318,520 L282,520 Z" fill="#0d0b14" />
     </g>
   </g>
-);
+  );
+};
 
 // ---------- Vizinho (só passa, olhando o celular) ----------
 export const Vizinho: React.FC<{x: number; y: number; escala?: number; frame: number}> = ({x, y, escala = 1, frame}) => {
@@ -247,7 +282,7 @@ export const Vizinho: React.FC<{x: number; y: number; escala?: number; frame: nu
 };
 
 // ---------- Placar ----------
-export const Placar: React.FC<{noite: string; chaves: number; entrada: number}> = ({noite, chaves, entrada}) => (
+export const Placar: React.FC<{noite: string; chaves: number; entrada: number; perguntas?: string[]}> = ({noite, chaves, entrada, perguntas = ['Quem escreve?']}) => (
   <g transform={`translate(0,${(1 - entrada) * -140})`} opacity={entrada} fontFamily="Inter, Arial, sans-serif">
     <rect x={18} y={22} width={150} height={44} rx={22} fill={C.hud} opacity={0.9} />
     <text x={93} y={51} fontSize={20} fontWeight="bold" textAnchor="middle" fill={C.hudTxt}>
@@ -263,13 +298,128 @@ export const Placar: React.FC<{noite: string; chaves: number; entrada: number}> 
     <text x={250} y={51} fontSize={20} fontWeight="bold" textAnchor="middle" fill={C.hudTxt}>
       {chaves}
     </text>
-    <rect x={330} y={22} width={192} height={66} rx={12} fill={C.hud} opacity={0.9} />
+    <rect x={330} y={22} width={192} height={40 + perguntas.length * 26} rx={12} fill={C.hud} opacity={0.9} />
     <text x={346} y={46} fontSize={13} fontWeight="bold" fill={C.acento}>
       PERGUNTAS
     </text>
-    <rect x={346} y={58} width={14} height={14} fill="none" stroke={C.hudTxt} strokeWidth={2} />
-    <text x={368} y={70} fontSize={15} fill={C.hudTxt}>
-      Quem escreve?
+    {perguntas.map((p, i) => (
+      <g key={p}>
+        <rect x={346} y={58 + i * 26} width={14} height={14} fill="none" stroke={C.hudTxt} strokeWidth={2} />
+        <text x={368} y={70 + i * 26} fontSize={15} fill={C.hudTxt}>
+          {p}
+        </text>
+      </g>
+    ))}
+  </g>
+);
+
+// ---------- Sala do Rodnei, à noite, cheia de caixas ----------
+export const SalaNoite: React.FC<{papel: number}> = ({papel}) => (
+  <g>
+    <polygon points="0,0 540,0 470,150 70,150" fill="#8a6f55" {...T} />
+    <polygon points="0,0 70,150 70,780 0,960" fill="#b89a74" {...T} />
+    <polygon points="540,0 470,150 470,780 540,960" fill="#b3946e" {...T} />
+    <rect x={70} y={150} width={400} height={630} fill="#cdb08a" {...T} />
+    <polygon points="0,960 70,780 470,780 540,960" fill="#8a5a3a" {...T} />
+    {[150, 240, 330, 420].map((x, i) => (
+      <line key={x} x1={x} y1={780} x2={-40 + i * 200} y2={960} stroke="#74482c" strokeWidth={2} />
+    ))}
+    {/* tapete */}
+    <polygon points="110,820 430,820 470,900 70,900" fill="#6e3b3b" {...Tf} />
+    {/* janela na parede esquerda, com a noite */}
+    <polygon points="14,250 56,268 56,470 14,470" fill="#16213e" {...T} />
+    <circle cx={34} cy={300} r={7} fill="#f3efd6" />
+    <line x1={35} y1={259} x2={35} y2={470} stroke={C.linha} strokeWidth={2} />
+    {/* relógio na parede marcando 23h */}
+    <circle cx={360} cy={250} r={34} fill="#fbf7ea" {...T} />
+    <line x1={360} y1={250} x2={360} y2={226} stroke={C.linha} strokeWidth={4} strokeLinecap="round" />
+    <line x1={360} y1={250} x2={348} y2={233} stroke={C.linha} strokeWidth={5} strokeLinecap="round" />
+    <circle cx={360} cy={250} r={3} fill={C.linha} />
+    {/* porta de entrada: olho mágico, trinco de corrente e a fresta embaixo */}
+    <rect x={300} y={400} width={130} height={380} fill="#a0623a" {...T} />
+    <rect x={316} y={420} width={98} height={140} fill="#874f2c" opacity={0.5} />
+    <rect x={316} y={590} width={98} height={160} fill="#874f2c" opacity={0.5} />
+    <circle cx={365} cy={470} r={5} fill="#2a2440" {...Tf} />
+    <circle cx={410} cy={600} r={7} fill={C.chave} {...Tf} />
+    <path d="M404,560 q-14,18 -2,30" fill="none" stroke="#9aa0a6" strokeWidth={3} />
+    <rect x={398} y={552} width={14} height={8} fill="#9aa0a6" {...Tf} />
+    <rect x={300} y={776} width={130} height={4} fill="#1b1b2a" />
+    {/* o bilhete deslizando por baixo da porta */}
+    {papel > 0 && (
+      <g>
+        <polygon points={`${335},${778 + papel * 40} ${395},${778 + papel * 40} ${400},${786 + papel * 60} ${330},${786 + papel * 60}`} fill={C.papel} {...Tf} />
+      </g>
+    )}
+    {/* abajur de chão, apoiado no chão */}
+    <rect x={448} y={560} width={6} height={220} fill="#3a3a3a" {...Tf} />
+    <ellipse cx={451} cy={782} rx={22} ry={6} fill="#3a3a3a" {...Tf} />
+    <path d="M426,560 L476,560 L466,520 L436,520 Z" fill="#f3d36b" {...T} />
+    <polygon points="426,560 476,560 520,780 400,780" fill={C.luz} opacity={0.18} />
+    {/* caixas da mudança empilhadas no chão */}
+    <rect x={88} y={680} width={130} height={100} fill="#c79a5b" {...T} />
+    <rect x={146} y={680} width={16} height={100} fill="#a87d42" opacity={0.6} />
+    <text x={153} y={745} fontSize={14} fontWeight="bold" textAnchor="middle" fill="#5a3a1e" fontFamily="Inter, Arial">LIVROS</text>
+    <rect x={100} y={600} width={104} height={80} fill="#c79a5b" {...T} />
+    <rect x={146} y={600} width={14} height={80} fill="#a87d42" opacity={0.6} />
+    <text x={152} y={650} fontSize={14} fontWeight="bold" textAnchor="middle" fill="#5a3a1e" fontFamily="Inter, Arial">SALA</text>
+    <rect x={120} y={540} width={70} height={60} fill="#d8ad6c" {...T} />
+    {/* rolo de fita em cima da caixa */}
+    <ellipse cx={155} cy={536} rx={16} ry={6} fill="#c9b27a" {...Tf} />
+  </g>
+);
+
+// ---------- Visor do elevador, de perto ----------
+export const VisorElevador: React.FC<{andar: string; subindo: boolean}> = ({andar, subindo}) => (
+  <g>
+    <rect x={0} y={0} width={540} height={960} fill="#544b7a" />
+    <rect x={0} y={880} width={540} height={80} fill="#7a5a4a" {...T} />
+    {/* moldura e portas do elevador */}
+    <rect x={60} y={520} width={420} height={360} fill="#8793a3" {...T} />
+    <rect x={80} y={540} width={190} height={340} fill="#a9b4c2" {...T} />
+    <rect x={270} y={540} width={190} height={340} fill="#a9b4c2" {...T} />
+    {/* visor preso na parede, acima das portas */}
+    <rect x={150} y={250} width={240} height={200} rx={16} fill="#111" {...T} />
+    <text x={312} y={400} fontSize={150} fontWeight="bold" textAnchor="middle" fill="#ff8a2a" fontFamily="JetBrains Mono, monospace">
+      {andar}
     </text>
+    {subindo && <polygon points="168,380 192,336 216,380" fill="#ff8a2a" />}
+    <rect x={500} y={650} width={22} height={44} rx={4} fill="#c9ced6" {...Tf} />
+  </g>
+);
+
+// ---------- Porta do 501 ----------
+export const Porta501: React.FC = () => (
+  <g>
+    <rect x={0} y={0} width={540} height={800} fill="#5d5486" />
+    <rect x={0} y={780} width={540} height={20} fill="#874f2c" {...Tf} />
+    <rect x={0} y={800} width={540} height={260} fill="#7a5a4a" {...T} />
+    <line x1={0} y1={880} x2={540} y2={880} stroke="#6a4c3e" strokeWidth={2} />
+    {/* arandela presa na parede */}
+    <rect x={455} y={380} width={20} height={34} rx={4} fill="#8793a3" {...Tf} />
+    <path d="M445,380 L485,380 L478,350 L452,350 Z" fill="#f3d36b" {...Tf} />
+    {/* porta */}
+    <rect x={140} y={240} width={260} height={560} fill="#874f2c" {...T} />
+    <rect x={154} y={254} width={232} height={546} fill="#a0623a" {...T} />
+    <rect x={180} y={300} width={180} height={190} fill="#874f2c" opacity={0.5} />
+    <rect x={180} y={540} width={180} height={220} fill="#874f2c" opacity={0.5} />
+    {/* número 501 */}
+    <rect x={225} y={268} width={90} height={36} rx={6} fill="#d8c37a" {...Tf} />
+    <text x={270} y={295} fontSize={26} fontWeight="900" textAnchor="middle" fill="#3a2a1a" fontFamily="Inter, Arial">501</text>
+    <circle cx={270} cy={340} r={6} fill="#1b1b2a" {...Tf} />
+    {/* placa "BEM-VINDOS" pendurada num prego (semente: muda de lugar entre os episódios) */}
+    <circle cx={270} cy={392} r={4} fill="#9aa0a6" {...Tf} />
+    <path d="M270,392 L226,428 M270,392 L314,428" stroke="#6a4c3e" strokeWidth={2} fill="none" />
+    <rect x={212} y={426} width={116} height={40} rx={6} fill="#f2e6c9" transform="rotate(-4 270 446)" {...Tf} />
+    <text x={270} y={452} fontSize={15} fontWeight="bold" textAnchor="middle" fill="#6e3b3b" fontFamily="Inter, Arial" transform="rotate(-4 270 446)">BEM-VINDOS</text>
+    <circle cx={372} cy={560} r={9} fill={C.chave} {...Tf} />
+    {/* luz acesa por baixo da porta: tem alguém em casa */}
+    <rect x={154} y={796} width={232} height={5} fill="#ffe69a" />
+    <polygon points="154,801 386,801 430,850 110,850" fill="#ffe69a" opacity={0.25} />
+    {/* capacho */}
+    <polygon points="160,812 380,812 400,846 140,846" fill="#5a4a3a" {...Tf} />
+    {/* vaso apoiado no chão */}
+    <path d="M440,800 L478,800 L472,760 L446,760 Z" fill="#b5653a" {...T} />
+    <path d="M459,760 Q440,720 448,700 Q458,730 459,760 Z" fill="#3f8a4a" {...Tf} />
+    <path d="M459,760 Q474,716 488,710 Q474,740 459,760 Z" fill="#4c9c56" {...Tf} />
   </g>
 );
