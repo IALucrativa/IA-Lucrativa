@@ -18,3 +18,6 @@ As outras opções (A e B) e o desenho estão em `referencias/perfil-instagram/`
 ## Bilhete na Porta dentro do perfil
 - Premissa (para destaques e post fixado): "Ele se muda em 30 dias. Desde que avisou, um bilhete aparece toda noite. Você decide em quem ele confia."
 - Ideia de destaque: "BILHETE NA PORTA" com os episódios em ordem.
+
+## Organização do perfil (2026-11-09)
+Carrossel "Como funciona", capas de destaque e guia em `entregas/2026-11-09_perfil-instagram/`. Fixados: Como funciona → Ep. 1 → episódio mais recente. Destaques: BILHETE NA PORTA e COMO FUNCIONA.
