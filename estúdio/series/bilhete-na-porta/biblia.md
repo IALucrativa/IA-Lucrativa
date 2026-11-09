@@ -98,6 +98,7 @@
 ## Duração
 - Ep. 1: 48 s (ficou assim, decisão da pessoa).
 - A partir do Ep. 2: no mínimo 1 minuto (regra do CLAUDE.md).
+- Começo impactante nos 3 primeiros segundos: a partir do Ep. 2, sempre que a história permitir. O Ep. 1 fica como está.
 
 ## Histórico de votos
 | Ep. | Opções | Resultado |
