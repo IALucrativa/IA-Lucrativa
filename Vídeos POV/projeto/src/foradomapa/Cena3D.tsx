@@ -26,7 +26,7 @@ type Paleta = {
   muro: string;
 };
 
-const PALETAS: Record<Estilo, Paleta> = {
+export const PALETAS: Record<Estilo, Paleta> = {
   cartoon: {
     ceu: '#1d2b55', neblina: '#2a3566', asfalto: '#3a3f55', calcada: '#8a8fa3',
     paredes: ['#e07a5f', '#81b29a', '#f2cc8f', '#6d8bc9', '#c97bb2', '#e9e4d4'],
@@ -48,7 +48,7 @@ const PALETAS: Record<Estilo, Paleta> = {
 };
 
 // Material por estilo
-const useMaterial = (estilo: Estilo) => {
+export const useMaterial = (estilo: Estilo) => {
   const degraus = useMemo(() => {
     const dados = new Uint8Array([70, 70, 70, 255, 160, 160, 160, 255, 255, 255, 255, 255]);
     const t = new THREE.DataTexture(dados, 3, 1, THREE.RGBAFormat);
@@ -69,7 +69,7 @@ const useMaterial = (estilo: Estilo) => {
   };
 };
 
-type Forma =
+export type Forma =
   | {tipo: 'caixa'; d: [number, number, number]}
   | {tipo: 'cilindro'; r: number; h: number; r2?: number}
   | {tipo: 'esfera'; r: number; esc?: [number, number, number]};
@@ -82,7 +82,7 @@ const geometria = (f: Forma, folga = 0, lowpoly = false): THREE.BufferGeometry =
 };
 
 // Uma peça da cena. No estilo cartoon ganha contorno escuro.
-const Peca: React.FC<{
+export const Peca: React.FC<{
   forma: Forma;
   material: THREE.Material;
   pos?: [number, number, number];
@@ -107,7 +107,7 @@ const Peca: React.FC<{
 };
 
 // Cilindro ligando dois pontos (braços, hastes)
-const entre = (a: THREE.Vector3, b: THREE.Vector3) => {
+export const entre = (a: THREE.Vector3, b: THREE.Vector3) => {
   const meio = a.clone().add(b).multiplyScalar(0.5);
   const dir = b.clone().sub(a);
   const comp = dir.length();
@@ -117,7 +117,7 @@ const entre = (a: THREE.Vector3, b: THREE.Vector3) => {
 };
 
 // Lente olho de peixe: desenha a cena numa imagem e curva as bordas.
-const OlhoDePeixe: React.FC<{forca: number}> = ({forca}) => {
+export const OlhoDePeixe: React.FC<{forca: number}> = ({forca}) => {
   const {gl, size, scene, camera} = useThree();
   const alvo = useMemo(() => {
     const t = new THREE.WebGLRenderTarget(size.width * 1.25, size.height * 1.25, {samples: 4});

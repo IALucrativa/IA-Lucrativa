@@ -1,0 +1,367 @@
+[
+ {
+  "bloco": "01-abertura",
+  "duracao": 7.549,
+  "legendas": [
+   {
+    "texto": "\"Não passa pela avenida amanhã.\"",
+    "de": 0.0,
+    "ate": 1.65
+   },
+   {
+    "texto": "Foi isso que um menino me disse hoje.",
+    "de": 1.96,
+    "ate": 4.08
+   },
+   {
+    "texto": "Um menino que sabia o meu nome...",
+    "de": 4.3,
+    "ate": 6.05
+   },
+   {
+    "texto": "e quanto eu devo.",
+    "de": 6.36,
+    "ate": 7.7
+   }
+  ]
+ },
+ {
+  "bloco": "02-prazo",
+  "duracao": 15.726,
+  "legendas": [
+   {
+    "texto": "Aqui todo mundo me chama de Motoca.",
+    "de": 0.0,
+    "ate": 6.66
+   },
+   {
+    "texto": "Eu faço entrega de madrugada.",
+    "de": 6.95,
+    "ate": 8.07
+   },
+   {
+    "texto": "E devo cinco mil reais pro Seu Vando.",
+    "de": 8.25,
+    "ate": 10.26
+   },
+   {
+    "texto": "Ele nunca grita.",
+    "de": 10.78,
+    "ate": 11.63
+   },
+   {
+    "texto": "Só manda áudio, sempre educado.",
+    "de": 11.94,
+    "ate": 12.86
+   },
+   {
+    "texto": "Hoje ele mandou: cinco mil, quinze noites.",
+    "de": 12.97,
+    "ate": 14.02
+   },
+   {
+    "texto": "A primeira começa agora.",
+    "de": 14.13,
+    "ate": 15.88
+   }
+  ]
+ },
+ {
+  "bloco": "03-rotina",
+  "duracao": 13.322,
+  "legendas": [
+   {
+    "texto": "Na lanchonete,",
+    "de": 0.0,
+    "ate": 0.81
+   },
+   {
+    "texto": "a moça do balcão manda eu comer alguma coisa.",
+    "de": 0.81,
+    "ate": 3.57
+   },
+   {
+    "texto": "Diz que eu tô pálido.",
+    "de": 3.7,
+    "ate": 4.9
+   },
+   {
+    "texto": "Eu conto as moedas e",
+    "de": 5.43,
+    "ate": 6.51
+   },
+   {
+    "texto": "pego o salgado mais barato.",
+    "de": 6.51,
+    "ate": 8.11
+   },
+   {
+    "texto": "Uma noite boa rende cento e cinquenta reais.",
+    "de": 8.44,
+    "ate": 11.06
+   },
+   {
+    "texto": "Faz a conta.",
+    "de": 11.36,
+    "ate": 12.14
+   },
+   {
+    "texto": "Não fecha.",
+    "de": 12.47,
+    "ate": 13.47
+   }
+  ]
+ },
+ {
+  "bloco": "04-pedido",
+  "duracao": 10.998,
+  "legendas": [
+   {
+    "texto": "Aí o celular apitou diferente.",
+    "de": 0.0,
+    "ate": 2.2
+   },
+   {
+    "texto": "Lanche infantil.",
+    "de": 2.42,
+    "ate": 3.75
+   },
+   {
+    "texto": "Rua sem nome.",
+    "de": 4.04,
+    "ate": 5.03
+   },
+   {
+    "texto": "Endereço não encontrado.",
+    "de": 5.26,
+    "ate": 6.81
+   },
+   {
+    "texto": "Qualquer um recusaria.",
+    "de": 7.09,
+    "ate": 8.66
+   },
+   {
+    "texto": "Eu nunca consegui dizer não.",
+    "de": 8.93,
+    "ate": 11.15
+   }
+  ]
+ },
+ {
+  "bloco": "05-caminho",
+  "duracao": 9.326,
+  "legendas": [
+   {
+    "texto": "O GPS ficou recalculando o caminho inteiro.",
+    "de": 0.0,
+    "ate": 3.08
+   },
+   {
+    "texto": "No fim daquela rua tem um muro.",
+    "de": 3.21,
+    "ate": 4.97
+   },
+   {
+    "texto": "Sempre teve.",
+    "de": 5.14,
+    "ate": 5.99
+   },
+   {
+    "texto": "Hoje, no lugar do muro...",
+    "de": 6.34,
+    "ate": 8.1
+   },
+   {
+    "texto": "tinha uma rua.",
+    "de": 8.35,
+    "ate": 9.48
+   }
+  ]
+ },
+ {
+  "bloco": "06-cliente",
+  "duracao": 15.073,
+  "legendas": [
+   {
+    "texto": "A porta abriu antes de eu tocar.",
+    "de": 0.0,
+    "ate": 2.13
+   },
+   {
+    "texto": "Um menino de pijama.",
+    "de": 2.29,
+    "ate": 3.54
+   },
+   {
+    "texto": "Ele me chamou de Motoca.",
+    "de": 3.78,
+    "ate": 5.21
+   },
+   {
+    "texto": "Sabia até quanto eu devo.",
+    "de": 5.53,
+    "ate": 6.97
+   },
+   {
+    "texto": "Disse que o lanche era pro pai dele...",
+    "de": 7.29,
+    "ate": 9.05
+   },
+   {
+    "texto": "que ainda não tinha chegado.",
+    "de": 9.26,
+    "ate": 10.61
+   },
+   {
+    "texto": "Perguntei se tava pago no app.",
+    "de": 11.19,
+    "ate": 12.91
+   },
+   {
+    "texto": "Ele disse que pagava de outro jeito.",
+    "de": 13.0,
+    "ate": 15.22
+   }
+  ]
+ },
+ {
+  "bloco": "07-pagamento",
+  "duracao": 9.953,
+  "legendas": [
+   {
+    "texto": "Olhou bem nos meus olhos e falou devagar: amanhã,",
+    "de": 0.0,
+    "ate": 3.79
+   },
+   {
+    "texto": "às dez da noite,",
+    "de": 3.79,
+    "ate": 5.03
+   },
+   {
+    "texto": "não passa pela avenida.",
+    "de": 5.03,
+    "ate": 6.97
+   },
+   {
+    "texto": "A porta fechou.",
+    "de": 7.46,
+    "ate": 8.57
+   },
+   {
+    "texto": "E a luz apagou.",
+    "de": 8.91,
+    "ate": 10.1
+   }
+  ]
+ },
+ {
+  "bloco": "08-volta",
+  "duracao": 7.001,
+  "legendas": [
+   {
+    "texto": "Na volta,",
+    "de": 0.0,
+    "ate": 0.56
+   },
+   {
+    "texto": "eu parei em cima da",
+    "de": 0.56,
+    "ate": 1.74
+   },
+   {
+    "texto": "faixa e olhei pelo retrovisor.",
+    "de": 1.74,
+    "ate": 3.75
+   },
+   {
+    "texto": "A rua não estava mais lá.",
+    "de": 4.14,
+    "ate": 5.78
+   },
+   {
+    "texto": "Só o muro.",
+    "de": 6.01,
+    "ate": 7.15
+   }
+  ]
+ },
+ {
+  "bloco": "09-ameaca",
+  "duracao": 9.326,
+  "legendas": [
+   {
+    "texto": "Em casa, contei o dinheiro da noite.",
+    "de": 0.0,
+    "ate": 2.28
+   },
+   {
+    "texto": "Cento e cinquenta reais.",
+    "de": 2.4,
+    "ate": 4.17
+   },
+   {
+    "texto": "Aí chegou a mensagem do Seu Vando.",
+    "de": 4.46,
+    "ate": 6.33
+   },
+   {
+    "texto": "Amanhã.",
+    "de": 6.54,
+    "ate": 7.21
+   },
+   {
+    "texto": "Dez da noite.",
+    "de": 7.4,
+    "ate": 8.35
+   },
+   {
+    "texto": "Na avenida.",
+    "de": 8.49,
+    "ate": 9.48
+   }
+  ]
+ },
+ {
+  "bloco": "10-voto",
+  "duracao": 13.479,
+  "legendas": [
+   {
+    "texto": "Um menino que eu nunca vi",
+    "de": 0.0,
+    "ate": 1.44
+   },
+   {
+    "texto": "me mandou fugir da avenida.",
+    "de": 1.44,
+    "ate": 3.15
+   },
+   {
+    "texto": "O homem que eu devo me mandou ir.",
+    "de": 3.51,
+    "ate": 6.7
+   },
+   {
+    "texto": "E você...",
+    "de": 6.93,
+    "ate": 7.67
+   },
+   {
+    "texto": "o que faria?",
+    "de": 8.09,
+    "ate": 9.18
+   },
+   {
+    "texto": "Obedecer o menino, ou ir até o Seu Vando?",
+    "de": 9.32,
+    "ate": 11.66
+   },
+   {
+    "texto": "Comenta: obedecer, ou ir.",
+    "de": 11.89,
+    "ate": 13.63
+   }
+  ]
+ }
+]
