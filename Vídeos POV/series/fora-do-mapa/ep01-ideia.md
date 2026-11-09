@@ -27,7 +27,7 @@ Formato de 9 passos para POV (no mínimo 1 minuto; a referência tem cerca de 2 
 8. **A ameaça:** no quarto alugado, o relógio começa a andar sozinho. No celular, a mensagem do agiota: "Já tá contando?"
 9. **Voto:** **VENDER** o relógio amanhã ou **GUARDAR** o relógio.
 
-## Ideia B: "O aviso"
+## Ideia B: "O aviso" ✅ escolhida
 1. **Abertura:** a moto freia em cima de uma faixa de pedestres vazia. Uma voz de criança: "Não passa pela avenida amanhã."
 2. **Quem e prazo:** o celular mostra NOITE 1/15 · DEVE R$ 5.000, e chega um áudio do agiota.
 3. **Rotina:** entrega numa lanchonete; o Motoca come um salgado frio em pé, contando moedas.
