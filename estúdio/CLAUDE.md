@@ -54,6 +54,16 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 
   #vocedecideai #<série> #<gênero> #serieanimada
   ```
+- Ao finalizar um episódio, entregue também a capa (`capa.png`, 1080×1920) no estilo padrão, feita com o molde `projeto/src/bilhete/Capa.tsx` (troque só os textos e a pose):
+  - selinho com o nome da série no alto;
+  - "EPISÓDIO <n>" grande, com o número em amarelo;
+  - faixa amarela inclinada com o placar ou prazo (ex.: "FALTAM 29 NOITES");
+  - selinho escuro com o gancho do episódio;
+  - o personagem no centro, no cenário do episódio;
+  - cartão inclinado com a ameaça e uma faixa vermelha embaixo;
+  - etiqueta curta do personagem;
+  - barra "VOCÊ DECIDE" com as duas opções do voto escritas.
+  Tudo o que importa fica dentro do recorte da grade do perfil (o meio da imagem, sem os 240 px de cima e de baixo), e nada cobre o rosto. Confira a capa recortada antes de entregar.
 - Quando a pessoa corrigir algo importante, pergunte se deve virar regra neste arquivo.
 - Confira cada coisa criada. Se der erro, leia a mensagem inteira, explique em uma linha (sem termo técnico) e tente corrigir. Se a correção precisar baixar algo, avise antes com o tamanho.
 
