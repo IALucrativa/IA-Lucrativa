@@ -16,13 +16,13 @@ Para criar uma série, use a `entrevista-da-serie.md` adaptando as perguntas a e
 - `referencias/<nome>/`: vídeos e imagens de referência, com a `analise.md` (estrutura × identidade).
 
 ## O ciclo de um desafio
-1. **Convocação** (dia 1): o herói sozinho contra N inimigos, o cardápio de tipos de soldado, a meta bônus, o prazo e a pergunta final. Termina com o herói com **zero soldados** e o inimigo avançando.
+1. **Convocação** (dia 1): o herói sozinho contra N inimigos, o cardápio de tipos de soldado, a meta bônus, o prazo e a pergunta final. Termina com o herói ainda sozinho e o inimigo avançando.
 2. **Contagem** (antes da Batalha): a pessoa me passa os números reais **de cada plataforma**: total de comentários e quantos pediram cada tipo. Comentário que não cita um tipo conta como soldado comum. Se ela não souber contar, explico como (ou peço prints dos comentários).
 3. **Batalha** (dia 2): o exército entra com o número exato, o tipo mais pedido vai na frente, cada tipo usa a sua força e o seu defeito, e o resultado sai da conta (ver "Como a batalha se resolve"). Termina com o gancho do próximo desafio.
 
 ## Antes de qualquer vídeo
 1. Leia a `biblia.md` e o `banco-de-desafios.md` da série.
-2. Na Batalha, confira com a pessoa a contagem **de cada plataforma**. O número é sempre o real: "se forem 3, lutam 3".
+2. Na Batalha, confira com a pessoa a contagem **de cada plataforma**. O número é sempre o real, nem um a mais, nem um a menos.
 3. Roteiro (a narração e a imagem de cada cena) → aprovação → narração para o ElevenLabs → só então a produção.
 
 ## Três plataformas: Instagram, TikTok e YouTube
@@ -41,11 +41,11 @@ Para criar uma série, use a `entrevista-da-serie.md` adaptando as perguntas a e
 - **Tipos de soldado:** sempre **4 tipos**, cada um com **um nome de uma palavra** (é o que o público comenta), **uma força e um defeito engraçado** ditos numa frase. Os tipos podem mudar a cada desafio, mas a frase de cada um precisa ser útil na Batalha.
 - **Meta bônus:** um número alto de comentários que desbloqueia um soldado especial (personagem nosso, criado do zero).
 - **Prazo:** sempre dito e mostrado ("24 HORAS"). A Batalha sai no horário prometido.
-- **Promessa de honestidade:** a Convocação diz em voz alta que o número é real ("se forem 300, lutam 300; se forem 3, lutam 3"). A Batalha cumpre, com o número exato no placar.
+- **Promessa de honestidade:** a Convocação diz em voz alta que o número é real (com frase da série, nunca a da referência; ex.: "cada comentário vira um gato, nem um a mais, nem um a menos"). A Batalha cumpre, com o número exato no placar.
 - **Nunca punir o público:** perder é possível, mas o exército sempre faz algo heroico e o herói sobrevive para o próximo desafio. Nada de sangue nem morte na tela: quem perde foge, desmaia ou é derrubado.
 - Começo impactante: os **primeiros 3 segundos** mostram a desvantagem (o herói sozinho na frente da multidão) com o título grande e uma frase curta. Nunca abrir com apresentação calma ou paisagem.
 - Começo que explica: até os 10 segundos, quem é o herói, contra quem ele vai lutar e que **o exército dele é feito pelos comentários**.
-- Final com ameaça e pergunta direta: a Convocação termina com "zero soldados", o inimigo avançando e uma pergunta ("qual você manda?"). A Batalha termina com o próximo inimigo aparecendo.
+- Final com ameaça e pergunta direta: a Convocação termina com o herói ainda sozinho, o inimigo avançando e uma pergunta direta com frase da série (ex.: "quem você convoca?"). A Batalha termina com o próximo inimigo aparecendo.
 
 ## Como a batalha se resolve
 - O resultado sai de uma conta simples, anotada na bíblia antes da primeira Batalha (ex.: cada soldado comum vale 1, cada tipo vale 1 + o bônus dele contra esse inimigo; vence quem tiver mais força). A conta é a mesma em todo desafio e fica na bíblia.
@@ -83,7 +83,7 @@ Para criar uma série, use a `entrevista-da-serie.md` adaptando as perguntas a e
 
   ⚔️ Comente <TIPO 1>, <TIPO 2>, <TIPO 3> ou <TIPO 4>.
   Passou de <meta>? Chega o <soldado especial>.
-  Batalha amanhã, <horário>. Se forem 3, lutam 3. 👀
+  Batalha amanhã, <horário>. Cada comentário vira um soldado, nem um a mais, nem um a menos. 👀
 
   #<perfil> #<série> #batalha #<gênero>
   ```
