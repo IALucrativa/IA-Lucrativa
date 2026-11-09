@@ -11,8 +11,9 @@
 > Séries curtas em que VOCÊ decide o próximo episódio. 🗳️
 > Agora: Bilhete na Porta 📝 Ep. novo todo dia, 12h.
 
-## Foto de perfil (ideia)
-Símbolo do canal, e não um personagem, para servir a todas as séries: um balão de comentário com uma setinha de "play" dentro, em cores fortes, que se leia bem pequeno.
+## Foto de perfil
+**Escolhida: opção C, "Escuro no amarelo"** (`foto-perfil-vocedecideai.png`, 1080×1080). Balão de comentário azul-escuro com o "play" amarelo, sobre fundo amarelo. Serve para todas as séries.
+As outras opções (A e B) e o desenho estão em `referencias/perfil-instagram/`.
 
 ## Bilhete na Porta dentro do perfil
 - Premissa (para destaques e post fixado): "Ele se muda em 30 dias. Desde que avisou, um bilhete aparece toda noite. Você decide em quem ele confia."
