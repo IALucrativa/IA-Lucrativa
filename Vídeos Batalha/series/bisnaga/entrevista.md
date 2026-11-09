@@ -52,3 +52,4 @@ Entrevista concluída em 09/11/2026.
 - Desafio 1: Ideia C, "Os pinguins da geladeira".
 - Faixas da batalha e meta bônus (500, dobrando): aprovadas como estão.
 - Horário: Bisnaga e Bilhete na Porta, os dois às 12h.
+- Estilo: 1 · cartoon com contorno (prancha de estilos, 09/11/2026).

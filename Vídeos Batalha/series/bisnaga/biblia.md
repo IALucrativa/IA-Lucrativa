@@ -75,6 +75,10 @@ Cada tipo tem um acessório que o identifica de longe (a definir na prancha: ex.
 - **A contagem fecha:** a decidir (sugestão: 9h do dia da Batalha, para dar tempo de produzir).
 - O Bilhete na Porta também sai às 12h no mesmo perfil: os dois saem juntos (decidido em 09/11/2026).
 
+## Estilo
+- **Escolhido em 09/11/2026:** estilo 1, **cartoon com contorno** (cores fortes, sombra em degraus e contorno preto). Prancha em `prancha/prancha-estilos-3d.png`; código em `projeto/src/bisnaga/Cena3D.tsx`.
+- Nunca trocar o estilo sem pedido.
+
 ## Voz
 - **Narrador:** voz grave e calma, de documentário, no ElevenLabs. Voz exata: a decidir (anotar aqui o nome assim que escolher e nunca trocar sem pedido).
 
