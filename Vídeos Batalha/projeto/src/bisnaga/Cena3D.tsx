@@ -113,6 +113,18 @@ const geometria = (f: Forma, folga: number, lp: boolean): THREE.BufferGeometry =
   return new THREE.SphereGeometry(f.r + folga, seg, lp ? 6 : 18);
 };
 
+// Formas iguais são criadas uma vez só e reaproveitadas (sem isso a memória enche a cada quadro).
+const GEOMETRIAS = new Map<string, THREE.BufferGeometry>();
+const geometriaGuardada = (f: Forma, folga: number, lp: boolean) => {
+  const chave = JSON.stringify(f) + '|' + folga + '|' + lp;
+  let g = GEOMETRIAS.get(chave);
+  if (!g) {
+    g = geometria(f, folga, lp);
+    GEOMETRIAS.set(chave, g);
+  }
+  return g;
+};
+
 export const Peca: React.FC<{
   forma: Forma;
   mat: THREE.Material;
@@ -123,8 +135,8 @@ export const Peca: React.FC<{
   contorno?: number;
 }> = ({forma, mat, estilo, pos = [0, 0, 0], rot = [0, 0, 0], esc = [1, 1, 1], contorno = 0.008}) => {
   const lp = estilo === 'lowpoly';
-  const geo = useMemo(() => geometria(forma, 0, lp), [forma, lp]);
-  const geoC = useMemo(() => geometria(forma, contorno, lp), [forma, contorno, lp]);
+  const geo = geometriaGuardada(forma, 0, lp);
+  const geoC = geometriaGuardada(forma, contorno, lp);
   return (
     <group position={pos} rotation={rot} scale={esc}>
       <mesh geometry={geo} material={mat} castShadow receiveShadow />
