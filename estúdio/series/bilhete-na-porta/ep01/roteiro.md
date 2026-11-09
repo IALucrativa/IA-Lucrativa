@@ -33,3 +33,7 @@
 ## Decidido antes da produção
 - **Câmera da Marlene:** não aparece no Ep. 1. Ela entra mais tarde, num episódio próprio (problema #16).
 - **Andar do Rodnei:** térreo. À noite ele volta pela garagem (subsolo) e o elevador para entre a garagem e o térreo; a porta abre no térreo, no andar dele.
+
+## Produção
+- 2026-11-09: prévia em folha de quadros e prévia em vídeo sem som **aprovadas** (`previa-folha-de-quadros.png`, `previa-sem-som.mp4`).
+- Próximo passo: a pessoa gera a narração no ElevenLabs com `narracao-para-elevenlabs.txt` e manda o áudio. Depois: acertar os tempos pela voz, efeitos pontuais, mixagem em −14 LUFS e render final em 1080×1920.
