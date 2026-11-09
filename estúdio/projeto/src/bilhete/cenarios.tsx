@@ -314,7 +314,7 @@ export const Placar: React.FC<{noite: string; chaves: number; entrada: number; p
 );
 
 // ---------- Sala do Rodnei, à noite, cheia de caixas ----------
-export const SalaNoite: React.FC<{papel: number}> = ({papel}) => (
+export const SalaNoite: React.FC<{papel: number; dia?: boolean; hora?: number}> = ({papel, dia = false, hora = 23}) => (
   <g>
     <polygon points="0,0 540,0 470,150 70,150" fill="#8a6f55" {...T} />
     <polygon points="0,0 70,150 70,780 0,960" fill="#b89a74" {...T} />
@@ -327,13 +327,14 @@ export const SalaNoite: React.FC<{papel: number}> = ({papel}) => (
     {/* tapete */}
     <polygon points="110,820 430,820 470,900 70,900" fill="#6e3b3b" {...Tf} />
     {/* janela na parede esquerda, com a noite */}
-    <polygon points="14,250 56,268 56,470 14,470" fill="#16213e" {...T} />
-    <circle cx={34} cy={300} r={7} fill="#f3efd6" />
+    <polygon points="14,250 56,268 56,470 14,470" fill={dia ? '#bfe4f5' : '#16213e'} {...T} />
+    {dia ? <circle cx={34} cy={300} r={9} fill="#ffe27a" /> : <circle cx={34} cy={300} r={7} fill="#f3efd6" />}
+    {dia && <polygon points="56,300 56,470 200,780 120,780" fill="#fff7c9" opacity={0.25} />}
     <line x1={35} y1={259} x2={35} y2={470} stroke={C.linha} strokeWidth={2} />
     {/* relógio na parede marcando 23h */}
     <circle cx={360} cy={250} r={34} fill="#fbf7ea" {...T} />
     <line x1={360} y1={250} x2={360} y2={226} stroke={C.linha} strokeWidth={4} strokeLinecap="round" />
-    <line x1={360} y1={250} x2={348} y2={233} stroke={C.linha} strokeWidth={5} strokeLinecap="round" />
+    <line x1={360} y1={250} x2={360 + 15 * Math.sin(((hora % 12) / 12) * 2 * Math.PI)} y2={250 - 15 * Math.cos(((hora % 12) / 12) * 2 * Math.PI)} stroke={C.linha} strokeWidth={5} strokeLinecap="round" />
     <circle cx={360} cy={250} r={3} fill={C.linha} />
     {/* porta de entrada: olho mágico, trinco de corrente e a fresta embaixo */}
     <rect x={300} y={400} width={130} height={380} fill="#a0623a" {...T} />
@@ -387,8 +388,17 @@ export const VisorElevador: React.FC<{andar: string; subindo: boolean}> = ({anda
   </g>
 );
 
-// ---------- Porta do 501 ----------
-export const Porta501: React.FC = () => (
+// ---------- Porta vista de frente (501, síndica...) ----------
+export const PortaFrente: React.FC<{
+  numero: string;
+  cor?: string;
+  corEsc?: string;
+  placa?: 'bemvindos' | 'sindica' | 'nenhuma';
+  placaTorta?: boolean;
+  papelNoChao?: boolean;
+  luzEmbaixo?: boolean;
+  dia?: boolean;
+}> = ({numero, cor = '#a0623a', corEsc = '#874f2c', placa = 'bemvindos', placaTorta = false, papelNoChao = false, luzEmbaixo = true, dia = false}) => (
   <g>
     <rect x={0} y={0} width={540} height={800} fill="#5d5486" />
     <rect x={0} y={780} width={540} height={20} fill="#874f2c" {...Tf} />
@@ -396,30 +406,152 @@ export const Porta501: React.FC = () => (
     <line x1={0} y1={880} x2={540} y2={880} stroke="#6a4c3e" strokeWidth={2} />
     {/* arandela presa na parede */}
     <rect x={455} y={380} width={20} height={34} rx={4} fill="#8793a3" {...Tf} />
-    <path d="M445,380 L485,380 L478,350 L452,350 Z" fill="#f3d36b" {...Tf} />
+    <path d="M445,380 L485,380 L478,350 L452,350 Z" fill={dia ? '#e9e3c8' : '#f3d36b'} {...Tf} />
     {/* porta */}
-    <rect x={140} y={240} width={260} height={560} fill="#874f2c" {...T} />
-    <rect x={154} y={254} width={232} height={546} fill="#a0623a" {...T} />
-    <rect x={180} y={300} width={180} height={190} fill="#874f2c" opacity={0.5} />
-    <rect x={180} y={540} width={180} height={220} fill="#874f2c" opacity={0.5} />
-    {/* número 501 */}
+    <rect x={140} y={240} width={260} height={560} fill={corEsc} {...T} />
+    <rect x={154} y={254} width={232} height={546} fill={cor} {...T} />
+    <rect x={180} y={300} width={180} height={190} fill={corEsc} opacity={0.5} />
+    <rect x={180} y={540} width={180} height={220} fill={corEsc} opacity={0.5} />
     <rect x={225} y={268} width={90} height={36} rx={6} fill="#d8c37a" {...Tf} />
-    <text x={270} y={295} fontSize={26} fontWeight="900" textAnchor="middle" fill="#3a2a1a" fontFamily="Inter, Arial">501</text>
+    <text x={270} y={295} fontSize={26} fontWeight="900" textAnchor="middle" fill="#3a2a1a" fontFamily="Inter, Arial">{numero}</text>
     <circle cx={270} cy={340} r={6} fill="#1b1b2a" {...Tf} />
-    {/* placa "BEM-VINDOS" pendurada num prego (semente: muda de lugar entre os episódios) */}
-    <circle cx={270} cy={392} r={4} fill="#9aa0a6" {...Tf} />
-    <path d="M270,392 L226,428 M270,392 L314,428" stroke="#6a4c3e" strokeWidth={2} fill="none" />
-    <rect x={212} y={426} width={116} height={40} rx={6} fill="#f2e6c9" transform="rotate(-4 270 446)" {...Tf} />
-    <text x={270} y={452} fontSize={15} fontWeight="bold" textAnchor="middle" fill="#6e3b3b" fontFamily="Inter, Arial" transform="rotate(-4 270 446)">BEM-VINDOS</text>
+    {placa === 'bemvindos' && (
+      <g transform={placaTorta ? 'rotate(14 270 392)' : ''}>
+        <circle cx={270} cy={392} r={4} fill="#9aa0a6" {...Tf} />
+        <path d="M270,392 L226,428 M270,392 L314,428" stroke="#6a4c3e" strokeWidth={2} fill="none" />
+        <rect x={212} y={426} width={116} height={40} rx={6} fill="#f2e6c9" transform="rotate(-4 270 446)" {...Tf} />
+        <text x={270} y={452} fontSize={15} fontWeight="bold" textAnchor="middle" fill="#6e3b3b" fontFamily="Inter, Arial" transform="rotate(-4 270 446)">BEM-VINDOS</text>
+      </g>
+    )}
+    {placa === 'sindica' && (
+      <g>
+        <rect x={205} y={380} width={130} height={36} rx={4} fill="#2f3540" {...Tf} />
+        <text x={270} y={404} fontSize={17} fontWeight="900" textAnchor="middle" fill="#f3d36b" fontFamily="Inter, Arial">SÍNDICA</text>
+      </g>
+    )}
     <circle cx={372} cy={560} r={9} fill={C.chave} {...Tf} />
-    {/* luz acesa por baixo da porta: tem alguém em casa */}
-    <rect x={154} y={796} width={232} height={5} fill="#ffe69a" />
-    <polygon points="154,801 386,801 430,850 110,850" fill="#ffe69a" opacity={0.25} />
-    {/* capacho */}
+    {luzEmbaixo && (
+      <>
+        <rect x={154} y={796} width={232} height={5} fill="#ffe69a" />
+        <polygon points="154,801 386,801 430,850 110,850" fill="#ffe69a" opacity={0.25} />
+      </>
+    )}
     <polygon points="160,812 380,812 400,846 140,846" fill="#5a4a3a" {...Tf} />
-    {/* vaso apoiado no chão */}
+    {papelNoChao && (
+      <g transform="rotate(-12 330 830)">
+        <polygon points="312,820 352,816 356,838 314,842" fill={C.papel} {...Tf} />
+        <line x1={320} y1={828} x2={346} y2={826} stroke="#999" strokeWidth={1.5} />
+      </g>
+    )}
     <path d="M440,800 L478,800 L472,760 L446,760 Z" fill="#b5653a" {...T} />
     <path d="M459,760 Q440,720 448,700 Q458,730 459,760 Z" fill="#3f8a4a" {...Tf} />
     <path d="M459,760 Q474,716 488,710 Q474,740 459,760 Z" fill="#4c9c56" {...Tf} />
   </g>
 );
+
+// ---------- Porta do 501 (Ep. 1) ----------
+export const Porta501: React.FC = () => <PortaFrente numero="501" />;
+
+// ---------- Portaria: balcão com o livro de entradas ----------
+export const Portaria: React.FC<{children?: React.ReactNode}> = ({children}) => (
+  <g>
+    <rect x={0} y={0} width={540} height={700} fill="#b9c7a8" />
+    <rect x={0} y={700} width={540} height={260} fill="#b9a68a" {...T} />
+    <line x1={0} y1={800} x2={540} y2={800} stroke="#a3907a" strokeWidth={2} />
+    {/* quadro de chaves preso na parede */}
+    <rect x={40} y={180} width={150} height={190} rx={6} fill="#7a5a3a" {...T} />
+    {[0, 1, 2, 3].map((r) => [0, 1, 2].map((c) => (
+      <g key={`${r}${c}`}>
+        <circle cx={70 + c * 45} cy={210 + r * 45} r={3} fill="#2f3540" />
+        {!(r === 2 && c === 1) && <path d={`M${70 + c * 45},${213 + r * 45} l0,16`} stroke={C.chave} strokeWidth={4} strokeLinecap="round" />}
+      </g>
+    )))}
+    <text x={115} y={392} fontSize={13} fontWeight="900" textAnchor="middle" fill="#3a2a1a" fontFamily="Inter, Arial">CHAVES</text>
+    {/* lista de moradores presa na parede */}
+    <rect x={340} y={160} width={170} height={230} rx={4} fill="#fbf7ea" {...T} />
+    <text x={425} y={190} fontSize={15} fontWeight="900" textAnchor="middle" fill={C.hud} fontFamily="Inter, Arial">MORADORES</text>
+    {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+      <line key={i} x1={355} y1={215 + i * 25} x2={495} y2={215 + i * 25} stroke="#c9c2ad" strokeWidth={3} />
+    ))}
+    {/* relógio */}
+    <circle cx={270} cy={150} r={30} fill="#fbf7ea" {...T} />
+    <line x1={270} y1={150} x2={270} y2={128} stroke={C.linha} strokeWidth={4} strokeLinecap="round" />
+    <line x1={270} y1={150} x2={258} y2={157} stroke={C.linha} strokeWidth={4} strokeLinecap="round" />
+    {children}
+    {/* balcão na frente */}
+    <rect x={30} y={600} width={480} height={22} fill="#8a5a3a" {...T} />
+    <rect x={44} y={622} width={452} height={240} fill="#a0623a" {...T} />
+    <rect x={64} y={650} width={190} height={180} fill="#874f2c" opacity={0.5} />
+    <rect x={286} y={650} width={190} height={180} fill="#874f2c" opacity={0.5} />
+    {/* livro aberto em cima do balcão */}
+    <path d="M150,602 Q210,586 270,600 Q330,586 390,602 L390,610 L150,610 Z" fill="#fbf7ea" {...T} />
+    <line x1={270} y1={592} x2={270} y2={608} stroke={C.linha} strokeWidth={2} />
+    {/* telefone */}
+    <rect x={420} y={584} width={50} height={18} rx={4} fill="#2f3540" {...Tf} />
+  </g>
+);
+
+// ---------- Livro de entradas, de perto ----------
+export const LivroClose: React.FC<{riscado: number; destaque: number}> = ({riscado, destaque}) => {
+  const linhas: [string, string, string][] = [
+    ['21:15', 'Bruno', '504'],
+    ['22:40', 'Família Lopes', '503'],
+    ['23:02', '', '5º'],
+  ];
+  return (
+    <g fontFamily="Inter, Arial">
+      <rect x={0} y={0} width={540} height={960} fill="#8a5a3a" />
+      <line x1={0} y1={300} x2={540} y2={300} stroke="#74482c" strokeWidth={3} />
+      <line x1={0} y1={700} x2={540} y2={700} stroke="#74482c" strokeWidth={3} />
+      <path d="M30,220 Q150,190 270,215 Q390,190 510,220 L510,760 Q390,735 270,760 Q150,735 30,760 Z" fill="#fbf7ea" {...T} />
+      <line x1={270} y1={215} x2={270} y2={760} stroke={C.linha} strokeWidth={2.5} />
+      <text x={150} y={270} fontSize={20} fontWeight="900" textAnchor="middle" fill={C.hud}>ENTRADAS</text>
+      <text x={150} y={292} fontSize={13} fontWeight="bold" textAnchor="middle" fill="#666">ontem, noite</text>
+      {linhas.map(([h, nome, ap], i) => (
+        <g key={i}>
+          <line x1={45} y1={350 + i * 90} x2={255} y2={350 + i * 90} stroke="#c9c2ad" strokeWidth={2} />
+          <text x={50} y={340 + i * 90} fontSize={17} fill="#1f2a5a" fontStyle="italic" fontFamily="FreeSerif, serif">{h}</text>
+          <text x={110} y={340 + i * 90} fontSize={i === 2 ? 30 : 19} fill="#1f2a5a" fontStyle="italic" fontFamily="FreeSerif, serif">{i === 2 ? 'T' : nome}</text>
+          <text x={225} y={340 + i * 90} fontSize={17} fill="#1f2a5a" fontStyle="italic" fontFamily="FreeSerif, serif">{ap}</text>
+        </g>
+      ))}
+      {/* o resto do nome, riscado com força */}
+      <path d={`M128,${520} q8,-14 16,0 q8,14 16,0 q8,-14 16,0 q8,14 16,0`} fill="none" stroke="#1f2a5a" strokeWidth={4}
+        strokeDasharray={200} strokeDashoffset={200 * (1 - riscado)} />
+      <path d={`M126,${512} L196,${506} M128,${526} L198,${522}`} stroke="#1f2a5a" strokeWidth={3} strokeDasharray={160} strokeDashoffset={160 * (1 - riscado)} />
+      {/* círculo de destaque no "T" */}
+      <ellipse cx={118} cy={518} rx={24} ry={28} fill="none" stroke="#e0463a" strokeWidth={4} strokeDasharray={170} strokeDashoffset={170 * (1 - destaque)} />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <line key={i} x1={290} y1={350 + i * 70} x2={495} y2={350 + i * 70} stroke="#c9c2ad" strokeWidth={2} />
+      ))}
+      {/* caneta apoiada no livro */}
+      <g transform="rotate(-30 420 640)">
+        <rect x={340} y={632} width={150} height={14} rx={7} fill="#2f6db5" {...Tf} />
+        <polygon points="340,632 318,639 340,646" fill="#d6dbe1" {...Tf} />
+      </g>
+    </g>
+  );
+};
+
+// ---------- Lista de moradores do 5º andar, de perto ----------
+export const ListaClose: React.FC<{destaque: number}> = ({destaque}) => {
+  const nomes = [['501', 'Tânia'], ['502', 'Sr. Prado'], ['503', 'Família Lopes'], ['504', 'Bruno']];
+  return (
+    <g fontFamily="Inter, Arial">
+      <rect x={0} y={0} width={540} height={960} fill="#b9c7a8" />
+      <rect x={60} y={170} width={420} height={560} rx={8} fill="#fbf7ea" {...T} />
+      <circle cx={270} cy={190} r={7} fill="#9aa0a6" {...Tf} />
+      <text x={270} y={250} fontSize={34} fontWeight="900" textAnchor="middle" fill={C.hud}>MORADORES</text>
+      <text x={270} y={290} fontSize={22} fontWeight="bold" textAnchor="middle" fill="#666">5º ANDAR</text>
+      {nomes.map(([ap, nome], i) => (
+        <g key={ap}>
+          <line x1={90} y1={360 + i * 90} x2={450} y2={360 + i * 90} stroke="#c9c2ad" strokeWidth={2} />
+          <text x={100} y={348 + i * 90} fontSize={28} fontWeight="900" fill="#5a3a1e">{ap}</text>
+          <text x={190} y={348 + i * 90} fontSize={30} fontWeight="bold" fill={C.hud}>{nome}</text>
+        </g>
+      ))}
+      <rect x={176} y={308} width={120} height={56} rx={28} fill="none" stroke="#e0463a" strokeWidth={5}
+        strokeDasharray={360} strokeDashoffset={360 * (1 - destaque)} />
+    </g>
+  );
+};
