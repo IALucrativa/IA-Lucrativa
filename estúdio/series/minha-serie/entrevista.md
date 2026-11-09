@@ -88,3 +88,8 @@
    17. O vizinho de baixo reclama do barulho das caixas.
 2. **Problema que cresce quieto:** a câmera da Marlene (ela vai juntando gravações do Rodnei andando de madrugada).
 3. **Sementes:** um bilhete que chega em papel de outra cor; um objeto na porta do 501 (da Tânia) que muda de lugar entre os episódios.
+
+## Bloco 9: Estilo e voz (2026-11-09)
+1. **Desenho:** a decidir na prancha de estilos (a mesma cena em 3 estilos, no fim da entrevista).
+2. **Narrador:** narrador de suspense (voz grave e séria, tipo filme de mistério, contando coisas que às vezes são bobas).
+3. **Voz:** gerada no ElevenLabs. A pessoa gera o áudio com a própria conta e manda o arquivo; o Claude não cria conta nem usa serviço pago sem pedido.
