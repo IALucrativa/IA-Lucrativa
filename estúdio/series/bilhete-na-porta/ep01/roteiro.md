@@ -43,3 +43,4 @@ O texto mudou, então a narração do ElevenLabs precisa ser gerada de novo, dep
 ## Produção
 - 2026-11-09: prévia v2 (folha de quadros e vídeo sem som) **aprovada**.
 - Próximo passo: narração nova no ElevenLabs (texto em `narracao-para-elevenlabs.txt`), depois acertar os tempos pela voz, efeitos, −14 LUFS e render final.
+- 2026-11-09: vídeo final **aprovado** (`entregas/2026-11-09_bilhete-na-porta-ep01/`). Resultado do voto: a confirmar.

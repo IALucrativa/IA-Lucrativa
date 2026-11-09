@@ -80,12 +80,25 @@
 
 ## Decisões de produção
 - **Estilo:** A · Cartoon com contorno (prancha 1, em `prancha/`). A prancha é rascunho: o rosto e o corpo do Rodnei ainda serão refinados.
-- **Ep. 1:** ideia C, "O elevador parou" (ver `ep01-ideia.md`). Bilhete da noite: "Eu parei o elevador. Queria ver se você ia ter coragem." Voto: Contar ou Esconder.
+- **Ep. 1:** "O que é meu" (roteiro v2, em `ep01/roteiro.md`). A v1 "O elevador parou" foi reprovada. Vídeo final aprovado em 2026-11-09.
+
+## Estado após o Ep. 1 (noite 1)
+- **Noite:** 1 de 30 (faltam 29).
+- **Chaves:** 12 + a mestra (secreta). Nenhuma chave perdida.
+- **Bilhetes:** 2.
+  1. "Você não vai embora antes de devolver o que é meu." (passado por baixo da porta, às 23h)
+  2. "Se contar pra alguém, eu conto o seu segredo." (deixado na porta enquanto ele foi até o elevador)
+- **Pistas:** alguém entrou no elevador logo depois do 1º bilhete; o elevador subiu e parou no 5º andar.
+- **Suspeita:** Tânia, do 501 (5º andar), que se mudou faz uma semana. A luz do 501 estava acesa.
+- **Sementes plantadas:** placa "BEM-VINDOS" na porta do 501 (vai mudar de lugar).
+- **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"?
+- **Visual do Rodnei:** igual ao início (macacão azul, chaves na cintura). Segura o bilhete.
+- **O público não sabe:** qual é o segredo (a chave mestra).
 
 ## Histórico de votos
 | Ep. | Opções | Resultado |
 |---|---|---|
-| (vazio) | | |
+| 1 | Contar · Esconder | a confirmar com a pessoa |
 
 ## Calendário interno
 - Episódio N = noite N. A mudança acontece na noite 30.
