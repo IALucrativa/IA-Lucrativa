@@ -1,5 +1,7 @@
 # Desafio 1 · Convocação: "Os pinguins da geladeira"
 
+> **Aprovado em 09/11/2026.**
+
 - **Duração prevista:** cerca de 70 s (cerca de 180 palavras, voz calma, com pausas).
 - **Tom:** documentário sério sobre uma guerra ridícula. O narrador nunca ri.
 - **Placar fixo no alto** a partir da cena 3: "GATOS 1 × 10.000 PINGUINS".
