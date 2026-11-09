@@ -101,13 +101,13 @@
 - Começo impactante nos 3 primeiros segundos: a partir do Ep. 2, sempre que a história permitir. O Ep. 1 fica como está.
 
 ## Plataformas
-- A série é postada no **Instagram** e no **TikTok**. Cada plataforma segue o voto do seu público (regra no CLAUDE.md).
-- **Situação:** linha única até o Ep. 1 (o mesmo vídeo nas duas). Se o voto do Ep. 1 for diferente, a história se separa a partir do Ep. 2: copiar o "Estado após o Ep. 1" para "Estado — Instagram" e "Estado — TikTok" e seguir cada um.
+- A série é postada no **Instagram**, no **TikTok** e no **YouTube Shorts**. Cada plataforma segue o voto do seu público (regra no CLAUDE.md).
+- **Situação:** linha única até o Ep. 1 (o mesmo vídeo nas três). Se algum voto do Ep. 1 for diferente, a plataforma que votou diferente se separa a partir do Ep. 2: copiar o "Estado após o Ep. 1" para o estado de cada linha e seguir cada uma.
 
 ## Histórico de votos
-| Ep. | Opções | Instagram | TikTok |
-|---|---|---|---|
-| 1 | Contar · Esconder | a confirmar | a confirmar |
+| Ep. | Opções | Instagram | TikTok | YouTube |
+|---|---|---|---|---|
+| 1 | Contar · Esconder | a confirmar | a confirmar | a confirmar |
 
 ## Calendário interno
 - Episódio N = noite N. A mudança acontece na noite 30.

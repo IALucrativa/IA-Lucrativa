@@ -13,15 +13,16 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 
 ## Antes de qualquer episódio
 1. Leia a `biblia.md` e o `banco-de-problemas.md` da série.
-2. Confira com a pessoa o resultado do voto **de cada plataforma** (Instagram e TikTok). O resultado é sempre o real.
+2. Confira com a pessoa o resultado do voto **de cada plataforma** (Instagram, TikTok e YouTube). O resultado é sempre o real.
 3. Roteiro curto (o texto da narração) → aprovação → só então a produção.
 
-## Duas plataformas: Instagram e TikTok
-- Cada plataforma é uma **linha da história própria**, que segue o voto do seu público.
-- Enquanto os votos forem iguais nas duas, faça **um vídeo só** e use nos dois lugares.
-- No primeiro voto diferente, a história **se separa** e não se junta mais: dali em diante, cada plataforma tem o seu roteiro, a sua narração, o seu vídeo, a sua capa e a sua legenda, mesmo que os votos voltem a coincidir.
-- A bíblia guarda **um estado, um placar e um histórico de votos para cada plataforma**. Ao separar, copie o estado comum para as duas e siga cada uma.
-- Pastas depois da separação: `series/<nome>/epNN-instagram/` e `epNN-tiktok/`; entregas em `entregas/AAAA-MM-DD_nome-epNN-instagram/` e `...-tiktok/`. Antes da separação, `epNN/` serve às duas.
+## Três plataformas: Instagram, TikTok e YouTube
+- Cada plataforma (Instagram, TikTok e YouTube Shorts) é uma **linha da história própria**, que segue o voto do seu público.
+- Plataformas que tiveram **exatamente os mesmos resultados em todos os votos** dividem a mesma linha e usam **o mesmo vídeo**.
+- No primeiro voto diferente, a plataforma que votou diferente **se separa** e não volta mais a dividir, mesmo que os votos voltem a coincidir. Pode acontecer de duas seguirem juntas e uma se separar, ou de as três se separarem.
+- Cada linha separada tem o seu roteiro, a sua narração, o seu vídeo, a sua capa e a sua legenda.
+- A bíblia guarda **um estado, um placar e um histórico de votos para cada plataforma**. Ao separar, copie o estado comum para a nova linha e siga cada uma.
+- Pastas: enquanto as três estão juntas, `series/<nome>/epNN/`. Depois de separar, uma pasta por linha, com o nome das plataformas que ela atende: ex. `ep02-instagram-tiktok/` e `ep02-youtube/`, ou `ep03-instagram/`, `ep03-tiktok/` e `ep03-youtube/`. As entregas seguem o mesmo padrão: `entregas/AAAA-MM-DD_nome-epNN-<plataformas>/`.
 
 ## Regras de criação
 - Fale em português do Brasil.
