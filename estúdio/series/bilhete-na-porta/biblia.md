@@ -95,6 +95,10 @@
 - **Visual do Rodnei:** igual ao início (macacão azul, chaves na cintura). Segura o bilhete.
 - **O público não sabe:** qual é o segredo (a chave mestra).
 
+## Duração
+- Ep. 1: 48 s (ficou assim, decisão da pessoa).
+- A partir do Ep. 2: no mínimo 1 minuto (regra do CLAUDE.md).
+
 ## Histórico de votos
 | Ep. | Opções | Resultado |
 |---|---|---|
