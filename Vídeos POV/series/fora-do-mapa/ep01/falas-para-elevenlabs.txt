@@ -4,7 +4,7 @@ Narração para gerar no ElevenLabs, em português do Brasil. UMA VOZ SÓ.
 A VOZ
 MOTOCA: homem jovem, cansado, voz baixa e grave, tom de quem conta um segredo de madrugada.
 Sem pressa, com pausa antes do que assusta.
-Voz escolhida no ElevenLabs: ____________  (use sempre a mesma em todas as partes)
+Voz escolhida no ElevenLabs: Erik - Deep Calm (estabilidade 50, similaridade 75, modelo v4)  (use sempre a mesma em todas as partes)
 
 COMO FAZER
 1. Gere um bloco por vez: copie só o texto que está depois de "TEXTO:".

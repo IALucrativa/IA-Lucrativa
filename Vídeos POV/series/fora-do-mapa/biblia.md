@@ -35,7 +35,7 @@
 - **Nenhum.** Quem ajuda o Motoca é o público, com as escolhas.
 
 ## Voz e legenda (atualizado em 2026-11-09)
-- **Uma voz só: o Motoca narra**, em primeira pessoa, falando com quem assiste. Homem jovem, cansado, voz baixa e grave, tom de segredo de madrugada. Voz no ElevenLabs: a anotar.
+- **Uma voz só: o Motoca narra**, em primeira pessoa, falando com quem assiste. Homem jovem, cansado, voz baixa e grave, tom de segredo de madrugada. Voz no ElevenLabs: **Erik - Deep Calm** (estabilidade 50, similaridade 75, modelo v4), escolhida na Parte 1.
 - Os outros personagens **não têm voz**: o que eles dizem chega pela boca do Motoca ("ele disse que...") ou escrito na tela (mensagens e áudios do Seu Vando, a tela do app).
 - Legenda: a narração em branco, no meio da tela. Mensagens na tela do celular.
 
