@@ -61,8 +61,8 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
   - selinho escuro com o gancho do episódio;
   - o personagem no centro, no cenário do episódio;
   - cartão inclinado com a ameaça e uma faixa vermelha embaixo;
-  - etiqueta curta do personagem;
-  - barra "VOCÊ DECIDE" com as duas opções do voto escritas.
+  - etiqueta curta do personagem.
+  A capa **não** leva a barra de voto ("VOCÊ DECIDE ... ou ..."): o voto fica no vídeo e na legenda.
   Tudo o que importa fica dentro do recorte da grade do perfil (o meio da imagem, sem os 240 px de cima e de baixo), e nada cobre o rosto. Confira a capa recortada antes de entregar.
 - Quando a pessoa corrigir algo importante, pergunte se deve virar regra neste arquivo.
 - Confira cada coisa criada. Se der erro, leia a mensagem inteira, explique em uma linha (sem termo técnico) e tente corrigir. Se a correção precisar baixar algo, avise antes com o tamanho.

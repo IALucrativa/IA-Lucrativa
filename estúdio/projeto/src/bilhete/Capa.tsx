@@ -14,7 +14,6 @@ export type CapaProps = {
   cartaoTexto: string[]; // o que aparece dentro do cartão (bilhete)
   cartaoRotulo: string[]; // rótulo vermelho do cartão (a ameaça)
   etiqueta: string; // etiqueta do personagem
-  opcoes: [string, string];
 };
 
 export const capaEp01: CapaProps = {
@@ -25,7 +24,6 @@ export const capaEp01: CapaProps = {
   cartaoTexto: ['Se contar pra alguém,', 'eu conto o', 'seu segredo.'],
   cartaoRotulo: ['O SEGREDO DELE', 'ESTÁ EM JOGO 👀'],
   etiqueta: 'TÉC. DE ELEVADOR · TÉRREO',
-  opcoes: ['CONTAR', 'ESCONDER'],
 };
 
 const F = 'Inter, Arial, sans-serif';
@@ -112,24 +110,6 @@ export const Capa: React.FC<CapaProps> = (p) => {
           ))}
         </g>
 
-        {/* barra de voto */}
-        <g fontFamily={F}>
-          <rect x={20} y={750} width={500} height={84} rx={18} fill={C.hud} opacity={0.92} />
-          <text x={270} y={774} fontSize={14} fontWeight="900" textAnchor="middle" fill={C.acento} letterSpacing={2}>
-            VOCÊ DECIDE
-          </text>
-          <rect x={40} y={784} width={190} height={40} rx={20} fill={C.acento} />
-          <text x={135} y={811} fontSize={21} fontWeight="900" textAnchor="middle" fill={C.hud}>
-            {p.opcoes[0]}
-          </text>
-          <text x={270} y={810} fontSize={17} fontWeight="bold" textAnchor="middle" fill="#fff">
-            ou
-          </text>
-          <rect x={310} y={784} width={190} height={40} rx={20} fill="#fff" />
-          <text x={405} y={811} fontSize={21} fontWeight="900" textAnchor="middle" fill={C.hud}>
-            {p.opcoes[1]}
-          </text>
-        </g>
       </svg>
     </AbsoluteFill>
   );
