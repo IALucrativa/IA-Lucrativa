@@ -17,7 +17,7 @@
 - **O que mais quer:** recomeçar do zero (por isso a mudança).
 - **Por que o público torce:** ele tem medo de tudo e enfrenta mesmo assim, toda noite.
 - **Segredo (o público ainda não sabe):** ele tem a **chave mestra** de todos os apartamentos, por causa do trabalho no elevador, e nunca contou a ninguém.
-- **Apartamento:** a decidir.
+- **Apartamento:** no térreo, perto da portaria e do elevador. Número: a decidir.
 
 ### A sombra (quem escreve os bilhetes)
 - Aparece só como uma silhueta no fim do corredor, que some quando ele acende a lanterna.
@@ -27,7 +27,7 @@
 ### Marlene, a síndica
 - **Papel:** atrapalha e é suspeita.
 - Quer de volta todas as chaves do Rodnei antes da mudança. Toma uma por vez.
-- Instalou (ou vai instalar) uma câmera no corredor: é o problema que cresce quieto.
+- Vai instalar uma câmera no corredor mais tarde (problema #16, episódio próprio). Depois disso, ela é o problema que cresce quieto. **No Ep. 1 não tem câmera.**
 
 ### Tânia, do 501
 - **Papel:** suspeita.

@@ -1,4 +1,4 @@
-# Ep. 1: "O elevador parou" (roteiro, aguardando aprovação)
+# Ep. 1: "O elevador parou" (roteiro aprovado em 2026-11-09)
 
 - **Noite:** 1 de 30 · **Chaves:** 12 · **Bilhetes:** 0 → 1
 - **Problema usado:** #3 do banco (o elevador para entre dois andares com ele dentro).
@@ -30,6 +30,6 @@
 - Se ganhar **Contar** ou **Esconder**, o Ep. 2 precisa ser uma vitória da opção escolhida.
 - Quem perde piora em silêncio.
 
-## A decidir antes da produção
-- A câmera da Marlene já aparece no corredor no Ep. 1? (Na prancha ela aparece; no banco de problemas, a instalação é o problema #16.)
-- O andar do Rodnei.
+## Decidido antes da produção
+- **Câmera da Marlene:** não aparece no Ep. 1. Ela entra mais tarde, num episódio próprio (problema #16).
+- **Andar do Rodnei:** térreo. À noite ele volta pela garagem (subsolo) e o elevador para entre a garagem e o térreo; a porta abre no térreo, no andar dele.
