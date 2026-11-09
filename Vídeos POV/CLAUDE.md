@@ -36,7 +36,7 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 - Nunca punir o voto: a parte do vencedor é uma vitória. Não mostrar a % de quem ganhou, só "Vocês escolheram: X".
 - Continuidade: o estado do protagonista segue entre as partes. O que mudou continua mudado.
 - O dinheiro (ou o recurso da série) é finito e as contas fecham.
-- Começo impactante: os **primeiros 3 segundos** prendem a pessoa. O vídeo abre direto no momento mais forte da parte (a ameaça, o susto, a descoberta ou a pergunta sem resposta), com uma fala curta. Pode ser um trecho do fim da parte, seguido de "Horas antes". Nunca abrir com apresentação calma, paisagem ou "esse é o...".
+- Começo impactante: os **primeiros 3 segundos** prendem a pessoa. O vídeo abre direto no momento mais forte da parte (a ameaça, o susto, a descoberta ou a pergunta sem resposta), com uma frase curta da narração. Pode ser um trecho do fim da parte, seguido de "Horas antes". Nunca abrir com apresentação calma, paisagem ou "esse é o...".
 - Começo que explica: logo depois do impacto, até os 15 segundos, o que está acontecendo e o que está em jogo (de preferência por uma tela ou uma fala, não por explicação).
 - Toda cena empurra a história: cada cena avança o mistério ou o objetivo. Se não avança, sai.
 - Final com ameaça: toda parte termina com algo em jogo para a próxima, logo antes do voto.
