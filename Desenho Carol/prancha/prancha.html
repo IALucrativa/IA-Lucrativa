@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Prancha de estilos</title>
+<style>
+  body { margin: 0; background: #1d1d22; font-family: Arial, Helvetica, sans-serif; color: #f2f2f2; }
+  #prancha { display: inline-block; padding: 28px 28px 20px; background: #1d1d22; }
+  h1 { margin: 0 0 4px; font-size: 26px; }
+  .sub { margin: 0 0 18px; font-size: 15px; color: #b9b9c4; }
+  .linha { display: flex; gap: 24px; }
+  .painel { width: 540px; }
+  .painel svg { display: block; width: 540px; height: 960px; border-radius: 10px; }
+  .rotulo { margin-top: 10px; font-size: 20px; font-weight: bold; }
+  .desc { font-size: 14px; color: #b9b9c4; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div id="prancha">
+  <h1>Bilhete na Porta · Prancha de estilos 1 (rascunho)</h1>
+  <p class="sub">Ep. 1, noite 1: o Rodnei acende a lanterna e a sombra some no fim do corredor. Mesma cena, três estilos.</p>
+  <div class="linha" id="linha"></div>
+</div>
+
+<script>
+// Cada estilo muda só cores, traço e acabamento. O Rodnei e a cena são os mesmos.
+const estilos = [
+  {
+    id: 'A', nome: 'A · Cartoon com contorno', desc: 'Cores vivas, contorno escuro, olhos expressivos.',
+    line: '#1b1b2a', lw: 3, filtro: '',
+    teto: '#3b3550', paredeE: '#5d5486', paredeD: '#544b7a', fundo: '#2a2440', chao: '#7a5a4a', chaoLinha: '#6a4c3e',
+    porta: '#a0623a', portaDet: '#874f2c', elev: '#a9b4c2', elevDet: '#8793a3',
+    caixa: '#c79a5b', caixaDet: '#a87d42', macacao: '#2f6db5', macacaoSomb: '#245793', pele: '#e0a77f', peleSomb: '#c98d66',
+    cabelo: '#3a2a22', sapato: '#2a2a2a', cinto: '#5a3a24', chave: '#d8c37a',
+    luz: '#ffe69a', luzOp: 0.38, sombra: '#0d0b14', papel: '#fbf7ea', texto: '#ffffff', hud: '#1b1b2a', hudTxt: '#ffffff', acento: '#ffcc33', camLuz: '#ff3b3b',
+    somb: 0.18
+  },
+  {
+    id: 'B', nome: 'B · Noir de suspense', desc: 'Sem contorno, azul-noite e âmbar, sombras duras.',
+    line: 'none', lw: 0, filtro: '',
+    teto: '#0f1726', paredeE: '#1d2b44', paredeD: '#18243a', fundo: '#0a101c', chao: '#22324d', chaoLinha: '#1a2740',
+    porta: '#5a3b2a', portaDet: '#3f2a1e', elev: '#55657e', elevDet: '#3e4c63',
+    caixa: '#8a6a3e', caixaDet: '#6b512e', macacao: '#2c4f86', macacaoSomb: '#1b335c', pele: '#d9a173', peleSomb: '#9a6a48',
+    cabelo: '#1a1410', sapato: '#0e0e12', cinto: '#2e1f14', chave: '#f0c060',
+    luz: '#ffc45a', luzOp: 0.5, sombra: '#000000', papel: '#fff1cf', texto: '#ffe2a8', hud: '#000000', hudTxt: '#ffd27a', acento: '#ffb02e', camLuz: '#ff2a2a',
+    somb: 0.45
+  },
+  {
+    id: 'C', nome: 'C · Giz e papel', desc: 'Traço tremido de giz, cores suaves, textura de papel.',
+    line: '#4a3426', lw: 2.6, filtro: 'url(#tremido)',
+    teto: '#cfc7b8', paredeE: '#b9c7c4', paredeD: '#aebdba', fundo: '#7f8c96', chao: '#d4b896', chaoLinha: '#bfa07c',
+    porta: '#c98e6a', portaDet: '#b07856', elev: '#d9dde0', elevDet: '#b9bfc4',
+    caixa: '#e2bf8a', caixaDet: '#c9a270', macacao: '#6f9ccf', macacaoSomb: '#5a86b8', pele: '#f0c4a2', peleSomb: '#dba985',
+    cabelo: '#6a4a38', sapato: '#5a4a44', cinto: '#8a6448', chave: '#e8c96a',
+    luz: '#fff2b0', luzOp: 0.55, sombra: '#3a3440', papel: '#ffffff', texto: '#3a2a20', hud: '#fffaf0', hudTxt: '#3a2a20', acento: '#e0663a', camLuz: '#e0463a',
+    somb: 0.15
+  }
+];
+
+function cena(e) {
+  const S = e.line === 'none' ? '' : `stroke="${e.line}" stroke-width="${e.lw}" stroke-linejoin="round" stroke-linecap="round"`;
+  const Sf = e.line === 'none' ? '' : `stroke="${e.line}" stroke-width="${Math.max(1.5, e.lw - 1)}" stroke-linejoin="round" stroke-linecap="round"`;
+  const subStroke = e.id === 'C' ? '#fffaf0' : '#000000';
+  return `
+<svg viewBox="0 0 540 960" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="tremido${e.id}" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="r"/>
+      <feDisplacementMap in="SourceGraphic" in2="r" scale="${e.id === 'C' ? 4 : 0}"/>
+    </filter>
+    <filter id="papel${e.id}">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="2"/>
+      <feColorMatrix values="0 0 0 0 0.35  0 0 0 0 0.28  0 0 0 0 0.2  0 0 0 0.10 0"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+    <radialGradient id="lamp${e.id}" cx="0.5" cy="0" r="0.8">
+      <stop offset="0" stop-color="${e.luz}" stop-opacity="${e.id === 'B' ? 0.25 : 0.35}"/>
+      <stop offset="1" stop-color="${e.luz}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <g filter="${e.id === 'C' ? 'url(#tremidoC)' : ''}">
+    <!-- teto, paredes, fundo e chão do corredor -->
+    <polygon points="0,0 540,0 540,150 360,390 240,390 0,150" fill="${e.teto}" ${S}/>
+    <polygon points="0,150 240,390 240,520 0,820" fill="${e.paredeE}" ${S}/>
+    <polygon points="540,150 360,390 360,520 540,820" fill="${e.paredeD}" ${S}/>
+    <rect x="240" y="390" width="120" height="130" fill="${e.fundo}" ${S}/>
+    <polygon points="0,820 240,520 360,520 540,820 540,960 0,960" fill="${e.chao}" ${S}/>
+    <!-- tábuas do chão -->
+    <g stroke="${e.chaoLinha}" stroke-width="2" fill="none">
+      <line x1="270" y1="520" x2="150" y2="960"/><line x1="300" y1="520" x2="300" y2="960"/>
+      <line x1="330" y1="520" x2="450" y2="960"/><line x1="200" y1="590" x2="400" y2="590"/>
+      <line x1="140" y1="680" x2="460" y2="680"/>
+    </g>
+    <!-- rodapés -->
+    <polygon points="0,800 240,512 240,520 0,820" fill="${e.portaDet}" opacity="0.7"/>
+    <polygon points="540,800 360,512 360,520 540,820" fill="${e.portaDet}" opacity="0.7"/>
+
+    <!-- janela no fim do corredor, com a noite lá fora -->
+    <rect x="272" y="402" width="56" height="44" fill="${e.id === 'C' ? '#5b6b8a' : '#101a33'}" ${Sf}/>
+    <line x1="300" y1="402" x2="300" y2="446" stroke="${e.line === 'none' ? e.paredeD : e.line}" stroke-width="2"/>
+    <circle cx="316" cy="414" r="4" fill="#f3efd6" opacity="0.9"/>
+
+    <!-- lâmpada presa no teto, piscando -->
+    <rect x="290" y="232" width="20" height="8" fill="${e.elevDet}" ${Sf}/>
+    <ellipse cx="300" cy="246" rx="24" ry="8" fill="${e.papel}" ${Sf}/>
+    <polygon points="276,250 324,250 420,520 180,520" fill="url(#lamp${e.id})"/>
+
+    <!-- câmera da Marlene presa na parede direita -->
+    <rect x="482" y="262" width="8" height="22" fill="${e.elevDet}" ${Sf}/>
+    <rect x="452" y="280" width="40" height="20" rx="4" fill="${e.id === 'C' ? '#efece4' : '#e8e8ec'}" ${Sf}/>
+    <rect x="444" y="284" width="10" height="12" rx="2" fill="#333"/>
+    <circle cx="482" cy="290" r="3.5" fill="${e.camLuz}"/>
+
+    <!-- porta do apartamento do Rodnei (parede esquerda) -->
+    <polygon points="50,367 150,400 150,632 50,757" fill="${e.porta}" ${S}/>
+    <polygon points="64,400 136,424 136,500 64,500" fill="${e.portaDet}" opacity="0.6"/>
+    <polygon points="64,540 136,548 136,600 64,640" fill="${e.portaDet}" opacity="0.6"/>
+    <circle cx="132" cy="545" r="5" fill="${e.chave}" ${Sf}/>
+    <circle cx="100" cy="455" r="4" fill="${e.fundo}" ${Sf}/>
+    <!-- bilhete no chão, saindo por baixo da porta -->
+    <polygon points="80,720 108,685 126,694 98,730" fill="${e.papel}" ${Sf}/>
+    <line x1="92" y1="718" x2="110" y2="696" stroke="${e.id === 'B' ? '#7a5a2a' : '#888'}" stroke-width="1.5"/>
+    <!-- borda da porta por cima do papel (ele está saindo por baixo dela) -->
+    <line x1="74" y1="727" x2="114" y2="677" stroke="${e.line === 'none' ? e.portaDet : e.line}" stroke-width="${Math.max(2, e.lw)}"/>
+
+    <!-- elevador (parede direita) -->
+    <polygon points="392,404 498,360 498,742 392,592" fill="${e.elevDet}" ${S}/>
+    <polygon points="400,412 490,373 490,737 400,587" fill="${e.elev}" ${S}/>
+    <line x1="445" y1="392" x2="445" y2="662" stroke="${e.line === 'none' ? e.elevDet : e.line}" stroke-width="2"/>
+    <polygon points="430,372 462,358 462,376 430,389" fill="#222" ${Sf}/>
+    <text x="0" y="0" font-size="13" font-weight="bold" fill="${e.acento}" transform="translate(441,384) skewY(-23)">4</text>
+    <!-- aviso da mudança colado na porta do elevador -->
+    <g transform="translate(452,470) skewY(-23)">
+      <rect x="0" y="0" width="32" height="40" fill="${e.papel}" ${Sf}/>
+      <rect x="11" y="-4" width="10" height="6" fill="${e.acento}" opacity="0.7"/>
+      <text x="16" y="13" font-size="6.5" font-weight="bold" text-anchor="middle" fill="#333">ME MUDO</text>
+      <text x="16" y="23" font-size="6.5" font-weight="bold" text-anchor="middle" fill="#333">DIA 30</text>
+      <text x="16" y="33" font-size="5" text-anchor="middle" fill="#555">Obrigado!</text>
+    </g>
+    <!-- botão do elevador -->
+    <rect x="503" y="520" width="10" height="20" rx="2" fill="${e.elevDet}" ${Sf}/>
+
+    <!-- caixas da mudança, apoiadas no chão -->
+    <rect x="18" y="828" width="104" height="78" fill="${e.caixa}" ${S}/>
+    <rect x="18" y="828" width="104" height="10" fill="${e.caixaDet}"/>
+    <rect x="62" y="828" width="16" height="78" fill="${e.caixaDet}" opacity="0.6"/>
+    <rect x="34" y="770" width="76" height="58" fill="${e.caixa}" ${S}/>
+    <rect x="66" y="770" width="12" height="58" fill="${e.caixaDet}" opacity="0.6"/>
+    <text x="70" y="872" font-size="12" font-weight="bold" text-anchor="middle" fill="${e.id === 'B' ? '#2a1d10' : '#5a3a1e'}">COZINHA</text>
+
+    <!-- facho da lanterna até o fim do corredor -->
+    <polygon points="314,580 324,584 336,446 262,446" fill="${e.luz}" opacity="${e.luzOp}"/>
+    <ellipse cx="299" cy="470" rx="38" ry="44" fill="${e.luz}" opacity="${e.luzOp * 0.6}"/>
+
+    <!-- a sombra sumindo na luz -->
+    <g opacity="${e.id === 'B' ? 0.75 : 0.6}">
+      <circle cx="300" cy="462" r="9" fill="${e.sombra}"/>
+      <path d="M287,472 Q300,466 313,472 L318,520 L282,520 Z" fill="${e.sombra}"/>
+    </g>
+    ${e.id === 'B' ? '<polygon points="282,520 318,520 380,560 250,560" fill="#000" opacity="0.35"/>' : ''}
+
+    <!-- sombra do Rodnei no chão -->
+    <ellipse cx="250" cy="890" rx="78" ry="14" fill="#000" opacity="${e.somb + 0.1}"/>
+    ${e.id === 'B' ? '<polygon points="200,890 300,890 160,960 40,960" fill="#000" opacity="0.4"/>' : ''}
+
+    <!-- RODNEI -->
+    <g id="rodnei">
+      <!-- pernas -->
+      <path d="M201,736 L246,736 L242,880 L212,880 Z" fill="${e.macacao}" ${S}/>
+      <path d="M254,736 L299,736 L289,880 L258,880 Z" fill="${e.macacaoSomb}" ${S}/>
+      <!-- sapatos -->
+      <path d="M206,876 L244,876 L246,894 L198,894 Q198,882 206,876 Z" fill="${e.sapato}" ${S}/>
+      <path d="M256,876 L292,876 Q302,882 302,894 L254,894 Z" fill="${e.sapato}" ${S}/>
+      <!-- braço esquerdo (de quem olha), descendo até as chaves -->
+      <path d="M208,622 Q186,660 188,700 L204,702 Q206,668 222,640 Z" fill="${e.macacaoSomb}" ${S}/>
+      <!-- tronco -->
+      <path d="M205,614 Q250,604 295,614 L304,738 L196,738 Z" fill="${e.macacao}" ${S}/>
+      <path d="M250,612 L250,738" stroke="${e.macacaoSomb}" stroke-width="3"/>
+      <path d="M236,612 L250,630 L264,612" fill="${e.peleSomb}" ${Sf}/>
+      <!-- bolsos -->
+      <rect x="214" y="650" width="26" height="22" fill="${e.macacaoSomb}" ${Sf}/>
+      <!-- nome bordado -->
+      <rect x="256" y="644" width="38" height="14" rx="2" fill="${e.papel}" ${Sf}/>
+      <text x="275" y="654.5" font-size="8" font-weight="bold" text-anchor="middle" fill="${e.macacaoSomb}">RODNEI</text>
+      <!-- cinto -->
+      <rect x="196" y="726" width="108" height="12" fill="${e.cinto}" ${Sf}/>
+      <rect x="244" y="725" width="14" height="14" fill="${e.chave}" ${Sf}/>
+      <!-- molho de chaves na cintura, preso no cinto -->
+      <circle cx="212" cy="748" r="9" fill="none" stroke="${e.chave}" stroke-width="3"/>
+      <g fill="${e.chave}" ${Sf}>
+        <path d="M204,754 l-6,22 l4,1 l1,-4 l3,1 l1,-4 l-2,-1 l3,-14 Z"/>
+        <path d="M210,757 l0,24 l4,0 l0,-4 l3,0 l0,-4 l-3,0 l0,-16 Z"/>
+        <path d="M216,755 l7,21 l4,-1 l-1,-4 l3,-1 l-1,-4 l-3,1 l-5,-13 Z"/>
+        <path d="M220,750 l12,16 l3,-2 l-2,-3 l3,-2 l-2,-3 l-3,2 l-8,-10 Z"/>
+      </g>
+      <!-- mão esquerda segurando as chaves -->
+      <ellipse cx="197" cy="706" rx="10" ry="11" fill="${e.pele}" ${S}/>
+      <!-- braço direito erguido com a lanterna -->
+      <path d="M290,620 Q318,640 326,672 L312,678 Q304,654 284,640 Z" fill="${e.macacao}" ${S}/>
+      <path d="M326,672 Q330,640 322,606 L308,608 Q314,640 312,678 Z" fill="${e.macacaoSomb}" ${S}/>
+      <!-- lanterna -->
+      <g transform="rotate(-6 318 596)">
+        <rect x="311" y="572" width="14" height="34" rx="3" fill="#3a3a3a" ${Sf}/>
+        <rect x="308" y="566" width="20" height="10" rx="2" fill="#9aa0a6" ${Sf}/>
+      </g>
+      <ellipse cx="316" cy="604" rx="10" ry="10" fill="${e.pele}" ${S}/>
+      <!-- pescoço e cabeça -->
+      <rect x="240" y="596" width="20" height="18" fill="${e.peleSomb}" ${Sf}/>
+      <ellipse cx="216" cy="566" rx="7" ry="10" fill="${e.pele}" ${S}/>
+      <ellipse cx="284" cy="566" rx="7" ry="10" fill="${e.pele}" ${S}/>
+      <ellipse cx="250" cy="562" rx="34" ry="40" fill="${e.pele}" ${S}/>
+      <!-- cabelo curto -->
+      <path d="M216,556 Q214,520 250,518 Q288,520 285,556 Q280,536 250,534 Q224,536 216,556 Z" fill="${e.cabelo}" ${Sf}/>
+      <!-- sobrancelhas erguidas (medo) -->
+      <path d="M228,540 Q236,532 244,538" fill="none" stroke="${e.cabelo}" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M256,538 Q264,532 272,540" fill="none" stroke="${e.cabelo}" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- olhos arregalados, olhando o fim do corredor -->
+      <ellipse cx="237" cy="555" rx="9" ry="11" fill="#ffffff" ${Sf}/>
+      <ellipse cx="263" cy="555" rx="9" ry="11" fill="#ffffff" ${Sf}/>
+      <circle cx="240" cy="551" r="4" fill="#1a1a1a"/>
+      <circle cx="266" cy="551" r="4" fill="#1a1a1a"/>
+      <circle cx="241.5" cy="549.5" r="1.3" fill="#fff"/>
+      <circle cx="267.5" cy="549.5" r="1.3" fill="#fff"/>
+      <!-- nariz, bigode e boca em "o" -->
+      <path d="M250,560 Q256,572 249,575" fill="none" stroke="${e.peleSomb}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M234,582 Q250,574 266,582 Q258,586 250,583 Q242,586 234,582 Z" fill="${e.cabelo}"/>
+      <ellipse cx="250" cy="591" rx="5" ry="6" fill="#5a2a22" ${Sf}/>
+      <!-- gota de suor -->
+      <path d="M287,540 Q291,548 287,552 Q283,548 287,540 Z" fill="#bfe3ff" ${Sf}/>
+    </g>
+  </g>
+
+  ${e.id === 'C' ? `<rect x="0" y="0" width="540" height="960" filter="url(#papelC)" fill="#fff"/>` : ''}
+
+  <!-- HUD: placar -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="18" y="22" width="150" height="44" rx="22" fill="${e.hud}" opacity="0.88"/>
+    <text x="93" y="51" font-size="20" font-weight="bold" text-anchor="middle" fill="${e.hudTxt}">NOITE 1/30</text>
+    <rect x="178" y="22" width="92" height="44" rx="22" fill="${e.hud}" opacity="0.88"/>
+    <g transform="translate(196,34)" fill="${e.acento}">
+      <circle cx="9" cy="10" r="8" fill="none" stroke="${e.acento}" stroke-width="4"/>
+      <rect x="16" y="8" width="18" height="4"/><rect x="28" y="12" width="4" height="6"/><rect x="22" y="12" width="4" height="4"/>
+    </g>
+    <text x="250" y="51" font-size="20" font-weight="bold" text-anchor="middle" fill="${e.hudTxt}">12</text>
+    <rect x="330" y="22" width="192" height="92" rx="12" fill="${e.hud}" opacity="0.88"/>
+    <text x="346" y="46" font-size="13" font-weight="bold" fill="${e.acento}">PERGUNTAS</text>
+    <rect x="346" y="58" width="14" height="14" fill="none" stroke="${e.hudTxt}" stroke-width="2"/>
+    <text x="368" y="70" font-size="15" fill="${e.hudTxt}">Quem escreve?</text>
+    <rect x="346" y="84" width="14" height="14" fill="none" stroke="${e.hudTxt}" stroke-width="2" opacity="0.5"/>
+    <text x="368" y="96" font-size="15" fill="${e.hudTxt}" opacity="0.5">Mora no prédio?</text>
+  </g>
+
+  <!-- legenda (embaixo, longe do rosto) -->
+  <text x="270" y="938" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="900" text-anchor="middle"
+        fill="${e.texto}" stroke="${subStroke}" stroke-width="5" paint-order="stroke">Faltam 30 noites. E alguém já sabe.</text>
+</svg>`;
+}
+
+const linha = document.getElementById('linha');
+for (const e of estilos) {
+  const d = document.createElement('div');
+  d.className = 'painel';
+  d.innerHTML = cena(e) + `<div class="rotulo">${e.nome}</div><div class="desc">${e.desc}</div>`;
+  linha.appendChild(d);
+}
+</script>
+</body>
+</html>
