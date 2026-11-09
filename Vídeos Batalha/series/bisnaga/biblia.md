@@ -80,7 +80,7 @@ Cada tipo tem um acessório que o identifica de longe (a definir na prancha: ex.
 - Nunca trocar o estilo sem pedido.
 
 ## Voz
-- **Narrador:** voz grave e calma, de documentário, no ElevenLabs. Voz exata: a decidir (anotar aqui o nome assim que escolher e nunca trocar sem pedido).
+- **Narrador:** **Leo Antonio - Welcoming, Serene** (ElevenLabs), escolhida em 09/11/2026. Ajustes: estabilidade 50, similaridade 75. Nunca trocar sem pedido.
 
 ## Placar
 | | Instagram | TikTok | YouTube |

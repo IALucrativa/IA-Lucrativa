@@ -82,12 +82,21 @@ export const useMaterial = (estilo: Estilo) => {
     t.needsUpdate = true;
     return t;
   }, []);
+  const guardados = useMemo(() => new Map<string, THREE.Material>(), [estilo]);
   return (cor: string, op: {mapa?: THREE.Texture; brilho?: number; emissivo?: string} = {}): THREE.Material => {
+    const chave = `${cor}|${op.mapa?.uuid ?? ''}|${op.brilho ?? ''}|${op.emissivo ?? ''}`;
+    const ja = guardados.get(chave);
+    if (ja) return ja;
+    const novo = criar(cor, op);
+    guardados.set(chave, novo);
+    return novo;
+  };
+  function criar(cor: string, op: {mapa?: THREE.Texture; brilho?: number; emissivo?: string}): THREE.Material {
     const base = {color: op.mapa ? '#ffffff' : cor, map: op.mapa ?? null, emissive: op.emissivo ?? '#000000'};
     if (estilo === 'cartoon') return new THREE.MeshToonMaterial({...base, gradientMap: degraus});
     if (estilo === 'lowpoly') return new THREE.MeshPhongMaterial({...base, flatShading: true, shininess: (op.brilho ?? 0) * 60});
     return new THREE.MeshStandardMaterial({...base, roughness: 1 - (op.brilho ?? 0.1), metalness: 0.02});
-  };
+  }
 };
 
 export type Forma =
@@ -129,7 +138,14 @@ export const Peca: React.FC<{
 };
 
 // ---------- O Bisnaga dormindo, enrolado ----------
-const Bisnaga: React.FC<{estilo: Estilo; p: Paleta; pos: [number, number, number]; giro: number}> = ({estilo, p, pos, giro}) => {
+export const Bisnaga: React.FC<{estilo: Estilo; p: Paleta; pos: [number, number, number]; giro: number; respira?: number; olhoAberto?: number}> = ({
+  estilo,
+  p,
+  pos,
+  giro,
+  respira = 0,
+  olhoAberto = 0,
+}) => {
   const m = useMaterial(estilo);
   const pelo = useMemo(
     () =>
@@ -159,7 +175,7 @@ const Bisnaga: React.FC<{estilo: Estilo; p: Paleta; pos: [number, number, number
   return (
     <group position={pos} rotation={[0, giro, 0]}>
       {/* corpo gordo e deitado */}
-      <Peca forma={{tipo: 'esfera', r: 1}} esc={[0.3, 0.15, 0.2]} pos={[0, 0.13, 0]} mat={corpo} estilo={estilo} contorno={0.03} />
+      <Peca forma={{tipo: 'esfera', r: 1}} esc={[0.3, 0.15 * (1 + 0.06 * respira), 0.2 * (1 + 0.04 * respira)]} pos={[0, 0.13, 0]} mat={corpo} estilo={estilo} contorno={0.03} />
       {/* rabo enrolado na frente */}
       <mesh geometry={rabo} material={corpo} castShadow />
       {/* patas da frente, brancas de farinha */}
@@ -175,7 +191,14 @@ const Bisnaga: React.FC<{estilo: Estilo; p: Paleta; pos: [number, number, number
         <Peca forma={{tipo: 'esfera', r: 1}} esc={[0.05, 0.045, 0.07]} pos={[0.11, -0.03, 0]} mat={branco} estilo={estilo} contorno={0.1} />
         <Peca forma={{tipo: 'esfera', r: 0.016}} pos={[0.155, -0.005, 0]} mat={rosa} estilo={estilo} contorno={0} />
         {/* olhos fechados: dois risquinhos */}
-        <Peca forma={{tipo: 'caixa', d: [0.012, 0.008, 0.045]}} pos={[0.115, 0.03, 0.05]} rot={[0, 0.5, 0.15]} mat={escuro} estilo={estilo} contorno={0} />
+        {olhoAberto > 0 ? (
+          <group position={[0.112, 0.03, 0.05]} rotation={[0, 0.5, 0]}>
+            <Peca forma={{tipo: 'esfera', r: 1}} esc={[0.01, 0.026 * olhoAberto, 0.026]} mat={m('#9bd44a')} estilo={estilo} contorno={0.3} />
+            <Peca forma={{tipo: 'esfera', r: 1}} esc={[0.006, 0.02 * olhoAberto, 0.008]} pos={[0.006, 0, 0]} mat={escuro} estilo={estilo} contorno={0} />
+          </group>
+        ) : (
+          <Peca forma={{tipo: 'caixa', d: [0.012, 0.008, 0.045]}} pos={[0.115, 0.03, 0.05]} rot={[0, 0.5, 0.15]} mat={escuro} estilo={estilo} contorno={0} />
+        )}
         <Peca forma={{tipo: 'caixa', d: [0.012, 0.008, 0.045]}} pos={[0.115, 0.03, -0.05]} rot={[0, -0.5, 0.15]} mat={escuro} estilo={estilo} contorno={0} />
       </group>
     </group>
@@ -183,16 +206,18 @@ const Bisnaga: React.FC<{estilo: Estilo; p: Paleta; pos: [number, number, number
 };
 
 // ---------- Um pinguim de louça ----------
-const Pinguim: React.FC<{estilo: Estilo; pos: [number, number, number]; giro: number; esc?: number; mats: THREE.Material[]}> = ({
+export const Pinguim: React.FC<{estilo: Estilo; pos: [number, number, number]; giro: number; esc?: number; mats: THREE.Material[]; tomba?: number; balanco?: number}> = ({
   estilo,
   pos,
   giro,
   esc = 1,
   mats,
+  tomba = 0,
+  balanco = 0,
 }) => {
   const [preto, branco, laranja, olho] = mats;
   return (
-    <group position={pos} rotation={[0, giro, 0]} scale={[esc, esc, esc]}>
+    <group position={[pos[0], pos[1] + tomba * 0.06, pos[2]]} rotation={[tomba * 1.45, giro, balanco]} scale={[esc, esc, esc]}>
       <Peca forma={{tipo: 'esfera', r: 1}} esc={[0.06, 0.09, 0.055]} pos={[0, 0.095, 0]} mat={preto} estilo={estilo} contorno={0.1} />
       <Peca forma={{tipo: 'esfera', r: 1}} esc={[0.045, 0.072, 0.03]} pos={[0, 0.088, 0.03]} mat={branco} estilo={estilo} contorno={0} />
       <Peca forma={{tipo: 'esfera', r: 0.042}} pos={[0, 0.2, 0]} mat={preto} estilo={estilo} contorno={0.006} />
@@ -208,17 +233,95 @@ const Pinguim: React.FC<{estilo: Estilo; pos: [number, number, number]; giro: nu
   );
 };
 
+// ---------- A janela: a rua lá fora, com as janelas dos prédios acendendo ----------
+const JanelaRua: React.FC<{janela: number; estilo: Estilo}> = ({janela, estilo}) => {
+  const nivel = Math.round(janela * 12);
+  const tex = useMemo(
+    () =>
+      texturaCanvas(256, 192, (c) => {
+        const g = c.createLinearGradient(0, 0, 0, 192);
+        g.addColorStop(0, '#0d1633');
+        g.addColorStop(1, '#2a3a70');
+        c.fillStyle = g;
+        c.fillRect(0, 0, 256, 192);
+        const r = aleatorio(11);
+        const predios = [[0, 70, 60], [55, 40, 50], [100, 90, 70], [165, 55, 45], [205, 30, 60]];
+        let n = 0;
+        for (const [x, y, l] of predios) {
+          c.fillStyle = '#141a2e';
+          c.fillRect(x, y, l, 192 - y);
+          for (let wy = y + 8; wy < 180; wy += 16)
+            for (let wx = x + 6; wx < x + l - 8; wx += 12) {
+              const acesa = r() < nivel / 12;
+              n++;
+              c.fillStyle = acesa ? '#ffd27a' : '#232a44';
+              c.fillRect(wx, wy, 6, 8);
+            }
+        }
+        // a rua e um farol de caminhão chegando
+        c.fillStyle = '#20232c';
+        c.fillRect(0, 176, 256, 16);
+        if (nivel > 0) {
+          c.fillStyle = 'rgba(255,230,160,' + Math.min(1, nivel / 6) + ')';
+          c.beginPath();
+          c.arc(30 + nivel * 6, 182, 6, 0, Math.PI * 2);
+          c.fill();
+        }
+        return n;
+      }),
+    [nivel],
+  );
+  return (
+    <mesh position={[2.865, 1.9, -3.2]} rotation={[0, -Math.PI / 2, 0]}>
+      <planeGeometry args={[1.16, 0.84]} />
+      <meshBasicMaterial map={tex} toneMapped={false} />
+    </mesh>
+  );
+};
+
 // ---------- A cozinha ----------
-const Camera: React.FC = () => {
+export type Vec = [number, number, number];
+export const CAM_PRANCHA = {pos: [0.85, 1.5, 2.55] as Vec, alvo: [-0.1, 0.85, -1.4] as Vec, fov: 52};
+
+const Camera: React.FC<{pos: Vec; alvo: Vec; fov: number}> = ({pos, alvo, fov}) => {
   const {camera} = useThree();
-  camera.position.set(0.85, 1.5, 2.55);
-  camera.lookAt(-0.1, 0.85, -1.4);
-  (camera as THREE.PerspectiveCamera).fov = 52;
+  camera.position.set(...pos);
+  camera.lookAt(...alvo);
+  (camera as THREE.PerspectiveCamera).fov = fov;
   camera.updateProjectionMatrix();
   return null;
 };
 
-export const Cena3D: React.FC<{estilo: Estilo}> = ({estilo}) => {
+export type ParamsCena = {
+  cam?: {pos: Vec; alvo: Vec; fov: number};
+  t?: number; // segundos desde o começo da cena (animação)
+  marcha?: number; // quanto os pinguins já andaram (m)
+  recuo?: number; // empurra os pinguins do balcão para trás (m), para abrir espaço
+  pulando?: number; // 0..1: pinguins de cima das geladeiras ganhando vida
+  escorregando?: number; // 0..1: pinguins do chão de barriga, deslizando
+  derrubados?: number; // quantos pinguins da frente do balcão caíram
+  solo?: Vec | null; // um pinguim sozinho (cenas 4 e 13)
+  respira?: number;
+  olhoAberto?: number;
+  janela?: number; // 0..1: luz da rua acendendo
+  extras?: React.ReactNode;
+};
+
+export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
+  estilo,
+  cam = CAM_PRANCHA,
+  t = 0,
+  marcha = 0,
+  recuo = 0,
+  pulando = 0,
+  escorregando = 0,
+  derrubados = 0,
+  solo = null,
+  respira = 0,
+  olhoAberto = 0,
+  janela = 0,
+  extras = null,
+}) => {
   const p = PALETAS[estilo];
   const m = useMaterial(estilo);
 
@@ -263,11 +366,11 @@ export const Cena3D: React.FC<{estilo: Estilo}> = ({estilo}) => {
   // posições dos pinguins: em cima do balcão (marchando), no chão dos dois lados e em cima das geladeiras
   const pinguins = useMemo(() => {
     const r = aleatorio(7);
-    const lista: {pos: [number, number, number]; giro: number; esc: number}[] = [];
+    const lista: {pos: [number, number, number]; giro: number; esc: number; onde: 'balcao' | 'chao' | 'geladeira'; fase: number}[] = [];
     for (let z = -0.45; z > -5.6; z -= 0.17) {
       for (let x = -0.36; x <= 0.37; x += 0.16) {
         if (r() < 0.12) continue;
-        lista.push({pos: [x + (r() - 0.5) * 0.06, 0.92, z + (r() - 0.5) * 0.06], giro: (r() - 0.5) * 0.5, esc: 1 + (r() - 0.5) * 0.15});
+        lista.push({pos: [x + (r() - 0.5) * 0.06, 0.92, z + (r() - 0.5) * 0.06], giro: (r() - 0.5) * 0.5, esc: 1 + (r() - 0.5) * 0.15, onde: 'balcao', fase: r() * 6});
       }
     }
     for (const lado of [-1, 1]) {
@@ -275,12 +378,12 @@ export const Cena3D: React.FC<{estilo: Estilo}> = ({estilo}) => {
         for (let k = 0; k < 6; k++) {
           if (r() < 0.2) continue;
           const x = lado * (0.75 + k * 0.2 + r() * 0.06);
-          lista.push({pos: [x, 0, z + (r() - 0.5) * 0.08], giro: (r() - 0.5) * 0.6, esc: 1 + (r() - 0.5) * 0.15});
+          lista.push({pos: [x, 0, z + (r() - 0.5) * 0.08], giro: (r() - 0.5) * 0.6, esc: 1 + (r() - 0.5) * 0.15, onde: 'chao', fase: r() * 6});
         }
       }
     }
     for (const gx of [-1.75, -1.05, 1.05, 1.75]) {
-      for (let k = 0; k < 4; k++) lista.push({pos: [gx - 0.24 + k * 0.16, 1.85, -5.55], giro: 0, esc: 1});
+      for (let k = 0; k < 4; k++) lista.push({pos: [gx - 0.24 + k * 0.16, 1.85, -5.55], giro: 0, esc: 1, onde: 'geladeira', fase: k * 1.7 + gx});
     }
     return lista;
   }, []);
@@ -290,7 +393,7 @@ export const Cena3D: React.FC<{estilo: Estilo}> = ({estilo}) => {
 
   return (
     <>
-      <Camera />
+      <Camera {...cam} />
       <color attach="background" args={[p.fundo]} />
       <fog attach="fog" args={[p.fundo, 4.5, 11]} />
       <ambientLight intensity={p.ambiente} color={p.luzFria} />
@@ -315,18 +418,25 @@ export const Cena3D: React.FC<{estilo: Estilo}> = ({estilo}) => {
         <planeGeometry args={[9, 3.2]} />
       </mesh>
       {/* janela com luar na parede da direita */}
-      <Peca forma={{tipo: 'caixa', d: [0.04, 0.8, 1.1]}} pos={[2.87, 1.9, -3.2]} mat={m('#1d2a4a', {emissivo: estilo === 'noturno' ? '#1a2850' : '#2a3a70'})} estilo={estilo} />
-      <Peca forma={{tipo: 'caixa', d: [0.06, 0.05, 1.15]}} pos={[2.85, 1.9, -3.2]} mat={m(p.madeira)} estilo={estilo} contorno={0} />
+      <JanelaRua janela={janela} estilo={estilo} />
+      {janela > 0 && <pointLight position={[2.4, 1.9, -3.2]} intensity={janela * 3} distance={4} decay={1.4} color="#ffc65a" />}
+      {/* moldura e cruz da janela */}
+      <Peca forma={{tipo: 'caixa', d: [0.06, 0.05, 1.2]}} pos={[2.85, 2.32, -3.2]} mat={m(p.madeira)} estilo={estilo} contorno={0} />
+      <Peca forma={{tipo: 'caixa', d: [0.06, 0.05, 1.2]}} pos={[2.85, 1.48, -3.2]} mat={m(p.madeira)} estilo={estilo} contorno={0} />
+      <Peca forma={{tipo: 'caixa', d: [0.06, 0.05, 1.2]}} pos={[2.85, 1.9, -3.2]} mat={m(p.madeira)} estilo={estilo} contorno={0} />
+      <Peca forma={{tipo: 'caixa', d: [0.06, 0.88, 0.05]}} pos={[2.85, 1.9, -2.62]} mat={m(p.madeira)} estilo={estilo} contorno={0} />
+      <Peca forma={{tipo: 'caixa', d: [0.06, 0.88, 0.05]}} pos={[2.85, 1.9, -3.78]} mat={m(p.madeira)} estilo={estilo} contorno={0} />
+      <Peca forma={{tipo: 'caixa', d: [0.06, 0.88, 0.05]}} pos={[2.85, 1.9, -3.2]} mat={m(p.madeira)} estilo={estilo} contorno={0} />
 
       {/* o balcão comprido */}
       <Peca forma={{tipo: 'caixa', d: [0.9, 0.86, 6.2]}} pos={[0, 0.43, -2.3]} mat={m(p.balcao)} estilo={estilo} contorno={0.01} />
       <Peca forma={{tipo: 'caixa', d: [1.0, 0.06, 6.3]}} pos={[0, 0.89, -2.3]} mat={m(p.tampo, {brilho: 0.5})} estilo={estilo} contorno={0.01} />
       {/* saco de farinha, rolo de massa e farinha derramada perto do Bisnaga */}
       <Peca forma={{tipo: 'cilindro', r: 0.15, r2: 0.12, h: 0.36}} pos={[-0.3, 1.1, 0.75]} mat={m('#e8dcc0')} estilo={estilo} />
-      <Peca forma={{tipo: 'cilindro', r: 0.025, h: 0.4}} pos={[0.33, 0.95, 0.15]} rot={[Math.PI / 2, 0, 0.3]} mat={m(p.madeira)} estilo={estilo} />
-      <Peca forma={{tipo: 'cilindro', r: 0.18, h: 0.006}} pos={[0.12, 0.925, 0.6]} esc={[1.3, 1, 0.8]} mat={m(p.farinha)} estilo={estilo} contorno={0} />
+      <Peca forma={{tipo: 'cilindro', r: 0.025, h: 0.4}} pos={[0.36, 0.95, -0.15]} rot={[Math.PI / 2, 0, 0.3]} mat={m(p.madeira)} estilo={estilo} />
+      <Peca forma={{tipo: 'cilindro', r: 0.18, h: 0.006}} pos={[0.14, 0.925, 0.35]} esc={[1.3, 1, 0.8]} mat={m(p.farinha)} estilo={estilo} contorno={0} />
 
-      <Bisnaga estilo={estilo} p={p} pos={[0.14, 0.92, 0.5]} giro={-0.95} />
+      <Bisnaga estilo={estilo} p={p} pos={[0.14, 0.92, 0.22]} giro={-0.95} respira={respira} olhoAberto={olhoAberto} />
 
       {/* geladeiras no fundo, a da direita aberta */}
       {[-1.4, 1.4].map((x) => (
@@ -348,9 +458,28 @@ export const Cena3D: React.FC<{estilo: Estilo}> = ({estilo}) => {
       ))}
 
       {/* o exército de pinguins */}
-      {pinguins.map((pg, i) => (
-        <Pinguim key={i} estilo={estilo} pos={pg.pos} giro={pg.giro} esc={pg.esc} mats={matsPinguim} />
-      ))}
+      {pinguins.map((pg, i) => {
+        let [x, y, z] = pg.pos;
+        let balanco = 0;
+        let tomba = 0;
+        if (pg.onde === 'balcao') {
+          z = Math.min(z + marcha - recuo, -0.32);
+          if (marcha > 0) balanco = Math.sin(t * 9 + pg.fase) * 0.12;
+          if (i < derrubados) tomba = 1;
+        }
+        if (pg.onde === 'chao') {
+          z += marcha * 0.8 + escorregando * 1.8;
+          tomba = escorregando > 0 ? Math.min(1, escorregando * 4) : 0;
+          if (marcha > 0 && !escorregando) balanco = Math.sin(t * 9 + pg.fase) * 0.12;
+        }
+        if (pg.onde === 'geladeira' && pulando > 0) {
+          y += Math.abs(Math.sin(t * 7 + pg.fase)) * 0.09 * pulando;
+          balanco = Math.sin(t * 5 + pg.fase) * 0.2 * pulando;
+        }
+        return <Pinguim key={i} estilo={estilo} pos={[x, y, z]} giro={pg.giro} esc={pg.esc} mats={matsPinguim} balanco={balanco} tomba={tomba} />;
+      })}
+      {solo && <Pinguim estilo={estilo} pos={solo} giro={0.4} esc={1.1} mats={matsPinguim} />}
+      {extras}
     </>
   );
 };
