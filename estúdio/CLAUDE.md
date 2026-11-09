@@ -24,6 +24,9 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 - Voto: duas opções de uma palavra. Nunca punir o voto: o episódio do vencedor é uma vitória. Não mostrar a % de quem ganhou, só "Vocês escolheram: X".
 - Continuidade: o estado do personagem segue entre os episódios. O que mudou continua mudado.
 - O dinheiro (ou o recurso da série) é finito e as contas fecham.
+- Começo que explica: nos primeiros 10 segundos, quem é o personagem, o que está acontecendo e o que ele quer.
+- Toda cena empurra a história: cada cena avança o mistério ou o objetivo. Se não avança, sai (nada de enrolação ou problema solto).
+- Final com ameaça: todo episódio termina com algo em jogo para o próximo, não só uma surpresa.
 
 ## Regras de arte
 - O personagem é um boneco articulado em código. **Nunca mude o rosto ou o corpo do personagem sem pedido.** Foto ou vídeo de referência guia só o movimento e a pose.
