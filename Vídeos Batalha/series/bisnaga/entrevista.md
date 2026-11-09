@@ -47,3 +47,8 @@ Início: 09/11/2026. Pasta da série: `series/bisnaga/`.
 **Resumo:** o Bisnaga entra no Você Decide Aí como segunda série; narrador grave de documentário; sem política, time ou palavrão.
 
 Entrevista concluída em 09/11/2026.
+
+## Decisões depois da entrega
+- Desafio 1: Ideia C, "Os pinguins da geladeira".
+- Faixas da batalha e meta bônus (500, dobrando): aprovadas como estão.
+- Horário: Bisnaga e Bilhete na Porta, os dois às 12h.

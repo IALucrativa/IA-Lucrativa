@@ -16,7 +16,7 @@ Inimigos e lugares, do mais fácil ao mais difícil. Cada um tem um dado para o 
 | 10 | Macacos-prego | Zoológico na hora da comida | 4 mãos | roubam tudo e jogam de volta | de zoológico: TRATADOR, PIPOCA, EXCURSÃO, JAULA |
 | 11 | Robôs aspiradores | Shopping fechado à noite | 3.000 rotações por minuto | sugam tudo o que encontram | de shopping: ESCADA-ROLANTE, PRAÇA-DE-ALIMENTAÇÃO, MANEQUIM, SEGURANÇA |
 | 12 | Bonecos de posto (infláveis) | Posto de gasolina | 6 metros de altura | dançam sem parar e não caem | de estrada: BORRACHARIA, CAMINHONEIRO, LAVA-JATO, CONVENIÊNCIA |
-| 13 | Pinguins de geladeira | Cozinha da padaria (ganharam vida) | 20 cm de louça | não sentem frio e escorregam | de cozinha: FORNO, LIQUIDIFICADOR, PANELA, GELADEIRA |
+| 13 | Pinguins de geladeira (**usado no Desafio 1**) | Cozinha da padaria (ganharam vida) | 20 cm de louça | não sentem frio e escorregam | de cozinha: FORNO, LIQUIDIFICADOR, PANELA, GELADEIRA |
 | 14 | Cães de guarda | Ferro-velho | latido de 100 decibéis | portão de ferro | de ferro-velho: SUCATA, GUINDASTE, PNEU, FERRUGEM |
 | 15 | Gaivotas | Porto de pescadores | 1 metro de asa | roubam peixe em pleno voo | de porto: REDE, FAROL, CAIS, BARQUEIRO |
 | 16 | **Os gatos da padaria chique** (chefe) | A rua entre as duas padarias | pão de fermentação natural | o líder: um gato rival de lenço no pescoço | todos os tipos favoritos do público voltam |

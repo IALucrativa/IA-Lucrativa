@@ -29,7 +29,7 @@ Estrutura da Convocação (cerca de 65 s, igual nas três):
 - **Na Batalha:** o FEIRANTE grita o preço da banana e os pombos se assustam; a LOTÉRICA joga milho para o lado errado; o SALÃO foge do cocô; o AÇOUGUE para no pastel. O Bisnaga dorme numa caixa de laranja e é carregado até o meio da briga.
 - **Ponto de atenção:** a feira exige muitos objetos no cenário (barracas, frutas, toldos). Dá mais trabalho no Desafio 1.
 
-## Ideia C: "Os pinguins da geladeira"
+## Ideia C: "Os pinguins da geladeira" (escolhida em 09/11/2026)
 - **Lugar:** a cozinha da padaria, onde 10.000 pinguins de louça ganharam vida em cima das geladeiras.
 - **Inimigo:** pinguins de geladeira. Dado: **20 CM DE LOUÇA**. Arma: "escorregam e não sentem frio".
 - **Por que ela:** é a mais absurda e a mais diferente de tudo o que existe; o tom sério e absurdo fica no máximo.

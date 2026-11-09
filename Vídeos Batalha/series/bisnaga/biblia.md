@@ -50,7 +50,7 @@ Cada tipo tem um acessório que o identifica de longe (a definir na prancha: ex.
 - A **padaria do Bisnaga** é o lar dele: aparece no começo de toda Convocação (ele dormindo no balcão) e em desafios especiais.
 
 ## Como a batalha se resolve (faixas)
-> **Proposta, a confirmar antes do Desafio 1.** Os números foram pensados para um perfil começando; quando o perfil crescer, as faixas podem subir, mas só entre desafios e com aviso na bíblia.
+> **Confirmado em 09/11/2026.** Os números foram pensados para um perfil começando; quando o perfil crescer, as faixas podem subir, mas só entre desafios e com aviso na bíblia.
 
 | Comentários | Resultado |
 |---|---|
@@ -59,7 +59,7 @@ Cada tipo tem um acessório que o identifica de longe (a definir na prancha: ex.
 | 200 ou mais | **Vitória:** o inimigo foge. |
 | Meta bônus ou mais | **Vitória épica:** chega o gato do caminhão de gás. |
 
-- **Meta bônus:** começa em **500**. Cada vez que for batida, a próxima **dobra** (500 → 1.000 → 2.000...). Proposta, a confirmar.
+- **Meta bônus:** começa em **500**. Cada vez que for batida, a próxima **dobra** (500 → 1.000 → 2.000...). Confirmado em 09/11/2026.
 - Os tipos lutam com a força e o defeito prometidos na Convocação, mesmo na vitória.
 - No fim da Batalha: placar final com os números reais e "Vocês mandaram: <N> soldados".
 - Nunca punir o público: perder é recuar com honra, e o Bisnaga sempre volta para o próximo desafio.
@@ -73,7 +73,7 @@ Cada tipo tem um acessório que o identifica de longe (a definir na prancha: ex.
 - **2 desafios por semana** (4 vídeos).
 - **Horário:** 12h. A Convocação sai às 12h e a Batalha sai às 12h do dia seguinte.
 - **A contagem fecha:** a decidir (sugestão: 9h do dia da Batalha, para dar tempo de produzir).
-- **Atenção:** o Bilhete na Porta também sai às 12h no mesmo perfil. A decidir: horários diferentes ou alternar os dias.
+- O Bilhete na Porta também sai às 12h no mesmo perfil: os dois saem juntos (decidido em 09/11/2026).
 
 ## Voz
 - **Narrador:** voz grave e calma, de documentário, no ElevenLabs. Voz exata: a decidir (anotar aqui o nome assim que escolher e nunca trocar sem pedido).
@@ -95,3 +95,4 @@ Cada tipo tem um acessório que o identifica de longe (a definir na prancha: ex.
 
 ## Estado atual (antes do Desafio 1)
 - O Bisnaga dorme no balcão da padaria. Nenhum desafio jogado.
+- **Desafio 1 escolhido:** Ideia C, "Os pinguins da geladeira" (`d01-ideia.md`).

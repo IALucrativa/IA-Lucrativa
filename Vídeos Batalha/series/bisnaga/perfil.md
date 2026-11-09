@@ -16,4 +16,4 @@
 - **Fixados:** a decidir junto com o Bilhete na Porta (sugestão: Como funciona → Bilhete Ep. 1 → Convocação do Desafio 1 do Bisnaga).
 
 ## Horário
-- O Bilhete na Porta sai todo dia às 12h. O Bisnaga também foi marcado para as 12h. A decidir: postar em horários diferentes (ex.: Bisnaga às 18h) ou só nos dias em que não sai Bilhete.
+- Os dois saem às 12h (decidido em 09/11/2026).
