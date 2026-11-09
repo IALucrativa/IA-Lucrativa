@@ -1,14 +1,19 @@
-# Perfil: Bilhete na Porta
+# Perfil: Você Decide Aí
 
-## Nome do perfil
-**Bilhete na Porta**
-- Sugestões de @ (confira se estão livres no Instagram): `@bilhetenaporta`, `@bilhete.na.porta`, `@bilhetenaporta.serie`.
+> O perfil é um **canal para várias séries**. Bilhete na Porta é a primeira. Escolhido em 2026-11-09.
+
+## Nome
+- **@:** `vocedecideai`. Se estiver ocupado, tente: `voce.decide.ai`, `vocedecideai.tv`, `vocedecideai.serie`. (Confira no próprio Instagram se está livre.)
+- **Nome do perfil (em negrito):** Você Decide Aí · Bilhete na Porta
+  - Quando trocar de série, muda só a segunda parte.
 
 ## Bio (até 150 letras)
-> Ele se muda em 30 dias. Desde que avisou, um bilhete aparece toda noite.
-> Você decide em quem ele confia. 🔦 Ep. novo todo dia, 12h.
+> Séries curtas em que VOCÊ decide o próximo episódio. 🗳️
+> Agora: Bilhete na Porta 📝 Ep. novo todo dia, 12h.
 
 ## Foto de perfil (ideia)
-Close de uma porta de apartamento à noite, com um bilhete dobrado saindo por baixo, iluminado pelo facho de uma lanterna. Sem rosto: o bilhete é a marca da série e se lê bem pequeno.
+Símbolo do canal, e não um personagem, para servir a todas as séries: um balão de comentário com uma setinha de "play" dentro, em cores fortes, que se leia bem pequeno.
 
-Alternativa: o Rodnei espiando pelo olho mágico, só os olhos arregalados, no estilo escolhido na prancha.
+## Bilhete na Porta dentro do perfil
+- Premissa (para destaques e post fixado): "Ele se muda em 30 dias. Desde que avisou, um bilhete aparece toda noite. Você decide em quem ele confia."
+- Ideia de destaque: "BILHETE NA PORTA" com os episódios em ordem.
