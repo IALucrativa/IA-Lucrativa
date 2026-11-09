@@ -1,4 +1,4 @@
-# Ep. 1: "O que é meu" (roteiro v2, aguardando aprovação)
+# Ep. 1: "O que é meu" (roteiro v2, aprovado em 2026-11-09)
 
 > A v1 ("O elevador parou", em `roteiro-v1-reprovado.md`) foi reprovada no vídeo final: o começo não explicava nada, o elevador travado e a mão tremendo não levavam a história para frente, e o bilhete não ameaçava nada. Virou regra no CLAUDE.md: começo que explica, toda cena empurra, final com ameaça.
 
