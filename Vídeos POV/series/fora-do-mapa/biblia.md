@@ -52,6 +52,10 @@
 - Explicar o que é o endereço fora do mapa antes do final.
 - Mostrar o rosto do Motoca.
 
+## Estilo (escolhido em 2026-11-09)
+- **3: Noturno realista.** 3D em primeira pessoa com lente curva, cidade escura, luz alaranjada de poste, neblina e janelas acesas. Prancha em `prancha/prancha-estilos-3d.png`; código em `projeto/src/foradomapa/`.
+- Recusados na prancha: 1, cartoon com contorno; 2, low poly colorido.
+
 ## Visual (o que aparece do Motoca)
 - Luva de motoqueiro com um dedo rasgado.
 - Moto velha: guidão, retrovisor rachado e celular no suporte com o app aberto.

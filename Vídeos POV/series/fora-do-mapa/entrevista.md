@@ -79,7 +79,7 @@ Igual ao da série Bilhete na Porta (confirmado):
 3. **Sementes:** no `banco-de-problemas.md`.
 
 ## Bloco 9: Estilo e voz (2026-11-09)
-1. **Desenho:** 3D em primeira pessoa, lente curva, braços na tela. O traço sai da prancha de estilos.
+1. **Desenho:** 3D em primeira pessoa, lente curva, braços na tela. Na prancha de estilos, a pessoa escolheu o **3, noturno realista** (os outros eram cartoon com contorno e low poly colorido).
 2. **Vozes:** sem narrador. Os personagens falam com o Motoca. **O Motoca fala pouco** (frases curtas, voz própria). O agiota fala só por áudio de mensagem.
 3. **Voz:** gerada no ElevenLabs pela pessoa, com o texto preparado pelo Claude (uma voz por personagem).
 
