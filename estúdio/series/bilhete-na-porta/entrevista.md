@@ -1,6 +1,6 @@
 # Entrevista da série
 
-> Nome da série: a decidir (a pasta `minha-serie` muda de nome quando ele for escolhido).
+> Nome da série e do perfil: **Bilhete na Porta** (escolhido no fim do Bloco 10).
 
 ## Bloco 1: Você e o seu objetivo (2026-11-08)
 1. **Em qual rede vai postar primeiro?** Instagram (Reels).
@@ -97,4 +97,6 @@
 ## Bloco 10: Ritmo (2026-11-09)
 1. **Episódios por semana:** 7 (um por dia; o público vive os 30 dias junto com o Rodnei).
 2. **Horário fixo:** 12h.
-3. **Roteiro adiantado:** topa. Sempre um roteiro pronto antes de prometer data.
+3. **Roteiro adiantado:** prefere escrever no dia, depois do resultado do voto.
+   - Corrigido pela pessoa: a primeira resposta era "topa ter sempre o próximo roteiro pronto".
+   - Aviso dado: com post às 12h, o dia fica apertado. Sugestão: fechar o voto cedo (ex.: 8h). Horário de fechamento do voto: a decidir.
