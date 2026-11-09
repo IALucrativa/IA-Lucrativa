@@ -102,12 +102,16 @@
 
 ## Plataformas
 - A série é postada no **Instagram**, no **TikTok** e no **YouTube Shorts**. Cada plataforma segue o voto do seu público (regra no CLAUDE.md).
-- **Situação:** linha única até o Ep. 1 (o mesmo vídeo nas três). Se algum voto do Ep. 1 for diferente, a plataforma que votou diferente se separa a partir do Ep. 2: copiar o "Estado após o Ep. 1" para o estado de cada linha e seguir cada uma.
+- **Situação:** linha única até o Ep. 1 (o mesmo vídeo nas três).
+- **Separação no voto do Ep. 1** (Instagram: Esconder · TikTok: Contar · YouTube: Esconder). A partir do Ep. 2 são **duas linhas**:
+  - **Linha IG+YT** (Instagram e YouTube): ele escondeu. Pastas `epNN-instagram-youtube/`.
+  - **Linha TT** (TikTok): ele contou para a síndica. Pastas `epNN-tiktok/`.
+  - Ponto de partida das duas: o "Estado após o Ep. 1" acima. Daqui em diante, cada linha tem o seu "Estado após o Ep. N".
 
 ## Histórico de votos
 | Ep. | Opções | Instagram | TikTok | YouTube |
 |---|---|---|---|---|
-| 1 | Contar · Esconder | a confirmar | a confirmar | a confirmar |
+| 1 | Contar · Esconder | Esconder | Contar | Esconder |
 
 ## Calendário interno
 - Episódio N = noite N. A mudança acontece na noite 30.
