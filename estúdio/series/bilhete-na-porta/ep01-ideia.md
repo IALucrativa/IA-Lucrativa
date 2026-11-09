@@ -40,7 +40,7 @@ Formato de 9 passos (cerca de 45 a 60 segundos):
 
 > Atenção: esta ideia já arranha o segredo da chave mestra no Ep. 1. Ela é forte, mas gasta a carta cedo.
 
-## Ideia C: "O elevador parou"
+## Ideia C: "O elevador parou" ✅ escolhida
 1. **Gancho:** a luz do elevador pisca e apaga. Narrador: "Para um técnico de elevador, isso deveria ser normal."
 2. **Quem e prazo:** o Rodnei volta do trabalho; no painel do elevador, o aviso dele: "Me mudo dia 30."
 3. **Problema:** o elevador para entre dois andares, com ele dentro.

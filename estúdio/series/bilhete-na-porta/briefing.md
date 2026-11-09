@@ -11,7 +11,7 @@
 | **Tempo disponível** | 2 horas ou mais por dia. |
 | **Experiência** | Usou IA um pouco; edição de vídeo no básico. |
 | **Tom** | Mistério, com um narrador de suspense sério contando coisas que às vezes são bobas. |
-| **Estilo do desenho** | A decidir na prancha de estilos. |
+| **Estilo do desenho** | A · Cartoon com contorno (cores vivas, contorno escuro, olhos expressivos), escolhido na prancha 1. Ainda falta o refinamento do Rodnei. |
 | **Voz** | Gerada no ElevenLabs pela própria pessoa, que manda o arquivo de áudio. |
 | **Formato** | 1080×1920, 30 fps, áudio em −14 LUFS. |
 | **Referência** | O Cara da Foto (série-exemplo do curso): só a estrutura (voto, meta com prazo, progresso na tela). |

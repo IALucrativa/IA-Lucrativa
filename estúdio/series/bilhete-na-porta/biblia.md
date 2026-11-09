@@ -78,6 +78,10 @@
 - [ ] Como a pessoa sabe coisas da vida dele?
 - [ ] O que ela quer com ele?
 
+## Decisões de produção
+- **Estilo:** A · Cartoon com contorno (prancha 1, em `prancha/`). A prancha é rascunho: o rosto e o corpo do Rodnei ainda serão refinados.
+- **Ep. 1:** ideia C, "O elevador parou" (ver `ep01-ideia.md`). Bilhete da noite: "Eu parei o elevador. Queria ver se você ia ter coragem." Voto: Contar ou Esconder.
+
 ## Histórico de votos
 | Ep. | Opções | Resultado |
 |---|---|---|
