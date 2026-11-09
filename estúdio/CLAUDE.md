@@ -19,6 +19,7 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 ## Regras de criação
 - Fale em português do Brasil.
 - Formato: 1080×1920, 30 fps. Áudio normalizado em −14 LUFS.
+- Duração mínima: todo vídeo tem **no mínimo 1 minuto** (60 s), para fins de monetização. Planeje o roteiro já com isso (cerca de 150 a 170 palavras de narração). O tempo a mais vem de história que empurra o mistério, nunca de enrolação ou cena parada.
 - Nunca copie personagem, nome, piada, arte ou música de outra pessoa. Referência serve só de estrutura. Nunca use nome de famoso ou de pessoa real.
 - A piada nunca é o físico nem a pobreza; é o jeito de resolver.
 - Voto: duas opções de uma palavra. Nunca punir o voto: o episódio do vencedor é uma vitória. Não mostrar a % de quem ganhou, só "Vocês escolheram: X".
