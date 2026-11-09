@@ -8,7 +8,7 @@ import {useThree} from '@react-three/fiber';
 
 export type Estilo = 'cartoon' | 'lowpoly' | 'noturno';
 
-type Paleta = {
+export type Paleta = {
   fundo: string;
   parede: string;
   azulejo: string;
@@ -31,7 +31,7 @@ type Paleta = {
   fria: number;
 };
 
-const PALETAS: Record<Estilo, Paleta> = {
+export const PALETAS: Record<Estilo, Paleta> = {
   cartoon: {
     fundo: '#24304f', parede: '#f1e6cf', azulejo: '#f7f2e6', rejunte: '#c9bfa8', piso1: '#e9e2d0', piso2: '#c0533f',
     balcao: '#3f7fbf', tampo: '#d9dde3', geladeira: '#eef1f4', forno: '#3c4048', madeira: '#b5793f', pao: '#e0a458',
@@ -52,7 +52,7 @@ const PALETAS: Record<Estilo, Paleta> = {
   },
 };
 
-const aleatorio = (semente: number) => {
+export const aleatorio = (semente: number) => {
   let s = semente;
   return () => {
     s = (s * 16807) % 2147483647;
@@ -60,7 +60,7 @@ const aleatorio = (semente: number) => {
   };
 };
 
-const texturaCanvas = (l: number, a: number, desenha: (c: CanvasRenderingContext2D) => void, rep: [number, number] = [1, 1]) => {
+export const texturaCanvas = (l: number, a: number, desenha: (c: CanvasRenderingContext2D) => void, rep: [number, number] = [1, 1]) => {
   const canvas = document.createElement('canvas');
   canvas.width = l;
   canvas.height = a;
@@ -73,7 +73,7 @@ const texturaCanvas = (l: number, a: number, desenha: (c: CanvasRenderingContext
   return t;
 };
 
-const useMaterial = (estilo: Estilo) => {
+export const useMaterial = (estilo: Estilo) => {
   const degraus = useMemo(() => {
     const dados = new Uint8Array([80, 80, 80, 255, 170, 170, 170, 255, 255, 255, 255, 255]);
     const t = new THREE.DataTexture(dados, 3, 1, THREE.RGBAFormat);
@@ -90,7 +90,7 @@ const useMaterial = (estilo: Estilo) => {
   };
 };
 
-type Forma =
+export type Forma =
   | {tipo: 'caixa'; d: [number, number, number]}
   | {tipo: 'cilindro'; r: number; h: number; r2?: number}
   | {tipo: 'cone'; r: number; h: number}
@@ -104,7 +104,7 @@ const geometria = (f: Forma, folga: number, lp: boolean): THREE.BufferGeometry =
   return new THREE.SphereGeometry(f.r + folga, seg, lp ? 6 : 18);
 };
 
-const Peca: React.FC<{
+export const Peca: React.FC<{
   forma: Forma;
   mat: THREE.Material;
   estilo: Estilo;
