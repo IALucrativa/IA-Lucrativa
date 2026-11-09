@@ -1,83 +1,51 @@
 FORA DO MAPA · PARTE 1: "O AVISO"
-Falas para gerar no ElevenLabs, em português do Brasil.
+Narração para gerar no ElevenLabs, em português do Brasil. UMA VOZ SÓ.
+
+A VOZ
+MOTOCA: homem jovem, cansado, voz baixa e grave, tom de quem conta um segredo de madrugada.
+Sem pressa, com pausa antes do que assusta.
+Voz escolhida no ElevenLabs: ____________  (use sempre a mesma em todas as partes)
 
 COMO FAZER
-1. Para cada personagem, escolha UMA voz no ElevenLabs e use sempre a mesma (anote o nome da voz aqui embaixo, ao lado do personagem).
-2. Gere uma fala por vez: copie só o texto que está depois de "TEXTO:".
-3. O que está entre parênteses é o tom. NÃO copie para o ElevenLabs; use para escolher a voz e ajustar a emoção.
-4. Salve cada áudio em  series/fora-do-mapa/ep01/audios/  com o nome indicado (ex.: 01-menino.mp3).
-5. Se uma fala sair estranha, gere de novo. Pode mandar mais de uma versão (ex.: 01-menino-b.mp3).
-
-VOZES
-- MOTOCA: homem jovem (20 e poucos anos), voz cansada, fala baixa e curta.          Voz escolhida: ____________
-- SEU VANDO (o agiota, por áudio de celular): homem de uns 60 anos, calmo, educado demais, sorrindo enquanto ameaça.   Voz escolhida: ____________
-- ATENDENTE: mulher de uns 50 anos, carinhosa, jeito de mãe, meio apressada.        Voz escolhida: ____________
-- MENINO: criança de uns 8 anos, tranquila demais, sem pressa nenhuma.              Voz escolhida: ____________
-- GPS: voz feminina de aplicativo, neutra.                                         Voz escolhida: ____________
+1. Gere um bloco por vez: copie só o texto que está depois de "TEXTO:".
+2. Salve cada bloco em  series/fora-do-mapa/ep01/audios/  com o nome indicado (ex.: 01-abertura.mp3).
+3. As reticências (...) são pausas de propósito. Deixe como está.
+4. Se um bloco sair estranho, gere de novo só ele. Pode mandar mais de uma versão (ex.: 01-abertura-b.mp3).
+5. Dica: no ElevenLabs, deixe a "estabilidade" mais baixa para a voz soar mais humana e cansada.
 
 ======================================================================
 
-01-menino.mp3
-(perto, quase sussurrando, muito calmo; abertura do vídeo)
-TEXTO: Não passa pela avenida amanhã.
+01-abertura.mp3
+TEXTO: "Não passa pela avenida amanhã." Foi isso que um menino me disse hoje. Um menino que sabia o meu nome... e quanto eu devo.
 
-02-vando.mp3
-(áudio de celular; calmo, simpático, cada frase com uma pausa)
-TEXTO: Motoca, meu querido. Cinco mil. Quinze noites. A primeira começa agora.
+02-prazo.mp3
+TEXTO: Aqui todo mundo me chama de Motoca. Eu faço entrega de madrugada. E devo cinco mil reais pro Seu Vando. Ele nunca grita. Só manda áudio, sempre educado. Hoje ele mandou: cinco mil, quinze noites. A primeira começa agora.
 
-03-motoca.mp3
-(cansado, meio sem paciência, falando sozinho para o celular)
-TEXTO: Tô correndo, Seu Vando. Tô correndo.
+03-rotina.mp3
+TEXTO: Na lanchonete, a moça do balcão manda eu comer alguma coisa. Diz que eu tô pálido. Eu conto as moedas e pego o salgado mais barato. Uma noite boa rende cento e cinquenta reais. Faz a conta. Não fecha.
 
-04-atendente.mp3
-(carinhosa e apressada, atrás do balcão)
-TEXTO: Mais um pra Vila Nova, Motoca. E come alguma coisa, que você tá pálido.
+04-pedido.mp3
+TEXTO: Aí o celular apitou diferente. Lanche infantil. Rua sem nome. Endereço não encontrado. Qualquer um recusaria. Eu nunca consegui dizer não.
 
-05-motoca.mp3
-(sem graça, contando moedas)
-TEXTO: Hoje não dá, não.
+05-caminho.mp3
+TEXTO: O GPS ficou recalculando o caminho inteiro. No fim daquela rua tem um muro. Sempre teve. Hoje, no lugar do muro... tinha uma rua.
 
-06-motoca.mp3
-(estranhando, lendo a tela do celular)
-TEXTO: Rua sem nome?
+06-cliente.mp3
+TEXTO: A porta abriu antes de eu tocar. Um menino de pijama. Ele me chamou de Motoca. Sabia até quanto eu devo. Disse que o lanche era pro pai dele... que ainda não tinha chegado. Perguntei se tava pago no app. Ele disse que pagava de outro jeito.
 
-07-gps.mp3
-(voz de aplicativo, neutra; a segunda vez igual à primeira)
-TEXTO: Recalculando... Recalculando...
+07-pagamento.mp3
+TEXTO: Olhou bem nos meus olhos e falou devagar: amanhã, às dez da noite, não passa pela avenida. A porta fechou. E a luz apagou.
 
-08-motoca.mp3
-(baixinho, assustado, sem acreditar)
-TEXTO: Isso aqui era um muro.
+08-volta.mp3
+TEXTO: Na volta, eu parei em cima da faixa e olhei pelo retrovisor. A rua não estava mais lá. Só o muro.
 
-09-menino.mp3
-(tranquilo, como se conhecesse ele há anos)
-TEXTO: Demorou, Motoca.
+09-ameaca.mp3
+TEXTO: Em casa, contei o dinheiro da noite. Cento e cinquenta reais. Aí chegou a mensagem do Seu Vando. Amanhã. Dez da noite. Na avenida.
 
-10-motoca.mp3
-(surpreso, a frase fica no meio)
-TEXTO: Como você sabe o meu...
-
-11-menino.mp3
-(interrompendo, calmo, um pouco triste)
-TEXTO: É pro meu pai. Ele ainda não chegou.
-
-12-motoca.mp3
-(sem jeito, querendo ir embora)
-TEXTO: Tá pago no app?
-
-13-menino.mp3
-(sério, devagar)
-TEXTO: Eu pago de outro jeito.
-
-14-menino.mp3
-(olhando nos olhos, devagar, cada parte com uma pausa; o momento mais importante)
-TEXTO: Amanhã, às dez da noite, não passa pela avenida.
-
-15-motoca.mp3
-(quase sem voz, lendo a mensagem do Seu Vando)
-TEXTO: ...Na avenida.
+10-voto.mp3
+TEXTO: Um menino que eu nunca vi me mandou fugir da avenida. O homem que eu devo me mandou ir. E você... o que faria? Obedecer o menino, ou ir até o Seu Vando? Comenta: obedecer, ou ir.
 
 ======================================================================
-Total: 15 falas (Motoca 7, Menino 5, Seu Vando 1, Atendente 1, GPS 1 com duas repetições).
-A mensagem escrita do Seu Vando ("Amanhã, 22h, na avenida. Traz o que tiver.") aparece só na tela, sem voz.
+Total: 10 blocos, uma voz só (cerca de 2 minutos).
+Na tela, sem voz: o áudio e a mensagem do Seu Vando, a tela do app ("Rua sem nome", "Recalculando...") e o placar.
 Os sons de ambiente (moto, rua, apito do celular, porta) eu faço aqui no estúdio; não precisa gerar.

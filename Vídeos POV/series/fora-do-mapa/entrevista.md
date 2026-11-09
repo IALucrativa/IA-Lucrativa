@@ -80,8 +80,9 @@ Igual ao da série Bilhete na Porta (confirmado):
 
 ## Bloco 9: Estilo e voz (2026-11-09)
 1. **Desenho:** 3D em primeira pessoa, lente curva, braços na tela. Na prancha de estilos, a pessoa escolheu o **3, noturno realista** (os outros eram cartoon com contorno e low poly colorido).
-2. **Vozes:** sem narrador. Os personagens falam com o Motoca. **O Motoca fala pouco** (frases curtas, voz própria). O agiota fala só por áudio de mensagem.
-3. **Voz:** gerada no ElevenLabs pela pessoa, com o texto preparado pelo Claude (uma voz por personagem).
+2. **Vozes:** **uma voz só: o Motoca narra** a noite em primeira pessoa.
+   - Corrigido pela pessoa depois do roteiro v1: a primeira escolha era sem narrador, com diálogos e uma voz por personagem (o Motoca falando pouco).
+3. **Voz:** gerada no ElevenLabs pela pessoa, com o texto preparado pelo Claude.
 
 ## Bloco 10: Ritmo (2026-11-09)
 1. **Partes por semana:** 3.

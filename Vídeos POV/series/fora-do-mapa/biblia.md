@@ -18,7 +18,7 @@
 - **Defeito:** não consegue recusar. Aceita toda corrida e todo favor, até os que não devia.
 - **O que mais quer:** quitar a dívida com o agiota.
 - **Por que o público torce:** ele se mete em encrenca porque não sabe dizer não, e enfrenta tudo sozinho.
-- **Fala pouco:** frases curtas, com voz própria.
+- **É o narrador:** conta a noite em primeira pessoa, com frases curtas e pausas.
 - **Segredo:** a decidir.
 
 ### Seu Vando, o agiota
@@ -34,14 +34,10 @@
 ### Aliados
 - **Nenhum.** Quem ajuda o Motoca é o público, com as escolhas.
 
-## Vozes e cores de legenda
-| Personagem | Voz (ElevenLabs) | Cor da legenda |
-|---|---|---|
-| Motoca | homem jovem, cansado, fala curta · voz: a anotar | branco |
-| Seu Vando | homem de uns 60 anos, calmo e educado demais · voz: a anotar | amarelo, com 🎙️ |
-| Atendente da lanchonete | mulher de uns 50 anos, jeito de mãe · voz: a anotar | laranja-claro |
-| O menino (Parte 1) | criança de uns 8 anos, tranquila demais · voz: a anotar | azul-claro |
-| GPS | voz de aplicativo | cinza, com 📍 |
+## Voz e legenda (atualizado em 2026-11-09)
+- **Uma voz só: o Motoca narra**, em primeira pessoa, falando com quem assiste. Homem jovem, cansado, voz baixa e grave, tom de segredo de madrugada. Voz no ElevenLabs: a anotar.
+- Os outros personagens **não têm voz**: o que eles dizem chega pela boca do Motoca ("ele disse que...") ou escrito na tela (mensagens e áudios do Seu Vando, a tela do app).
+- Legenda: a narração em branco, no meio da tela. Mensagens na tela do celular.
 
 ## Lugares
 - **O quarto alugado (lugar fixo):** ele volta no fim da noite, conta o dinheiro e olha o saldo. É onde os objetos guardados se acumulam.

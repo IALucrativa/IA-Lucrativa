@@ -7,8 +7,8 @@
 - **Ritmo:** 3 partes por semana, às 12h.
 - **Duração:** no mínimo 1 minuto; a referência tem cerca de 2 min 20 s.
 - **Formato:** POV em 3D, câmera em primeira pessoa com lente curva, braços na tela, 1080×1920, 30 fps.
-- **Voz:** sem narrador. Os personagens falam com o Motoca, que fala pouco. Vozes geradas no ElevenLabs pela pessoa, uma por personagem.
-- **Legenda:** no meio da tela, branca com contorno, com uma cor por quem fala. Mensagens e áudios do agiota aparecem no celular.
+- **Voz:** uma voz só. O Motoca narra a noite em primeira pessoa, falando com quem assiste; o que os outros dizem chega pela narração ou escrito na tela. Voz gerada no ElevenLabs pela pessoa.
+- **Legenda:** a narração no meio da tela, branca com contorno. Mensagens e áudios do agiota aparecem no celular.
 - **Abertura:** selo "FORA DO MAPA · PARTE N" e o título da parte, sobre o momento mais forte.
 - **Fim:** "O QUE VOCÊ FARIA?" com duas ações, cada uma com uma palavra em destaque para comentar.
 - **Tempo de trabalho:** 2 horas ou mais por dia.
