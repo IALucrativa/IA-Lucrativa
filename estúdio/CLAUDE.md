@@ -25,7 +25,8 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 - Voto: duas opções de uma palavra. Nunca punir o voto: o episódio do vencedor é uma vitória. Não mostrar a % de quem ganhou, só "Vocês escolheram: X".
 - Continuidade: o estado do personagem segue entre os episódios. O que mudou continua mudado.
 - O dinheiro (ou o recurso da série) é finito e as contas fecham.
-- Começo que explica: nos primeiros 10 segundos, quem é o personagem, o que está acontecendo e o que ele quer.
+- Começo impactante: os **primeiros 3 segundos** prendem a pessoa. O vídeo abre direto no momento mais forte do episódio (a ameaça, o susto, a descoberta ou a pergunta sem resposta), com imagem que chama atenção e uma frase curta de narração. Nunca abrir com apresentação calma, paisagem ou "esse é o...".
+- Começo que explica: logo depois do impacto, até os 10 segundos, quem é o personagem, o que está acontecendo e o que ele quer.
 - Toda cena empurra a história: cada cena avança o mistério ou o objetivo. Se não avança, sai (nada de enrolação ou problema solto).
 - Final com ameaça: todo episódio termina com algo em jogo para o próximo, não só uma surpresa.
 
