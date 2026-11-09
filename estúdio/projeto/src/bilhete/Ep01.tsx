@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {C, T, Tf} from './cores';
 import {Rodnei, MolhoDeChaves, Braco} from './Rodnei';
 import {Corredor, ElevadorInterior, HallDia, Placar, Vizinho} from './cenarios';
@@ -8,41 +8,84 @@ import {Corredor, ElevadorInterior, HallDia, Placar, Vizinho} from './cenarios';
 // Tempos de cada parte do roteiro (em quadros).
 export const CENAS = {
   gancho: [0, 95],
-  quem: [95, 335],
-  problema: [335, 515],
-  tentativa1: [515, 755],
-  tentativa2: [755, 965],
-  virada: [965, 1205],
-  bilhete: [1205, 1415],
-  placar: [1415, 1535],
-  voto: [1535, 1680],
+  quem: [95, 380],
+  problema: [380, 560],
+  tentativa1: [560, 800],
+  tentativa2: [800, 1010],
+  virada: [1010, 1250],
+  bilhete: [1250, 1460],
+  placar: [1460, 1580],
+  voto: [1580, 1745],
 } as const;
-export const DURACAO_EP01 = 1680;
+export const DURACAO_EP01 = 1745;
 
 const s = (seg: number) => Math.round(seg * 30);
 
-// Legendas (texto da narração). Na parte do bilhete não tem legenda: o texto já está na tela.
-const LEGENDAS: [number, number, string][] = [
-  [0.3, 3.0, 'Para um técnico de elevador, isso deveria ser normal.'],
-  [3.3, 5.2, 'Rodnei. Quarenta e um anos.'],
-  [5.3, 7.6, 'Conhece todos os prédios da cidade por dentro.'],
-  [7.7, 8.7, 'Menos o dele.'],
-  [8.8, 10.1, 'Hoje, avisou que vai embora.'],
-  [10.1, 11.1, 'Ninguém leu.'],
-  [11.4, 13.4, 'Onze da noite.'],
-  [13.5, 15.8, 'O elevador parou entre dois andares.'],
-  [15.8, 17.0, 'Com ele dentro.'],
-  [17.5, 20.5, 'Ele sabe exatamente o que fazer.'],
-  [21.5, 24.5, 'O problema é a mão.'],
-  [25.3, 27.8, 'Plano B: lanterna na boca.'],
-  [29.4, 30.7, 'Funcionou.'],
-  [30.7, 32.1, 'Claro que funcionou.'],
-  [33.0, 36.0, 'A porta abriu no andar dele.'],
-  [36.4, 39.8, 'E alguém tinha chegado primeiro.'],
-  [47.5, 50.6, 'Faltam vinte e nove noites.'],
-  [51.2, 53.4, 'Ele conta para alguém...'],
-  [53.4, 56.0, '...ou esconde?'],
+// Falas: [início no áudio, fim no áudio, quando entra no vídeo] em segundos,
+// com as legendas (tempos relativos ao começo da fala). Sem legenda no bilhete: o texto já está na tela.
+type Fala = {de: number; ate: number; em: number; legendas: [number, number, string][]};
+const inteira = (txt: string, dur: number): [number, number, string][] => [[0, dur, txt]];
+const FALAS: Fala[] = [
+  {de: 0.0, ate: 3.3, em: 0.1, legendas: inteira('Para um técnico de elevador, isso deveria ser normal.', 3.3)},
+  {de: 3.9, ate: 5.86, em: 3.5, legendas: inteira('Rodnei. Quarenta e um anos.', 1.96)},
+  {de: 6.28, ate: 9.0, em: 5.7, legendas: inteira('Conhece todos os prédios da cidade por dentro.', 2.72)},
+  {de: 9.55, ate: 10.43, em: 8.6, legendas: inteira('Menos o dele.', 0.88)},
+  {de: 11.0, ate: 12.7, em: 9.7, legendas: inteira('Hoje, avisou que vai embora.', 1.7)},
+  {de: 13.19, ate: 13.94, em: 11.6, legendas: inteira('Ninguém leu.', 0.9)},
+  {
+    de: 14.55, ate: 19.3, em: 13.0,
+    legendas: [
+      [0, 1.1, 'Onze da noite.'],
+      [1.4, 3.45, 'O elevador parou entre dois andares.'],
+      [3.85, 4.75, 'Com ele dentro.'],
+    ],
+  },
+  {de: 19.8, ate: 21.85, em: 19.2, legendas: inteira('Ele sabe exatamente o que fazer.', 2.05)},
+  {de: 22.32, ate: 23.76, em: 22.3, legendas: inteira('O problema é a mão.', 1.6)},
+  {de: 24.42, ate: 26.5, em: 27.0, legendas: inteira('Plano B: lanterna na boca.', 2.08)},
+  {de: 27.01, ate: 27.6, em: 31.2, legendas: inteira('Funcionou.', 0.8)},
+  {de: 27.99, ate: 29.08, em: 32.0, legendas: inteira('Claro que funcionou.', 1.2)},
+  {de: 29.49, ate: 31.06, em: 34.2, legendas: inteira('A porta abriu no andar dele.', 1.7)},
+  {de: 31.53, ate: 33.26, em: 36.6, legendas: inteira('E alguém tinha chegado primeiro.', 1.9)},
+  {de: 33.74, ate: 34.85, em: 42.0, legendas: []},
+  {de: 35.19, ate: 36.89, em: 43.5, legendas: []},
+  {de: 37.36, ate: 39.31, em: 49.2, legendas: inteira('Faltam vinte e nove noites.', 2.1)},
+  {de: 39.75, ate: 41.01, em: 53.0, legendas: inteira('Ele conta para alguém...', 1.3)},
+  {de: 41.38, ate: 42.08, em: 54.4, legendas: inteira('...ou esconde?', 0.9)},
+  {de: 42.64, ate: 45.0, em: 55.5, legendas: inteira('Comente: contar ou esconder.', 2.5)},
 ];
+
+const LEGENDAS: [number, number, string][] = FALAS.flatMap((f) =>
+  f.legendas.map(([a, b, txt]) => [f.em + a, f.em + b, txt] as [number, number, string]),
+);
+
+// Efeitos pontuais e fundo baixo: [arquivo, quando entra (s), volume, duração máxima (s)]
+const EFEITOS: [string, number, number, number?][] = [
+  ['luz_piscando', 0, 0.35],
+  ['zumbido_elevador', 0, 0.1, 3.17],
+  ['zumbido_elevador', 12.67, 0.12, 18.2],
+  ['chaves_caindo', 23.67, 0.6],
+  ['clique', 30.83, 0.7],
+  ['luz_volta', 30.9, 0.4],
+  ['suspense', 36.5, 0.2],
+  ['papel', 41.8, 0.5],
+  ['uuush', 52.75, 0.35],
+];
+
+const Sons: React.FC = () => (
+  <>
+    {FALAS.map((f, i) => (
+      <Sequence key={`fala${i}`} from={s(f.em)} durationInFrames={s(f.ate - f.de)}>
+        <Audio src={staticFile('ep01-narracao.mp3')} trimBefore={s(f.de)} />
+      </Sequence>
+    ))}
+    {EFEITOS.map(([arq, em, vol, max], i) => (
+      <Sequence key={`efeito${i}`} from={s(em)} durationInFrames={max ? s(max) : undefined}>
+        <Audio src={staticFile(`sfx/${arq}.wav`)} volume={vol} />
+      </Sequence>
+    ))}
+  </>
+);
 
 const Legenda: React.FC = () => {
   const f = useCurrentFrame();
@@ -134,13 +177,13 @@ const Quem: React.FC = () => {
   const f = useCurrentFrame();
   const baixar = interpolate(f, [85, 105], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const bracoD = misturar({ombro: -148, cotovelo: 30}, BRACO_SOLTO_D, baixar);
-  const vx = interpolate(f, [110, 190], [620, 410], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const andando = f < 190;
-  const olhandoVizinho = f > 125;
+  const vx = interpolate(f, [170, 250], [620, 410], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const andando = f < 250;
+  const olhandoVizinho = f > 185;
   return (
     <Tela>
       <HallDia avisoColado />
-      {f > 110 && <Vizinho x={vx} y={835} escala={1} frame={andando ? f : 0} />}
+      {f > 170 && <Vizinho x={vx} y={835} escala={1} frame={andando ? f : 0} />}
       <Rodnei
         x={150}
         y={900}
@@ -186,7 +229,7 @@ const Problema: React.FC = () => {
 const Tentativa1: React.FC = () => {
   const {fps} = useVideoConfig();
   const f = useCurrentFrame();
-  const QUEDA = 135;
+  const QUEDA = 150;
   const caiu = f >= QUEDA;
   const tremor = interpolate(f, [0, QUEDA], [1, 7], {extrapolateRight: 'clamp'});
   const queda = interpolate(f, [QUEDA, QUEDA + 14], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -277,7 +320,7 @@ const FRASE = ['Eu parei o elevador.', 'Queria ver se você', 'ia ter coragem.']
 const Bilhete: React.FC = () => {
   const f = useCurrentFrame();
   const total = FRASE.join('').length;
-  const letras = Math.floor(interpolate(f, [25, 170], [0, total], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}));
+  const letras = Math.floor(interpolate(f, [10, 43, 55, 106], [0, FRASE[0].length, FRASE[0].length, total], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}));
   const tx = Math.sin(f * 1.9) * 2.5;
   const ty = Math.cos(f * 2.3) * 2;
   let usadas = 0;
@@ -405,5 +448,6 @@ export const Ep01: React.FC = () => (
       );
     })}
     <Legenda />
+    <Sons />
   </AbsoluteFill>
 );
