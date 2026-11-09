@@ -61,9 +61,9 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
   Comente <OPÇÃO 1> ou <OPÇÃO 2>.
   O próximo episódio é o que vocês escolherem. Amanhã, 12h.
 
-  #vocedecideai #<série> #<gênero> #serieanimada
+  #<perfil> #<série> #<gênero> #serieanimada
   ```
-- Ao finalizar um episódio, entregue também a capa (`capa.png`, 1080×1920) no estilo padrão, feita com o molde `projeto/src/bilhete/Capa.tsx` (troque só os textos e a pose):
+- Ao finalizar um episódio, entregue também a capa (`capa.png`, 1080×1920) no estilo padrão, feita a partir de um molde em `projeto/src/<série>/Capa.tsx` (crie o molde no Ep. 1 e, nos seguintes, troque só os textos e a pose):
   - selinho com o nome da série no alto;
   - "EPISÓDIO <n>" grande, com o número em amarelo;
   - faixa amarela inclinada com o placar ou prazo (ex.: "FALTAM 29 NOITES");
