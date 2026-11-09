@@ -42,6 +42,18 @@ Se a pessoa ainda não montou o estúdio (não existe a pasta `projeto/`), siga 
 - Mostre prévias em folha de quadros (vários quadros numa imagem) antes do render final, e só avance com aprovação.
 - O trabalho pesado roda no computador (render, transcrição, mixagem): rode o script e leia só o resumo.
 - Depois de cada episódio publicado, atualize a bíblia com o "estado após o episódio" e o resultado do voto.
+- Ao finalizar um episódio, entregue junto a legenda do post (`legenda-do-post.txt` na pasta da entrega e no chat, pronta para copiar), sempre nesta estrutura:
+  ```
+  EP. <n> | <título do episódio> <emoji>
+  <o que aconteceu, em 1 ou 2 frases curtas>
+  <o gancho: a ameaça ou a dúvida, em 1 frase> 👀
+
+  🗳️ VOCÊ DECIDE: <a pergunta do voto>?
+  Comente <OPÇÃO 1> ou <OPÇÃO 2>.
+  O próximo episódio é o que vocês escolherem. Amanhã, 12h.
+
+  #vocedecideai #<série> #<gênero> #serieanimada
+  ```
 - Quando a pessoa corrigir algo importante, pergunte se deve virar regra neste arquivo.
 - Confira cada coisa criada. Se der erro, leia a mensagem inteira, explique em uma linha (sem termo técnico) e tente corrigir. Se a correção precisar baixar algo, avise antes com o tamanho.
 
