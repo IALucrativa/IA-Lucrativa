@@ -41,8 +41,8 @@ const IgImpacto: React.FC = () => (
 
 const IgBatida: React.FC = () => {
   const f = useCurrentFrame();
-  const guardar = interpolate(f, [70, 95], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const ouviu = f > 30;
+  const guardar = interpolate(f, [125, 150], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const ouviu = f > 114;
   return (
     <Tela>
       <SalaNoite papel={0} dia hora={7} />
@@ -77,12 +77,12 @@ const IgQuem: React.FC = () => {
 
 const IgMarlene: React.FC = () => {
   const f = useCurrentFrame();
-  const sai = interpolate(f, [205, 265], [365, 640], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const sai = interpolate(f, [175, 240], [365, 640], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const sorriu = f > 95;
   return (
     <Tela>
       <Corredor sombraOp={0} bilheteNoChao={false} feixe={false} portaAberta />
-      <Rodnei x={190} y={885} frame={f} medo={!sorriu} boca={sorriu ? 'aliviada' : 'fechada'} olhar={f > 210 ? [1, 0] : [1, -0.2]} />
+      <Rodnei x={190} y={885} frame={f} medo={!sorriu} boca={sorriu ? 'aliviada' : 'fechada'} olhar={f > 180 ? [1, 0] : [1, -0.2]} />
       <Marlene
         x={sai}
         y={885}
@@ -118,7 +118,7 @@ const IgQuinto: React.FC = () => (
 
 const IgPapel: React.FC = () => {
   const f = useCurrentFrame();
-  const zoom = interpolate(f, [0, 110], [2.4, 2.7]);
+  const zoom = interpolate(f, [0, 165], [2.4, 2.75]);
   return (
     <Tela>
       <g transform={`translate(270,470) scale(${zoom}) translate(-330,-830)`}>
@@ -191,22 +191,46 @@ const IgVoto: React.FC = () => {
   );
 };
 
+// Tempos acertados pela narração do Instagram + YouTube (ep02-igyt-narracao.mp3, 72,2 s).
 export const PARTES_EP02_IGYT: Parte[] = [
-  {nome: 'impacto', Cena: IgImpacto, dur: 60, legendas: []},
-  {nome: 'batida', Cena: IgBatida, dur: 210, legendas: [[0.2, 2.4, 'O Rodnei não contou pra ninguém.'], [2.5, 6.6, 'Nem quando a síndica bateu na porta dele às sete da manhã.']]},
-  {nome: 'quem', Cena: IgQuem, dur: 255, legendas: [[0.2, 3.2, 'Ele é técnico de elevador, mora no térreo'], [3.2, 5.0, 'e se muda em vinte e nove dias.'], [5.1, 8.3, 'E desde ontem, alguém deixa bilhetes na porta dele.']]},
-  {nome: 'marlene', Cena: IgMarlene, dur: 270, legendas: [[0.2, 3.0, 'A Marlene queria saber do barulho no corredor.'], [3.1, 5.6, 'Ele sorriu, disse que foi o gato...'], [5.7, 8.8, '...e ela foi embora sem desconfiar de nada.']]},
-  {nome: 'ganho', Cena: IgGanho, dur: 195, legendas: [[0.2, 1.6, 'Esconder deu certo.'], [1.7, 6.3, 'E deu mais: sem a síndica no caminho, ele podia investigar sozinho.']]},
-  {nome: 'quinto', Cena: IgQuinto, dur: 270, legendas: [[0.2, 2.6, 'À tarde, ele subiu até o quinto andar.'], [2.7, 5.8, 'Na porta da Tânia, a plaquinha de boas-vindas estava torta.'], [5.9, 8.8, 'Como se alguém tivesse saído com pressa.']]},
-  {nome: 'papel', Cena: IgPapel, dur: 120, legendas: [[0.2, 2.6, 'E no chão, perto do capacho, um pedaço de papel.'], [2.6, 3.9, 'Igual ao dos bilhetes.']]},
-  {nome: 'noite', Cena: IgNoite, dur: 90, pos: 'alto', legendas: [[0.2, 2.9, 'Às onze da noite, chegou o terceiro.']]},
-  {nome: 'bilhete3', Cena: IgBilhete3, dur: 150, legendas: []},
-  {nome: 'peso', Cena: IgPeso, dur: 150, legendas: [[0.2, 2.2, 'Ele não contou nada pra ninguém.'], [2.3, 4.9, 'Mas alguém está contando os passos dele.']]},
-  {nome: 'placar', Cena: IgPlacar, dur: 100, legendas: [[0.2, 3.1, 'Noite dois. Faltam vinte e oito.']]},
-  {nome: 'voto', Cena: IgVoto, dur: 210, legendas: [[0.2, 3.0, 'Hoje à noite, ele bate na porta da Tânia...'], [3.1, 5.3, '...ou fica acordado vigiando a própria porta?'], [5.4, 7.0, 'Comente: bater ou vigiar.']]},
+  {nome: 'impacto', Cena: IgImpacto, dur: 88, fala: [0, 2.32], atraso: 0.2, legendas: []},
+  {nome: 'batida', Cena: IgBatida, dur: 181, fala: [2.82, 8.34], atraso: 0.2,
+    legendas: [[2.82, 4.88, 'O Rodnei não contou pra ninguém.'], [5.33, 8.34, 'Nem quando a síndica bateu na porta dele às sete da manhã.']]},
+  {nome: 'quem', Cena: IgQuem, dur: 270, fala: [8.92, 17.4], atraso: 0.2,
+    legendas: [[8.92, 11.42, 'Ele é técnico de elevador, mora no térreo'], [11.7, 13.61, 'e se muda em vinte e nove dias.'], [14.08, 17.4, 'E desde ontem, alguém deixa bilhetes na porta dele.']]},
+  {nome: 'marlene', Cena: IgMarlene, dur: 246, fala: [18.02, 25.63], atraso: 0.2,
+    legendas: [[18.02, 20.3, 'A Marlene queria saber do barulho no corredor.'], [20.84, 22.86, 'Ele sorriu, disse que foi o gato...'], [23.37, 25.63, '...e ela foi embora sem desconfiar de nada.']]},
+  {nome: 'ganho', Cena: IgGanho, dur: 198, fala: [26.23, 32.32], atraso: 0.2,
+    legendas: [[26.23, 27.59, 'Esconder deu certo.'], [27.99, 32.32, 'E deu mais: sem a síndica no caminho, ele podia investigar sozinho.']]},
+  {nome: 'quinto', Cena: IgQuinto, dur: 269, fala: [32.92, 41.37], atraso: 0.2,
+    legendas: [[32.92, 35.25, 'À tarde, ele subiu até o quinto andar.'], [35.75, 39.16, 'Na porta da Tânia, a plaquinha de boas-vindas estava torta.'], [39.54, 41.37, 'Como se alguém tivesse saído com pressa.']]},
+  {nome: 'papel', Cena: IgPapel, dur: 168, fala: [41.9, 46.99], atraso: 0.2,
+    legendas: [[41.9, 45.03, 'E no chão, perto do capacho, um pedaço de papel.'], [45.54, 46.99, 'Igual ao dos bilhetes.']]},
+  {nome: 'noite', Cena: IgNoite, dur: 80, fala: [47.56, 49.71], atraso: 0.2, pos: 'alto',
+    legendas: [[47.56, 49.71, 'Às onze da noite, chegou o terceiro.']]},
+  {nome: 'bilhete3', Cena: IgBilhete3, dur: 145, fala: [50.26, 54.49], atraso: 0.2, legendas: []},
+  {nome: 'peso', Cena: IgPeso, dur: 154, fala: [55.06, 59.69], atraso: 0.2,
+    legendas: [[55.06, 57.01, 'Ele não contou nada pra ninguém.'], [57.47, 59.69, 'Mas alguém está contando os passos dele.']]},
+  {nome: 'placar', Cena: IgPlacar, dur: 103, fala: [60.29, 62.93], atraso: 0.3,
+    legendas: [[60.29, 62.93, 'Noite dois. Faltam vinte e oito.']]},
+  {nome: 'voto', Cena: IgVoto, dur: 278, fala: [63.47, 71.83], atraso: 0.3,
+    legendas: [[63.47, 65.98, 'Hoje à noite, ele bate na porta da Tânia...'], [66.44, 69.03, '...ou fica acordado vigiando a própria porta?'], [69.54, 71.83, 'Comente: bater ou vigiar.']]},
+];
+const IG = montar(PARTES_EP02_IGYT);
+const EFEITOS_IG: [string, number, number, number?][] = [
+  ['batida', IG.inicio('batida') + 112, 0.6],
+  ['clique', IG.inicio('ganho') + 30, 0.3],
+  ['papel', IG.inicio('papel') + 2, 0.3],
+  ['suspense_longo', IG.inicio('noite'), 0.16, IG.duracao - IG.inicio('noite')],
+  ['papel', IG.inicio('noite') + 12, 0.55],
+  ['impacto', IG.inicio('noite') + 20, 0.45],
+  ['papel', IG.inicio('bilhete3') + 2, 0.35],
+  ['uuush', IG.inicio('voto') + 4, 0.3],
 ];
 export const DURACAO_EP02_IGYT = montar(PARTES_EP02_IGYT).duracao;
-export const Ep02IGYT: React.FC<{semLegenda?: boolean}> = ({semLegenda}) => <Episodio partes={PARTES_EP02_IGYT} semLegenda={semLegenda} />;
+export const Ep02IGYT: React.FC<{semLegenda?: boolean}> = ({semLegenda}) => (
+  <Episodio partes={PARTES_EP02_IGYT} audio="ep02-igyt-narracao.mp3" efeitos={EFEITOS_IG} semLegenda={semLegenda} />
+);
 
 // ================= Linha TT (TikTok): "A letra T" =================
 

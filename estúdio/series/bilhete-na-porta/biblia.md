@@ -106,8 +106,14 @@
 - **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"? ☐ Quem é "T"?
 - **Voto do Ep. 2:** Marlene · Tânia (a confirmar).
 
-## Estado após o Ep. 2 — linha IG+YT (Instagram e YouTube)
-- A produzir (aguardando a narração).
+## Estado após o Ep. 2 — linha IG+YT (Instagram e YouTube) (noite 2)
+- **Noite:** 2 de 30 (faltam 28). **Chaves:** 12 + a mestra (secreta). **Bilhetes:** 3.
+  3. "Eu vi você no quinto andar. E eu sei em que portas você entra." (23h, por baixo da porta)
+- **Marlene:** não sabe dos bilhetes. Bateu às 7h por causa de um barulho no corredor; ele disse que foi o gato e ela acreditou.
+- **Pistas:** na porta do 501, a placa BEM-VINDOS ficou torta (semente colhida); perto do capacho, um pedaço de papel igual ao dos bilhetes (pode ser pista falsa).
+- **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"? ☐ Quem me viu no 5º?
+- **O público não sabe:** o segredo (chave mestra); o 3º bilhete chega perto dele.
+- **Voto do Ep. 2:** Bater · Vigiar (a confirmar).
 
 ## Duração
 - Ep. 1: 48 s (ficou assim, decisão da pessoa).
@@ -126,6 +132,7 @@
 | Ep. | Opções | Instagram | TikTok | YouTube |
 |---|---|---|---|---|
 | 1 | Contar · Esconder | Esconder | Contar | Esconder |
+| 2 (IG+YT) | Bater · Vigiar | a confirmar | — | a confirmar |
 | 2 (TT) | Marlene · Tânia | — | a confirmar | — |
 
 ## Calendário interno

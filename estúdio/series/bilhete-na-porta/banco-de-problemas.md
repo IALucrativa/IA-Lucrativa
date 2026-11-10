@@ -12,7 +12,7 @@
 | 5 | A Tânia vê o Rodnei rondando a porta dela e acha que **ele** é o autor. | |
 | 6 | A fita das caixas da mudança acaba e uma caixa rasga no corredor. | |
 | 7 | Um barulho estranho no poço do elevador de madrugada. | |
-| 8 | Um bilhete cita algo que só quem tem a chave mestra saberia: o segredo dele corre risco. | |
+| 8 | Um bilhete cita algo que só quem tem a chave mestra saberia: o segredo dele corre risco. | Ep. 2 (IG+YT) |
 | 9 | A empresa de mudança muda o horário e pede um sinal adiantado. | |
 | 10 | O gato do prédio pega o bilhete antes dele. | |
 | 11 | Uma pista falsa: a letra parece a de um vizinho inocente. | |
@@ -30,6 +30,6 @@
 | Semente | Como aparece | Plantada no ep. | Colhida no ep. |
 |---|---|---|---|
 | Papel de outra cor | Um bilhete chega num papel diferente dos outros. | | |
-| A porta do 501 | Um objeto na porta da Tânia muda de lugar entre os episódios. | | |
+| A porta do 501 | Um objeto na porta da Tânia muda de lugar entre os episódios. | Ep. 1 | Ep. 2 IG+YT (placa torta) |
 
 > Antes de renderizar, confira cada semente num close grande.
