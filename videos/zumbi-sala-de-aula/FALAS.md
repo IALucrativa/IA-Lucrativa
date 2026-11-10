@@ -15,11 +15,11 @@
 | 0:33 | **Você** | Ué... por que ele tá correndo assim? | Adam (`09`) |
 | 0:36 | **Bia** | Aquele ali não é o seu Jorge... o porteiro? | Daiane Candido (`10`) |
 | 0:40 | **Léo** | Mano... ele tá olhando pra cá. | Matheus Moretti (`11`) |
-| 0:43 | **Você** | "Alerta extremo... não abra portas pra ninguém." | ⚠️ **falta gerar** (`12`) |
+| 0:43 | **Você** | "Alerta extremo... não abra portas pra ninguém." | Yuri (`12`) |
 | 0:48 | **Professor** | Todo mundo pro fundo da sala! AGORA! | Yuri (`13`) |
-| 0:52 | **Professor** | Tranca a porta! Encosta as carteiras! | ⚠️ **falta gerar** (`14`) |
+| 0:52 | **Professor** | Tranca a porta! Encosta as carteiras! | Matheus Moretti (`14`) |
 | 0:54 | **Léo** | Apaga a luz! Apaga! | Matheus Moretti (`15`) |
-| 0:57 | **Professor** | Shhh... ninguém faz um barulho. | ⚠️ **falta gerar** (`16`) |
+| 0:57 | **Professor** | Shhh! Ninguém faz barulho! | Matheus Moretti (`16`) |
 | 1:01 | **Davi** | Sou eu, o Davi! Abre a porta! | Rakshit (`17`, abafada pela porta) |
 | 1:04 | **Léo** | Não abre! Ele pode ter sido mordido! | Matheus Moretti (`18`) |
 | 1:08 | **Davi** | Eles tão vindo! | Rakshit (`19`, abafada) |
