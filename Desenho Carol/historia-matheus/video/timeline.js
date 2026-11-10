@@ -41,18 +41,25 @@ function estimarTempos(ep, pps = 2.6, pausa = 0.5) {
 }
 
 // Divide cada frase em palavras com tempo (proporcional ao tamanho da palavra).
+// Se a frase tem "trechos" medidos no áudio (pausas reais), distribui dentro de cada trecho.
+function distribuir(crus, a, b) {
+  const pesos = crus.map(w => w.replace(/[*.,?!]/g, '').length + 2 + (/[.,?!]$/.test(w) ? 1 : 0));
+  const total = pesos.reduce((x, y) => x + y, 0);
+  let acc = 0;
+  return crus.map((w, i) => {
+    const s = a + (b - a) * acc / total;
+    acc += pesos[i];
+    return { w: w.replace(/\*/g, ''), hi: /\*/.test(w), start: s, end: a + (b - a) * acc / total };
+  });
+}
 function prepararPalavras(ep) {
   for (const f of ep.frases) {
-    const crus = f.texto.split(/\s+/);
-    const pesos = crus.map(w => w.replace(/[*.,?!]/g, '').length + 2 + (/[.,?!]$/.test(w) ? 3 : 0));
-    const total = pesos.reduce((a, b) => a + b, 0);
-    let acc = 0;
-    f.palavras = crus.map((w, i) => {
-      const s = f.start + (f.end - f.start) * acc / total;
-      acc += pesos[i];
-      const e = f.start + (f.end - f.start) * acc / total;
-      return { w: w.replace(/\*/g, ''), hi: /\*/.test(w), start: s, end: e };
-    });
+    const partes = f.texto.split(/(?<=[.,?!])\s+/).filter(Boolean);
+    if (f.trechos && f.trechos.length === partes.length) {
+      f.palavras = partes.flatMap((p, i) => distribuir(p.split(/\s+/), f.trechos[i].start, f.trechos[i].end));
+    } else {
+      f.palavras = distribuir(f.texto.split(/\s+/), f.start, f.end);
+    }
   }
 }
 
@@ -92,7 +99,7 @@ function prepararCenas(ep) {
 
 function prepararEpisodio(ep, tempos) {
   if (tempos) {
-    for (const f of ep.frases) { f.start = tempos[f.id].start; f.end = tempos[f.id].end; }
+    for (const f of ep.frases) { f.start = tempos[f.id].start; f.end = tempos[f.id].end; f.trechos = tempos[f.id].trechos; }
   } else {
     estimarTempos(ep);
   }

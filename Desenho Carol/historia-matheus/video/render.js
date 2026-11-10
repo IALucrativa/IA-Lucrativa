@@ -33,9 +33,11 @@ const { spawn } = require('child_process');
     const args = ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-'];
     if (audio) args.push('-i', audio);
     args.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p');
-    if (audio) args.push('-c:a', 'aac', '-b:a', '192k', '-shortest');
+    if (audio) args.push('-af', 'apad', '-c:a', 'aac', '-b:a', '192k');
+    args.push('-t', dur.toFixed(3));
     args.push('-movflags', '+faststart', saida);
     const ff = spawn('ffmpeg', args, { stdio: ['pipe', 'inherit', 'inherit'] });
+    const fechou = new Promise(r => ff.on('close', r));
     for (let i = 0; i < n; i++) {
       await page.evaluate(t => renderAt(t), i / fps);
       const buf = await page.screenshot({ type: 'jpeg', quality: 92 });
@@ -43,7 +45,7 @@ const { spawn } = require('child_process');
       if (i % 300 === 0) console.log(`quadro ${i}/${n}`);
     }
     ff.stdin.end();
-    await new Promise(r => ff.on('close', r));
+    await fechou;
   }
   await browser.close();
 })();
