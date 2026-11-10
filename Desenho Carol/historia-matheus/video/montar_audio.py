@@ -176,12 +176,30 @@ for apos, fid, arq in insercoes:
     a, b = clip_pos[arq]
     txt = [t for i, v, t in frases if i == fid][0].replace('*', '')
     tr = trechos(txt)
-    if arq == 'bia.mp3' and len(tr) == 2:  # "Vai ter bolo," | "Matheus?" (pausa medida no clipe)
-        ps = [s for s in silencios(os.path.join(PASTA, arq), d=0.1) if s[0] > 0.1 and s[1] < b - a]
-        if ps:
-            tempos[fid] = {'start': a, 'end': b, 'trechos': [{'start': a, 'end': a + ps[0][0]}, {'start': a + ps[0][1], 'end': b}]}
-            continue
-    tempos[fid] = {'start': a, 'end': b, 'trechos': [{'start': a + (b - a) * k / len(tr), 'end': a + (b - a) * (k + 1) / len(tr)} for k in range(len(tr))]}
+    if arq in faltando:
+        tempos[fid] = {'start': a, 'end': b, 'trechos': [{'start': a + (b - a) * k / len(tr), 'end': a + (b - a) * (k + 1) / len(tr)} for k in range(len(tr))]}
+        continue
+    # pausas medidas no clipe: primeiro casam com fim de frase (. ! ?), senão com qualquer pontuação
+    ps = [(x + a, y + a) for x, y in silencios(os.path.join(PASTA, arq), d=0.15) if x > 0.1 and y < b - a]
+    grupos, cur = [], []
+    for t_ in tr:
+        cur.append(t_)
+        if re.search(r'[.!?]$', t_): grupos.append(cur); cur = []
+    if cur: grupos.append(cur)
+    if len(ps) >= len(tr) - 1:
+        grupos = [[t_] for t_ in tr]
+    if len(ps) >= len(grupos) - 1 and len(grupos) > 1:
+        ps = sorted(sorted(ps, key=lambda s_: s_[1] - s_[0], reverse=True)[:len(grupos) - 1])
+        lim = [a] + [v for p_ in ps for v in p_] + [b]
+        spans_g = [(lim[2 * k], lim[2 * k + 1]) for k in range(len(grupos))]
+    else:
+        grupos, spans_g = [tr], [(a, b)]
+    trs = []
+    for g, (ga, gb) in zip(grupos, spans_g):
+        ws = [peso(x) for x in g]; acc = 0
+        for w_ in ws:
+            trs.append({'start': ga + (gb - ga) * acc / sum(ws), 'end': ga + (gb - ga) * (acc + w_) / sum(ws)}); acc += w_
+    tempos[fid] = {'start': a, 'end': b, 'trechos': trs}
 
 # --- montar o áudio com ffmpeg
 filtros, entradas = [], []

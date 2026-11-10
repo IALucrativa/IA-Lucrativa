@@ -70,7 +70,7 @@ Aparece sempre no topo da tela, como no vídeo de referência ("META R$ 2.800,00
 
 ## Gorjetas do público
 
-- **Ep. 1:** só apresenta a tabela de valores (cena nova depois da meta, com narração própria).
+- **Ep. 1:** só apresenta a tabela de valores (cena nova depois da meta, com narração própria em `ep01/audio/gorjetas.mp3`).
 - **A partir do Ep. 2:** mostra quanto o Matheus ganhou com o engajamento do episódio anterior.
 
 Igual ao vídeo de referência: tela verde, moedas caindo, uma lista com quanto vale cada coisa e o aviso "GORJETAS FICTÍCIAS • VALORES DA ANIMAÇÃO".
