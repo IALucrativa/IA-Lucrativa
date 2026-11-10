@@ -275,7 +275,7 @@ function classroom(t) {
   rect(600, -340, 260, 580, '#8a5a32', 6); rect(640, -300, 80, 110, '#9cc0d6', 5); circ(830, -20, 14, '#d8c25a', 4);
   // alto-falante
   rrect(-100, -720, 200, 130, 14, '#d8d4c8'); for (let i = 0; i < 4; i++) for (let j = 0; j < 7; j++) circ(-66 + j * 22, -690 + i * 22, 6, '#555', 0);
-  if (t > 21.6 && t < 25.8) circ(80, -705, 9, Math.floor(t * 4) % 2 ? '#e33' : '#711', 3);
+  if (t > 20.6 && t < 25.8) circ(80, -705, 9, Math.floor(t * 4) % 2 ? '#e33' : '#711', 3);
   if (t > 24.6 && t < 25.8) for (let i = 0; i < 6; i++) line(-140 - rnd(i + Math.floor(t * 20)) * 80, -700 + i * 18, -110, -690 + i * 15, 4, '#333');
   // mesa do professor
   poly([-560, 40, -220, 40, -230, 90, -550, 90], '#b98a52'); rect(-545, 90, 300, 150, '#9d6f3c', 5);
@@ -520,24 +520,24 @@ function doorSet(T) {
 
 // ----------------------------- LEGENDAS -----------------------------
 const SUBS = [
-  [0.6, 3.5, 'VOCÊ', 'Questão 7... eu não estudei nada disso.'],
-  [4.6, 7.0, 'VOCÊ', 'Psiu... Léo! Qual é a da sete?'],
-  [7.1, 9.6, 'LÉO', 'Fica quieto, mano! O professor tá olhando!'],
-  [10.4, 13.9, 'PROFESSOR', 'Vocês dois aí! Mais uma palavra e é ZERO!'],
-  [18.3, 21.3, 'PROFESSOR', 'Ninguém se mexe. Deve ser obra na rua.'],
-  [21.9, 24.5, 'ALTO-FALANTE', 'Atenção, alunos! Permaneçam nas salas. Repito, perman—'],
-  [25.9, 27.6, 'VOCÊ', 'Isso foi... um grito?'],
-  [28.6, 32.2, 'BIA', 'Gente... tem alguém correndo lá no pátio.'],
-  [33.8, 36.3, 'VOCÊ', 'Ué... por que ele tá correndo assim?'],
-  [36.7, 39.9, 'BIA', 'Aquele ali não é o seu Jorge... o porteiro?'],
+  [0.4, 3.8, 'VOCÊ', 'Questão 7... eu não estudei nada disso.'],
+  [4.6, 6.8, 'VOCÊ', 'Léo... qual é a da sete?'],
+  [7.0, 9.6, 'LÉO', 'Fica quieto, mano! O professor tá olhando!'],
+  [10.4, 13.7, 'PROFESSOR', 'Vocês dois aí! Mais uma palavra e é ZERO!'],
+  [17.8, 20.5, 'PROFESSOR', 'Ninguém se mexe. Deve ser obra na rua.'],
+  [20.8, 24.6, 'ALTO-FALANTE', 'Atenção, alunos! Permaneçam nas salas. Repito, perman—'],
+  [25.9, 28.0, 'VOCÊ', 'Isso foi... um grito?'],
+  [28.6, 31.6, 'BIA', 'Gente... tem alguém correndo lá no pátio.'],
+  [33.8, 35.8, 'VOCÊ', 'Ué... por que ele tá correndo assim?'],
+  [36.7, 39.8, 'BIA', 'Aquele ali não é o seu Jorge... o porteiro?'],
   [40.2, 42.4, 'LÉO', 'Mano... ele tá olhando pra cá.'],
   [43.2, 47.0, 'VOCÊ', '"Alerta extremo... não abra portas pra ninguém."'],
-  [48.1, 51.4, 'PROFESSOR', 'Todo mundo pro fundo da sala! AGORA!'],
+  [48.1, 51.2, 'PROFESSOR', 'Todo mundo pro fundo da sala! AGORA!'],
   [52.0, 54.6, 'PROFESSOR', 'Tranca a porta! Encosta as carteiras!'],
-  [54.8, 56.4, 'LÉO', 'Apaga a luz! Apaga!'],
+  [54.8, 56.6, 'LÉO', 'Apaga a luz! Apaga!'],
   [57.0, 59.6, 'PROFESSOR', 'Shhh... ninguém faz um barulho.'],
-  [61.0, 64.3, 'DAVI', 'Professor! Sou eu, o Davi! Abre a porta!'],
-  [64.7, 67.6, 'LÉO', 'Não abre! Ele pode ter sido mordido!'],
+  [61.4, 64.0, 'DAVI', 'Sou eu, o Davi! Abre a porta!'],
+  [64.7, 67.5, 'LÉO', 'Não abre! Ele pode ter sido mordido!'],
   [68.0, 69.8, 'DAVI', 'Eles tão vindo!'],
   [70.0, 72.6, 'DAVI', 'POR FAVOR, ABRE!!!'],
 ];

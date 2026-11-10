@@ -19,7 +19,8 @@
 ## Como gerar de novo
 ```bash
 python3 sfx.py audio.wav                       # efeitos sonoros
-node render.js video prova-zumbi.mp4 audio.wav # vídeo (precisa de Playwright + ffmpeg)
+python3 vozes.py audio.wav mix.wav             # mistura as vozes da pasta vozes/
+node render.js video prova-zumbi.mp4 mix.wav # vídeo (precisa de Playwright + ffmpeg)
 node render.js stills previas 2 10 20          # só alguns quadros para conferir
 ```
 Falas, tempos e cores das legendas ficam em `SUBS` dentro de `scene.html`.

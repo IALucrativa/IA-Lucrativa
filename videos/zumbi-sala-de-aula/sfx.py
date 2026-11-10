@@ -131,11 +131,11 @@ for te in [74.0, 74.3]:
     add(te, np.sin(2 * np.pi * 880 * x) * np.exp(-x * 30), 0.15)
 
 # alto-falante: sinal "dim-dom", chiado, grito cortado
-for te, f in [(21.6, 660), (21.95, 523)]:
+for te, f in [(20.25, 660), (20.55, 523)]:
     x = tt(0.6)
     add(te, (np.sin(2 * np.pi * f * x) + 0.3 * np.sin(2 * np.pi * 2 * f * x)) * np.exp(-x * 5), 0.18)
-x = tt(2.9)
-add(21.9, norm(band(rng.standard_normal(len(x)), 1500, 4000)) * 0.5 * (0.6 + 0.4 * np.sin(2 * np.pi * 7 * x)), 0.03)
+x = tt(3.8)
+add(20.8, norm(band(rng.standard_normal(len(x)), 1500, 4000)) * 0.5 * (0.6 + 0.4 * np.sin(2 * np.pi * 7 * x)), 0.03)
 x = tt(0.75)
 f = 700 + 300 * np.sin(np.pi * x / 0.75) + 25 * np.sin(2 * np.pi * 9 * x)
 ph = 2 * np.pi * np.cumsum(f) / SR
