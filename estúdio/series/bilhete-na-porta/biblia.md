@@ -29,6 +29,9 @@
 - Quer de volta todas as chaves do Rodnei antes da mudança. Toma uma por vez.
 - Vai instalar uma câmera no corredor mais tarde (problema #16, episódio próprio). Depois disso, ela é o problema que cresce quieto. **No Ep. 1 não tem câmera.**
 
+- **Visual (aprovado no Ep. 2):** uns 55 anos, cabelo curto cacheado avermelhado, óculos retangulares na ponta do nariz com cordinha, brincos de pérola, cardigã lilás sobre blusa clara, saia cinza, meia-calça, sapatos vinho, prancheta e um chaveiro enorme no bolso do cardigã. Boneco em `projeto/src/bilhete/Marlene.tsx`.
+- **Mora no 102 (térreo)**, porta verde com a placa "SÍNDICA".
+
 ### Tânia, do 501
 - **Papel:** suspeita.
 - Chegou ao prédio na mesma semana em que os bilhetes começaram.
@@ -95,6 +98,17 @@
 - **Visual do Rodnei:** igual ao início (macacão azul, chaves na cintura). Segura o bilhete.
 - **O público não sabe:** qual é o segredo (a chave mestra).
 
+## Estado após o Ep. 2 — linha TT (TikTok) (noite 2)
+- **Noite:** 2 de 30 (faltam 28). **Chaves:** 12 + a mestra (secreta). **Bilhetes:** 3.
+  3. "Você contou pra ela. Agora eu também vou contar." (chegou às 23h, com a porta trancada e a luz acesa)
+- **Marlene:** sabe dos bilhetes, acreditou nele e virou aliada. Vai instalar uma câmera no corredor amanhã (problema #16).
+- **Pistas:** no livro da portaria, às 23h02 de ontem, alguém assinou a entrada pro 5º andar; o nome está riscado, só o "T" é legível. Na lista do 5º andar, só a Tânia (501) começa com T (pode ser pista falsa).
+- **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"? ☐ Quem é "T"?
+- **Voto do Ep. 2:** Marlene · Tânia (a confirmar).
+
+## Estado após o Ep. 2 — linha IG+YT (Instagram e YouTube)
+- A produzir (aguardando a narração).
+
 ## Duração
 - Ep. 1: 48 s (ficou assim, decisão da pessoa).
 - A partir do Ep. 2: no mínimo 1 minuto (regra do CLAUDE.md).
@@ -112,6 +126,7 @@
 | Ep. | Opções | Instagram | TikTok | YouTube |
 |---|---|---|---|---|
 | 1 | Contar · Esconder | Esconder | Contar | Esconder |
+| 2 (TT) | Marlene · Tânia | — | a confirmar | — |
 
 ## Calendário interno
 - Episódio N = noite N. A mudança acontece na noite 30.

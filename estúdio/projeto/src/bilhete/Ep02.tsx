@@ -225,7 +225,7 @@ const PortaSindica: React.FC = () => (
 
 const TtImpacto: React.FC = () => {
   const f = useCurrentFrame();
-  const bate = (f > 80 && f < 110) || (f > 140 && f < 170) ? Math.sin(f * 0.9) * 14 : 0;
+  const bate = f > 128 && f < 160 ? Math.sin((f - 128) * 0.7) * 14 : 0;
   const mostra = interpolate(f, [70, 85], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <Tela>
@@ -283,7 +283,7 @@ const TtPortaria: React.FC = () => {
 
 const TtLivro: React.FC = () => {
   const f = useCurrentFrame();
-  const destaque = interpolate(f, [55, 85], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const destaque = interpolate(f, [100, 124], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <Tela>
       <LivroClose riscado={1} destaque={destaque} />
@@ -293,7 +293,7 @@ const TtLivro: React.FC = () => {
 
 const TtLista: React.FC = () => {
   const f = useCurrentFrame();
-  const destaque = interpolate(f, [30, 70], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const destaque = interpolate(f, [62, 92], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <Tela>
       <ListaClose destaque={destaque} />
@@ -325,8 +325,8 @@ const TtJunto: React.FC = () => {
 
 const TtNoite: React.FC = () => {
   const f = useCurrentFrame();
-  const papel = interpolate(f, [105, 130], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const viu = f > 112;
+  const papel = interpolate(f, [128, 150], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const viu = f > 135;
   return (
     <Tela>
       <SalaNoite papel={papel} />
@@ -337,7 +337,7 @@ const TtNoite: React.FC = () => {
 };
 
 const TtBilhete3: React.FC = () => (
-  <BilheteClose linhas={['Você contou pra ela.', 'Agora eu também', 'vou contar.']} de={6} ate={95} fundo={<SalaNoite papel={0} />} />
+  <BilheteClose linhas={['Você contou pra ela.', 'Agora eu também', 'vou contar.']} de={6} ate={106} fundo={<SalaNoite papel={0} />} />
 );
 
 const PERG_TT = ['Quem escreve?', 'O que é "meu"?', 'Quem é "T"?'];
@@ -366,19 +366,44 @@ const TtVoto: React.FC = () => {
   );
 };
 
+// Tempos acertados pela narração do TikTok (ep02-tiktok-narracao.mp3, 64,8 s).
 export const PARTES_EP02_TT: Parte[] = [
-  {nome: 'impacto', Cena: TtImpacto, dur: 210, legendas: [[2.6, 3.8, 'Sete da manhã.'], [3.9, 6.9, 'O Rodnei bateu na porta da síndica com os dois bilhetes na mão.']]},
-  {nome: 'quem', Cena: TtQuem, dur: 255, legendas: [[0.2, 3.2, 'Ele é técnico de elevador, mora no térreo'], [3.2, 5.0, 'e se muda em vinte e nove dias.'], [5.1, 8.3, 'E desde ontem, alguém deixa bilhetes na porta dele.']]},
-  {nome: 'leu', Cena: TtLeu, dur: 150, legendas: [[0.2, 2.0, 'A Marlene leu tudo...'], [2.2, 4.2, '...e acreditou nele.']]},
-  {nome: 'portaria', Cena: TtPortaria, dur: 210, legendas: [[0.2, 2.4, 'Ela abriu o livro da portaria.'], [2.5, 6.8, 'Ontem, às onze da noite, alguém assinou a entrada pro quinto andar.']]},
-  {nome: 'livro', Cena: TtLivro, dur: 150, legendas: [[0.2, 1.8, 'O nome estava riscado.'], [1.9, 4.7, 'Só dava pra ler a primeira letra: T.']]},
-  {nome: 'lista', Cena: TtLista, dur: 120, legendas: [[0.2, 3.8, 'Na lista de moradores do quinto andar, só um nome começa com T.']]},
-  {nome: 'camera', Cena: TtCamera, dur: 165, legendas: [[0.2, 1.6, 'E a Marlene foi além:'], [1.7, 5.2, 'amanhã, eu ponho uma câmera nesse corredor.']]},
-  {nome: 'junto', Cena: TtJunto, dur: 105, legendas: [[0.2, 3.3, 'Pela primeira vez, o Rodnei não estava sozinho nessa.']]},
-  {nome: 'noite', Cena: TtNoite, dur: 165, pos: 'alto', legendas: [[0.2, 3.4, 'Às onze da noite, ele esperou com a porta trancada e a luz acesa.'], [3.5, 5.3, 'O bilhete chegou mesmo assim.']]},
-  {nome: 'bilhete3', Cena: TtBilhete3, dur: 120, legendas: []},
-  {nome: 'placar', Cena: TtPlacar, dur: 100, legendas: [[0.2, 3.1, 'Noite dois. Faltam vinte e oito.']]},
-  {nome: 'voto', Cena: TtVoto, dur: 210, legendas: [[0.2, 2.8, 'Ele mostra esse bilhete pra Marlene...'], [2.9, 5.0, '...ou vai direto falar com a Tânia?'], [5.1, 7.0, 'Comente: Marlene ou Tânia.']]},
+  {nome: 'impacto', Cena: TtImpacto, dur: 248, fala: [0, 7.56], atraso: 0.2,
+    legendas: [[2.63, 3.55, 'Sete da manhã.'], [4.18, 7.56, 'O Rodnei bateu na porta da síndica com os dois bilhetes na mão.']]},
+  {nome: 'quem', Cena: TtQuem, dur: 261, fala: [8.13, 16.24], atraso: 0.2,
+    legendas: [[8.13, 10.56, 'Ele é técnico de elevador, mora no térreo'], [10.77, 12.67, 'e se muda em vinte e nove dias.'], [13.14, 16.24, 'E desde ontem, alguém deixa bilhetes na porta dele.']]},
+  {nome: 'leu', Cena: TtLeu, dur: 108, fala: [16.84, 19.71], atraso: 0.2,
+    legendas: [[16.84, 18.09, 'A Marlene leu tudo...'], [18.69, 19.71, '...e acreditou nele.']]},
+  {nome: 'portaria', Cena: TtPortaria, dur: 198, fala: [20.3, 26.23], atraso: 0.2,
+    legendas: [[20.3, 21.77, 'Ela abriu o livro da portaria.'], [22.33, 26.23, 'Ontem, às onze da noite, alguém assinou a entrada pro quinto andar.']]},
+  {nome: 'livro', Cena: TtLivro, dur: 141, fala: [26.67, 30.73], atraso: 0.2,
+    legendas: [[26.67, 27.88, 'O nome estava riscado.'], [28.18, 30.73, 'Só dava pra ler a primeira letra: T.']]},
+  {nome: 'lista', Cena: TtLista, dur: 127, fala: [31.35, 35.08], atraso: 0.2,
+    legendas: [[31.35, 35.08, 'Na lista de moradores do quinto andar, só um nome começa com T.']]},
+  {nome: 'camera', Cena: TtCamera, dur: 135, fala: [35.58, 39.58], atraso: 0.2,
+    legendas: [[35.58, 36.64, 'E a Marlene foi além:'], [37.12, 39.58, 'amanhã, eu ponho uma câmera nesse corredor.']]},
+  {nome: 'junto', Cena: TtJunto, dur: 121, fala: [40.09, 43.61], atraso: 0.2,
+    legendas: [[40.09, 43.61, 'Pela primeira vez, o Rodnei não estava sozinho nessa.']]},
+  {nome: 'noite', Cena: TtNoite, dur: 202, fala: [44.07, 50.3], atraso: 0.2, pos: 'alto',
+    legendas: [[44.07, 48.01, 'Às onze da noite, ele esperou com a porta trancada e a luz acesa.'], [48.51, 50.3, 'O bilhete chegou mesmo assim.']]},
+  {nome: 'bilhete3', Cena: TtBilhete3, dur: 118, fala: [50.9, 54.23], atraso: 0.2, legendas: []},
+  {nome: 'placar', Cena: TtPlacar, dur: 93, fala: [54.84, 57.33], atraso: 0.3,
+    legendas: [[54.84, 57.33, 'Noite dois. Faltam vinte e oito.']]},
+  {nome: 'voto', Cena: TtVoto, dur: 231, fala: [57.88, 64.58], atraso: 0.3,
+    legendas: [[57.88, 59.8, 'Ele mostra esse bilhete pra Marlene...'], [60.18, 61.88, '...ou vai direto falar com a Tânia?'], [62.42, 64.58, 'Comente: Marlene ou Tânia.']]},
+];
+const TT = montar(PARTES_EP02_TT);
+const EFEITOS_TT: [string, number, number, number?][] = [
+  ['batida', TT.inicio('impacto') + 130, 0.6],
+  ['papel', TT.inicio('quem') + 10, 0.2],
+  ['papel', TT.inicio('livro') + 2, 0.3],
+  ['suspense_longo', TT.inicio('noite'), 0.16, TT.duracao - TT.inicio('noite')],
+  ['papel', TT.inicio('noite') + 128, 0.55],
+  ['impacto', TT.inicio('noite') + 134, 0.5],
+  ['papel', TT.inicio('bilhete3') + 2, 0.35],
+  ['uuush', TT.inicio('voto') + 4, 0.3],
 ];
 export const DURACAO_EP02_TT = montar(PARTES_EP02_TT).duracao;
-export const Ep02TT: React.FC<{semLegenda?: boolean}> = ({semLegenda}) => <Episodio partes={PARTES_EP02_TT} semLegenda={semLegenda} />;
+export const Ep02TT: React.FC<{semLegenda?: boolean}> = ({semLegenda}) => (
+  <Episodio partes={PARTES_EP02_TT} audio="ep02-tiktok-narracao.mp3" efeitos={EFEITOS_TT} semLegenda={semLegenda} />
+);
