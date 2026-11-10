@@ -1,5 +1,8 @@
 import React, {useMemo} from 'react';
-import {AbsoluteFill, Audio, Easing, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, Easing, getInputProps, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
+
+// Com --props='{"soAudio":true}', renderiza só os sons (sem o 3D): o áudio sai em minutos.
+const SO_AUDIO = Boolean((getInputProps() as {soAudio?: boolean}).soAudio);
 import {ThreeCanvas} from '@remotion/three';
 import {useThree} from '@react-three/fiber';
 import * as THREE from 'three';
@@ -786,6 +789,7 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
 const CenaComp: React.FC<{c: Ctx; destaques: Set<string>}> = ({c, destaques}) => {
   const f = useCurrentFrame();
   const {p, ui, sons, gancho} = quadro(c.bloco.cena, f, c);
+  if (SO_AUDIO) return <AbsoluteFill>{sons}</AbsoluteFill>;
   return (
     <AbsoluteFill>
       <ThreeCanvas width={1080} height={1920} gl={{antialias: true}} dpr={1} shadows>
