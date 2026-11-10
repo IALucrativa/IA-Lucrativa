@@ -8,5 +8,11 @@
 ## Entregas obrigatórias de todo vídeo
 Ao terminar cada vídeo, sempre entregar ao usuário (na conversa e salvo na pasta do vídeo):
 1. **As falas do vídeo** (`FALAS.md`), com personagem e tempo de cada fala, prontas para gravar/dublar.
-2. **A capa para postar** (`capa.png`, 1080x1920), com título chamativo sobre uma cena forte do vídeo.
+2. **A capa para postar** (`capa.png`, 1080x1920), sempre no **estilo de capa de série**:
+   - fonte grossa e condensada (Anton, em `videos/fonts/`), contorno preto grosso e sombra;
+   - **topo:** nome da série em 2 linhas (1ª branca, 2ª vermelha);
+   - **meio:** close de um personagem com expressão forte (cena do vídeo, com efeito olho-de-peixe);
+   - **gancho** em 2 linhas (1ª branca, 2ª amarela), terminando em "...";
+   - **faixa vermelha levemente inclinada** com "PARTE XX";
+   - **título do episódio** bem grande, em amarelo, embaixo.
 3. **A legenda do post** (`LEGENDA.md`), com gancho, chamada para comentar e hashtags.

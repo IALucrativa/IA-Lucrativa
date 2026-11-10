@@ -1,5 +1,5 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><style>body{margin:0;background:#000}</style></head>
+<html><head><meta charset="utf-8"><style>@font-face{font-family:Anton;src:url(../fonts/Anton.ttf)}body{margin:0;background:#000}</style></head>
 <body><canvas id="out"></canvas>
 <script>
 // =====================================================================
@@ -606,56 +606,39 @@ function renderFrame(t) {
   return out.toDataURL('image/jpeg', 0.9);
 }
 // ------------------------------- CAPA -------------------------------
-function renderCover() {
-  c.save(); c.fillStyle = '#050608'; c.fillRect(0, 0, SW, SH);
-  // parede e chão no escuro
-  rect(-50, -50, SW + 100, 1450, '#1a1c22', 0); rect(-50, 1400, SW + 100, 700, '#121318', 0);
-  // porta
-  rect(130, 120, 820, 1640, '#160e08', 6); rect(170, 160, 740, 1600, '#24170d', 6); rect(230, 1060, 620, 650, '#1f140b', 4);
-  // visor iluminado pelo corredor (luz fria + emergência vermelha)
-  const vx = 330, vy = 470, vw = 420, vh = 520;
-  const gl = c.createRadialGradient(vx + vw / 2, vy + vh * 0.35, 20, vx + vw / 2, vy + vh / 2, 420); gl.addColorStop(0, '#d9e4e0'); gl.addColorStop(0.5, '#7f948f'); gl.addColorStop(1, '#3a2020');
-  rect(vx, vy, vw, vh, gl, 0);
-  c.save(); c.beginPath(); c.rect(vx, vy, vw, vh); c.clip();
-  // silhueta: cabeça inclinada, ombros, braço erguido
-  c.save(); c.translate(vx + vw / 2 + 10, vy + vh + 40); c.rotate(-0.12);
-  c.fillStyle = '#07080a';
-  c.beginPath(); c.moveTo(-230, 40); c.quadraticCurveTo(-200, -170, -60, -190); c.lineTo(60, -190); c.quadraticCurveTo(200, -170, 230, 40); c.closePath(); c.fill();
-  c.fillRect(-36, -260, 72, 90);
-  c.beginPath(); c.ellipse(8, -330, 92, 108, 0.25, 0, Math.PI * 2); c.fill();
-  for (let i = 0; i < 9; i++) { c.beginPath(); c.arc(-60 + i * 16, -425 + Math.abs(i - 4) * 8, 22, 0, 7); c.fill(); }
-  // olhos tênues
-  c.fillStyle = 'rgba(230,235,200,.85)'; c.beginPath(); c.ellipse(-22, -330, 11, 6, 0.25, 0, 7); c.ellipse(40, -316, 11, 6, 0.25, 0, 7); c.fill();
-  c.restore();
-  // mão espalmada no vidro + marca escura escorrendo
-  c.save(); c.translate(vx + 75, vy + 360); c.rotate(-0.25); c.fillStyle = 'rgba(10,10,12,.92)';
-  c.beginPath(); c.roundRect(-45, -10, 90, 80, 26); c.fill(); for (let i = 0; i < 4; i++) { c.beginPath(); c.roundRect(-44 + i * 23, -80 + Math.abs(i - 1.5) * 8, 19, 78, 9); c.fill(); } c.beginPath(); c.roundRect(42, 10, 18, 50, 9); c.fill();
-  c.restore();
-  c.fillStyle = 'rgba(90,10,12,.75)'; for (let i = 0; i < 4; i++) c.fillRect(vx + 35 + i * 22, vy + 430, 8, 60 + rnd(i) * 140);
-  // vidro: reflexo + trinca
-  c.globalAlpha = 0.16; poly([vx + 20, vy, vx + 110, vy, vx + 10, vy + vh, vx - 80, vy + vh], '#fff', 0); c.globalAlpha = 1;
-  for (let i = 0; i < 7; i++) { const a = i * 0.9 + 0.3, L = 120 + rnd(i + 3) * 200; line(vx + 300, vy + 140, vx + 300 + Math.cos(a) * L, vy + 140 + Math.sin(a) * L, 3, 'rgba(255,255,255,.7)'); }
-  c.restore();
-  rect(vx, vy, vw, vh, null, 10);
-  // facho de luz do visor no chão/porta
-  c.save(); c.globalCompositeOperation = 'lighter'; const beam = c.createLinearGradient(0, vy, 0, 1900); beam.addColorStop(0, 'rgba(120,140,135,.18)'); beam.addColorStop(1, 'rgba(120,140,135,0)');
-  c.fillStyle = beam; c.beginPath(); c.moveTo(vx, vy + vh); c.lineTo(vx + vw, vy + vh); c.lineTo(vx + vw + 260, 1920); c.lineTo(vx - 260, 1920); c.closePath(); c.fill(); c.restore();
-  // maçaneta
-  rect(760, 1130, 40, 120, '#5a5028', 5); rrect(690, 1180, 120, 34, 16, '#6b6030', 5);
-  // nossa mão quase tocando a maçaneta
-  povArm(910, 1500, -0.55, 1.4, 'reach');
-  c.fillStyle = 'rgba(5,6,10,.45)'; c.fillRect(0, 1250, SW, 700);
-  // vinheta forte
-  const v = c.createRadialGradient(SW / 2, 700, 250, SW / 2, 900, 1150); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.85)'); c.fillStyle = v; c.fillRect(0, 0, SW, SH);
+// texto estilo capa: fonte condensada, contorno grosso e sombra
+function ctext(str, x, y, size, fill, rot = 0) {
+  o.save(); o.translate(x, y); o.rotate(rot);
+  o.font = `${size}px Anton`; o.textAlign = 'center'; o.textBaseline = 'middle'; o.lineJoin = 'round';
+  o.lineWidth = size * 0.2; o.strokeStyle = '#000'; o.strokeText(str, 5, 6);
+  o.strokeText(str, 0, 0); o.fillStyle = fill; o.fillText(str, 0, 0); o.restore();
+}
+function banner(str, x, y, w, h, size, rot) {
+  o.save(); o.translate(x, y); o.rotate(rot);
+  o.fillStyle = 'rgba(0,0,0,.6)'; o.fillRect(-w / 2 + 8, -h / 2 + 10, w, h);
+  o.fillStyle = '#d42020'; o.fillRect(-w / 2, -h / 2, w, h); o.lineWidth = 6; o.strokeStyle = '#000'; o.strokeRect(-w / 2, -h / 2, w, h);
+  o.restore(); ctext(str, x, y + 2, size, '#fff', rot);
+}
+async function renderCover(opts = {}) {
+  await document.fonts.load('80px Anton');
+  const ep = opts.part || 'PARTE 01', title = opts.title || 'A PORTA';
+  c.save(); c.fillStyle = '#000'; c.fillRect(0, 0, SW, SH);
+  c.translate(540, 860); c.scale(1.75, 1.75); c.translate(-450, -470);
+  doorSet(70.6);
   c.restore();
   applyLens();
-  // textos
-  o.textAlign = 'center'; o.textBaseline = 'middle';
-  o.font = 'bold 40px "DejaVu Sans"'; o.fillStyle = 'rgba(235,235,235,.95)'; o.shadowColor = '#000'; o.shadowBlur = 18;
-  o.fillText('ELE DIZ QUE É', 360, 120); o.font = 'bold 54px "DejaVu Sans"'; o.fillText('SEU AMIGO.', 360, 182);
-  o.font = '30px "DejaVu Sans"'; o.fillStyle = 'rgba(220,220,220,.9)'; o.fillText('mas o alerta no celular diz:', 360, H - 205);
-  o.font = 'bold 66px "DejaVu Sans"'; o.fillStyle = '#e02424'; o.shadowColor = 'rgba(224,36,36,.8)'; o.shadowBlur = 26; o.fillText('NÃO ABRA.', 360, H - 135);
-  o.shadowBlur = 0;
+  // escurece topo e base para o texto
+  let g = o.createLinearGradient(0, 0, 0, 330); g.addColorStop(0, 'rgba(0,0,0,.75)'); g.addColorStop(1, 'rgba(0,0,0,0)'); o.fillStyle = g; o.fillRect(0, 0, W, 330);
+  g = o.createLinearGradient(0, 760, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.8)'); o.fillStyle = g; o.fillRect(0, 760, W, H - 760);
+  // nome da série
+  ctext('ZUMBIS', 360, 88, 92, '#ffffff');
+  ctext('NA ESCOLA', 360, 192, 92, '#e02424');
+  // gancho
+  ctext('ELE DISSE QUE', 360, 800, 54, '#ffffff');
+  ctext('ERA O DAVI...', 360, 862, 54, '#ffd21f');
+  // faixa da parte + título
+  banner(ep, 360, 970, 420, 104, 76, -0.035);
+  ctext(title, 360, 1135, 150, '#ffd21f');
   return out.toDataURL('image/png');
 }
 window.renderCover = renderCover;
