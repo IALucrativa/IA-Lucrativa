@@ -1,6 +1,6 @@
 # Ep. 1: "Onde você tava?" (roteiro v1, para a Carol aprovar)
 
-- **Duração alvo:** 75 a 85 segundos (vertical 9:16).
+- **Duração alvo:** 80 a 100 segundos (vertical 9:16). Regra da Carol: todo episódio entre 1 e 2 minutos, nunca menos de 1 min nem mais de 2 min.
 - **Estrutura:** a mesma do vídeo de referência (`../referencia/estrutura.md`), sem as partes que só existem a partir do Ep. 2 (gorjetas do público e resultado do voto).
 - **Narrador:** uma voz só, rápida e animada, falando direto com o público ("você", "vocês").
 - **Legenda:** karaokê, 2 a 3 palavras por vez, a palavra importante em amarelo.
