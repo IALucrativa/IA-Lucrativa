@@ -46,3 +46,8 @@ Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 ### Escolha do fim do Ep. 1
 
 A definir com a Carol. Ideia descartada: "dinheiro para o aluguel ou para o aniversário" (o aniversário não entra como opção agora).
+
+## Decisões sobre o vídeo
+
+- **Tela verde com moedas** (o dinheiro que o Matheus ganha com o público): **só a partir do Ep. 2**. O jeito de ele ganhar dinheiro ainda vai ser definido pela Carol.
+- **@ do perfil:** a Carol vai mandar.
