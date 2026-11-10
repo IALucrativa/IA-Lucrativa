@@ -35,3 +35,17 @@ Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 
 - O que acontece depois (meio e final).
 - Referências de como ela quer o desenho.
+
+## Formato: história interativa (o público decide)
+
+- Série em episódios curtos (vídeo vertical, uns 45 a 60 segundos).
+- Todo episódio termina com uma pergunta para o público: **opção A ou opção B?**
+- O público vota nos comentários. A opção mais votada vira o próximo episódio.
+- Mesmo formato do Bilhete na Porta.
+
+### Ideia de escolha para o fim do Ep. 1 (sugestão do Claude)
+
+No fim da primeira semana no semáforo, o Matheus juntou um dinheiro, mas não dá para tudo.
+
+- **A:** entrega o dinheiro para a mãe ajudar no aluguel.
+- **B:** guarda o dinheiro para o aniversário da Bia.
