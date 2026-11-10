@@ -147,6 +147,22 @@ const Prateleira: React.FC<{pos: Vec; cai: number}> = ({pos, cai}) => {
   );
 };
 
+const FormaDeBolo: React.FC<{pos: Vec}> = ({pos}) => {
+  const m = useMaterial(ESTILO);
+  return <Peca forma={{tipo: 'cilindro', r: 0.06, h: 0.025}} pos={pos} mat={m('#b9c0c8', {brilho: 0.7})} estilo={ESTILO} contorno={0.004} />;
+};
+
+// um rolinho de massa arremessado (e que erra)
+const Rolinho: React.FC<{T: number; t0: number; de: Vec; para: Vec; dur?: number}> = ({T, t0, de, para, dur = 0.6}) => {
+  const m = useMaterial(ESTILO);
+  const k = (T - t0) / dur;
+  if (k < 0) return null;
+  const kk = Math.min(1, k);
+  const pos = lerp(de, para, kk);
+  pos[1] += Math.sin(kk * Math.PI) * 0.35;
+  return <Peca forma={{tipo: 'cilindro', r: 0.022, h: 0.13}} pos={pos} rot={[kk < 1 ? T * 14 : Math.PI / 2, 0, kk < 1 ? T * 9 : 0.3]} mat={m('#b5793f')} estilo={ESTILO} />;
+};
+
 // pinguins empurrando o Bisnaga (não conseguem)
 const Empurradores: React.FC<{t: number; z: number}> = ({t, z}) => {
   const m = useMaterial(ESTILO);
@@ -336,6 +352,8 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
   const T = ini + t; // segundo da narração
   const em = (s: number) => Math.round((s - ini) * FPS); // quadro local de um segundo da narração
   const leg = (i: number) => bloco.legendas[Math.min(i, bloco.legendas.length - 1)][0];
+  const achar = (trecho: string) => bloco.legendas.find(([, x]) => x.toLowerCase().includes(trecho.toLowerCase()));
+  const quando = (trecho: string, senao: number) => achar(trecho)?.[0] ?? senao;
   const k = f / dur;
   const total = soldados(cfg.contagem);
   const ui: React.ReactNode[] = [];
@@ -368,7 +386,10 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
 
   switch (cena) {
     case 'chamado': {
-      const cam = camMove({pos: [1.35, 1.2, 0.7], alvo: [-0.2, 0.95, -2.2]}, {pos: [1.15, 1.15, 0.2], alvo: [-0.2, 0.95, -2.4]}, k, 50);
+      const cam =
+        ex.N <= 4
+          ? camMove({pos: [1.2, 1.25, ex.frenteZ + 1.2], alvo: [-0.1, 1.0, ex.frenteZ - 1.0]}, {pos: [1.05, 1.2, ex.frenteZ + 0.95], alvo: [-0.1, 1.0, ex.frenteZ - 1.1]}, k, 50)
+          : camMove({pos: [1.35, 1.2, 0.7], alvo: [-0.2, 0.95, -2.2]}, {pos: [1.15, 1.15, 0.2], alvo: [-0.2, 0.95, -2.4]}, k, 50);
       ui.push(<Titulo key="t" f={f} gatos={total + 1} />);
       som('impacto.wav', 0, 0.7);
       return {p: {...base, ...marchaParada(t * 0.05), cam, extras: [bandeja, ...exercito(poseVaga)]}, ui, sons};
@@ -384,7 +405,7 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
         if (ex.N <= 30 || i % 2 === 0) som('pop.wav', chega(s) + 9, 0.35);
       });
       const comercio = total - cfg.contagem.comuns;
-      if (T >= leg(0)) ui.push(<Selo key="c1" texto={`${cfg.contagem.comuns} COMUNS`} f={em(leg(0)) > f ? 0 : f - em(leg(0))} top={480} />);
+      if (T >= leg(0)) ui.push(<Selo key="c1" texto={cfg.contagem.comuns === 1 ? '1 COMUM' : `${cfg.contagem.comuns} COMUNS`} f={f - em(leg(0))} top={480} />);
       if (T >= leg(1)) ui.push(<Selo key="c2" texto={`${comercio} DO COMÉRCIO`} f={f - em(leg(1))} top={580} amarelo />);
       return {
         p: {
@@ -465,6 +486,8 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
       som('clique.wav', 4, 0.5);
       let marcha = t * 0.05;
       let derrubados = 0;
+      const tTrope = achar('tropeça') ? quando('tropeça', 0) + (achar('tropeça')![1].startsWith('A LOTÉRICA') ? 1.0 : 0.4) : 0;
+      const tCai = achar('prateleira') ? quando('prateleira', 0) + (achar('prateleira')![1].startsWith('E derruba') ? 0.6 : 0.1) : 0;
       const outros: React.ReactNode[] = [];
       const pose = (s: Soldado): Pose => {
         if (s.tipo === cfg.frente) {
@@ -480,10 +503,9 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
           return {pos: p0, giro: 2.2 + (rouco ? 0 : Math.sin(f * 2.1 + j) * 0.07), boca: T >= leg(0) + 0.3 && !rouco ? 'aberta' : 'fechada', olhos: rouco ? 'meio' : 'abertos'};
         }
         if (tp === 'LOTÉRICA') {
-          const trope = T - (leg(0) + 1.0);
+          const trope = T - tTrope;
           const rx = trope > 0 && trope < 0.9 ? -Math.sin((trope / 0.9) * Math.PI) * 0.55 : 0;
-          const erra = cfg.blocos.find((b) => b.cena === 'loterica')!.legendas.some(([, x]) => x.includes('miram'));
-          const mira = erra && T < leg(1) ? Math.sin(t * 3 + j) * 0.25 : 0;
+          const mira = achar('miram') && T < tTrope - 0.3 ? Math.sin(t * 3 + j) * 0.25 : 0;
           return {pos: [p0[0], p0[1], p0[2] - (trope > 0 ? Math.min(trope, 0.4) * 0.15 : 0)], giro: 2.2 + mira, rx: j === 0 ? rx : 0, olhos: trope > 0 && trope < 1.5 && j === 0 ? 'fechados' : 'abertos'};
         }
         // SALÃO: desfile no chão encerado, depois a farinha e a fuga
@@ -504,12 +526,18 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
         som('miadinho.wav', em(leg(2) + 0.4), 0.7);
       }
       if (tp === 'LOTÉRICA') {
-        const cai = suave((T - leg(1) - 0.1) / 0.5);
-        derrubados = cai > 0.6 ? Math.min(16, Math.round((T - leg(1) - 0.35) * 40)) : 0;
+        const cai = suave((T - tCai) / 0.5);
+        derrubados = cai > 0.6 ? Math.min(16, Math.round((T - tCai - 0.25) * 40)) : 0;
         outros.push(<Prateleira key="prat" pos={[0.3, YB, FOCO_Z - 0.05]} cai={cai} />);
-        som('baque.wav', em(leg(0) + 1.1), 0.6);
-        som('clang.wav', em(leg(1) + 0.3), 0.6);
-        som('tlec_varios.wav', em(leg(1) + 0.4), 0.8);
+        if (achar('miram'))
+          grupo.forEach((_, j) => {
+            const t0 = leg(0) + 0.6 + j * 0.35;
+            outros.push(<Rolinho key={`r${j}`} T={T} t0={t0} de={[fila(n, j, FOCO_Z)[0], YB + 0.25, FOCO_Z]} para={[fila(n, j, FOCO_Z)[0] + (j % 2 ? 0.75 : -0.7), 0.05, FOCO_Z - 0.6 - j * 0.1]} />);
+            som('uuush.wav', em(t0), 0.35);
+          });
+        som('baque.wav', em(tTrope + 0.1), 0.6);
+        som('clang.wav', em(tCai + 0.2), 0.6);
+        som('tlec_varios.wav', em(tCai + 0.3), 0.8);
       }
       if (tp === 'SALÃO') {
         if (T > leg(1)) outros.push(<Farinha key="far" f={f - em(leg(1)) + 20} centro={[fila(n, 0, FOCO_Z)[0], YB, FOCO_Z - (leg(1) + 0.9 - leg(0)) * 0.06]} />);
@@ -517,6 +545,79 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
         som('uuush.wav', em(leg(1) + 0.9), 0.7);
       }
       return {p: {...base, ...marchaParada(marcha), cam, derrubados, extras: [bandeja, ...outros, ...exercito(pose)]}, ui, sons};
+    }
+    case 'porta':
+    case 'mira':
+    case 'tropeca':
+    case 'prateleira':
+    case 'silencio': {
+      // TikTok: um gato comum na porta e uma LOTÉRICA
+      placar();
+      const outros: React.ReactNode[] = [];
+      let cam = camLado(FOCO_Z + (cena === 'tropeca' ? 0.42 : 0.22), k);
+      let marcha = t * 0.05;
+      let derrubados = 0;
+      let solo: Vec | null = null;
+      let poseLot: Pose = {pos: [0.12, YB, FOCO_Z + 0.2], giro: 2.2};
+      const poseComum: Pose = {pos: [-0.08, YB, FOCO_Z - 0.1], giro: 2.45, olhos: 'meio'};
+      if (cena === 'porta') {
+        if (T >= leg(0)) ui.push(<Etiqueta key="e" texto="GATO COMUM" x={540} y={430} linha={60} f={f - em(leg(0))} tam={50} />);
+        const para = leg(0) + 1.4;
+        marcha = Math.min(t, para - ini) * 0.05;
+        solo = [-0.02, YB, FOCO_Z - 0.75 + suave((T - leg(0)) / 1.3) * 0.45];
+        som('escorregar.wav', em(leg(0)), 0.5);
+        som('tlec.wav', em(leg(0) + 1.3), 0.6);
+      }
+      if (cena === 'mira') {
+        ui.push(<Etiqueta key="e" texto="LOTÉRICA" x={540} y={430} linha={60} f={f - 4} tam={50} />);
+        const primeiro = !!achar('primeiro');
+        const t0 = leg(0) + (primeiro ? 2.3 : 0.5);
+        const para: Vec = primeiro ? [-1.0, 0.05, FOCO_Z - 0.2] : [-0.7, 1.5, FOCO_Z - 2.6];
+        poseLot = {pos: [0.12, YB, FOCO_Z + 0.2], giro: 2.2 + (T < t0 ? Math.sin(t * 2) * 0.12 : -0.3), olhos: T < t0 ? 'meio' : 'abertos'};
+        outros.push(<Rolinho key="r" T={T} t0={t0} de={[0.12, YB + 0.25, FOCO_Z + 0.2]} para={para} dur={primeiro ? 0.6 : 0.8} />);
+        som('uuush.wav', em(t0), 0.5);
+        som('baque.wav', em(t0 + (primeiro ? 0.6 : 0.8)), 0.35);
+      }
+      if (cena === 'tropeca') {
+        const vira = suave((T - leg(0)) / 0.6);
+        const passo = suave((T - leg(1) - 0.3) / 0.5) * 0.12;
+        const tTr = quando('tropeça', leg(2)) + 0.5;
+        const tr = T - tTr;
+        const rx = tr > 0 ? Math.min(1, tr / 0.35) * 0.9 : 0;
+        poseLot = {pos: [0.12, YB + (tr > 0 ? -Math.min(1, tr / 0.35) * 0.02 : 0), FOCO_Z + 0.2 + passo], giro: 2.2 - vira * 2.4, rx, olhos: tr > 0 ? 'fechados' : 'meio'};
+        outros.push(<FormaDeBolo key="forma" pos={[0.1, YB + 0.013, FOCO_Z + 0.44]} />);
+        som('baque.wav', em(tTr + 0.3), 0.7);
+        som('clang.wav', em(tTr + 0.25), 0.25);
+      }
+      if (cena === 'prateleira' || cena === 'silencio') {
+        const tCai = cena === 'prateleira' ? leg(0) + 0.2 : -99;
+        const cai = cena === 'prateleira' ? suave((T - tCai) / 0.5) : 1;
+        derrubados = cena === 'prateleira' ? (cai > 0.6 ? Math.min(140, Math.round((T - tCai - 0.25) * 70)) : 0) : 140;
+        marcha = cena === 'prateleira' ? Math.min(t, tCai - ini + 0.3) * 0.05 : 0.02;
+        outros.push(<Prateleira key="prat" pos={[0.3, YB, FOCO_Z - 0.05]} cai={cai} />);
+        poseLot = cena === 'prateleira' ? {pos: [0.05, YB - 0.02, FOCO_Z + 0.5], giro: -0.2, rx: 0.9, olhos: 'fechados'} : {pos: [0.05, YB, FOCO_Z + 0.5], giro: 2.0 + Math.sin(t * 1.2) * 0.4, olhos: 'abertos'};
+        const largo = {pos: [1.1, 2.1, FOCO_Z + 1.3] as Vec, alvo: [0, 0.75, FOCO_Z - 2.4] as Vec};
+        cam = cena === 'prateleira' ? camMove({pos: cam.pos, alvo: cam.alvo}, largo, (T - leg(1) + 0.4) / 1.2, 46) : camMove(largo, {pos: [1.0, 1.95, FOCO_Z + 1.0], alvo: [0, 0.75, FOCO_Z - 2.4]}, k, 46);
+        if (cena === 'prateleira') {
+          if (T >= leg(1)) ui.push(<NumeroGrande key="n" num="200" rotulo="PINGUINS NO CHÃO" f={f - em(leg(1))} />);
+          som('clang.wav', em(tCai + 0.2), 0.7);
+          som('tlec_varios.wav', em(tCai + 0.3), 0.9);
+          som('tlec_varios.wav', em(tCai + 1.1), 0.8);
+          som('tlec_varios.wav', em(tCai + 1.9), 0.6);
+        }
+      }
+      return {
+        p: {
+          ...base,
+          ...marchaParada(marcha),
+          cam,
+          derrubados,
+          solo,
+          extras: [bandeja, ...outros, ...exercito((s) => (s.tipo === 'COMUM' ? {...poseComum, pos: [poseComum.pos[0], YB + bob(s), poseComum.pos[2]]} : poseLot))],
+        },
+        ui,
+        sons,
+      };
     }
     case 'comuns': {
       const cam = camLado(ex.frenteZ, k, 0.15);
@@ -558,13 +659,14 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
       const cam = camLado(ex.frenteZ, k);
       placar();
       const n = cfg.contagem[cfg.frente];
-      const golpe = T - leg(3) - 0.35;
+      const tGolpe = quando('patada', leg(3));
+      const golpe = T - tGolpe - 0.35;
       const queda1 = golpe > 0 ? Math.min(n * 5 + 4, Math.round(golpe * 45)) : 0;
       if (T >= leg(0)) ui.push(<Etiqueta key="e" texto={`${cfg.frente} ×${n}`} x={540} y={430} linha={60} f={f - em(leg(0))} amarela tam={50} />);
       som('nham.wav', em(leg(1)), 0.5);
-      som('uuush.wav', em(leg(3) + 0.2), 0.6);
-      som('baque.wav', em(leg(3) + 0.35), 0.9);
-      som('tlec_varios.wav', em(leg(3) + 0.4), 0.9);
+      som('uuush.wav', em(tGolpe + 0.2), 0.6);
+      som('baque.wav', em(tGolpe + 0.35), 0.9);
+      som('tlec_varios.wav', em(tGolpe + 0.4), 0.9);
       return {
         p: {
           ...base,
@@ -577,7 +679,7 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
               if (s.tipo !== cfg.frente) return poseVaga(s);
               const v = ex.vagas[s.n];
               const lunge = golpe > 0 && golpe < 0.6 ? Math.sin((golpe / 0.6) * Math.PI) : 0;
-              const lambe = T < leg(2) ? 'fechados' : 'abertos';
+              const lambe = T < tGolpe - 1.2 ? 'fechados' : 'abertos';
               return {pos: [v[0], YB + lunge * 0.05, v[2] - 0.1 - lunge * 0.14], giro: GIRO_FRENTE, rx: -lunge * 0.3, olhos: lambe};
             }),
           ],
@@ -589,9 +691,10 @@ const quadro = (cena: CenaBatalha, f: number, c: Ctx): {p: ParamsCena; ui: React
     case 'dezmil': {
       const cam = camMove({pos: [0.7, 2.3, 2.2], alvo: [0, 0.7, -2.4]}, {pos: [0.55, 2.6, 2.6], alvo: [0, 0.6, -2.8]}, k, 52);
       placar();
-      if (T >= leg(0)) ui.push(<NumeroGrande key="n" num="10.000" rotulo="PINGUINS" f={f - em(leg(0))} />);
+      const tDez = quando('dez mil', leg(0));
+      if (T >= tDez) ui.push(<NumeroGrande key="n" num="10.000" rotulo="PINGUINS" f={f - em(tDez)} />);
       const avanco = suave(k) * 0.45;
-      const atras = suave((T - leg(2)) / 1.5) * 0.3;
+      const atras = achar('seguram') ? suave((T - quando('seguram', 0)) / 1.5) * 0.3 : 0;
       som('tlec_varios.wav', 10, 0.5);
       som('tlec_varios.wav', 70, 0.5);
       som('suspense.wav', em(leg(1)), 0.4);
