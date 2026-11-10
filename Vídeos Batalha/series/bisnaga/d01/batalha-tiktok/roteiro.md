@@ -1,6 +1,6 @@
 # Desafio 1 · Batalha (TikTok): "Os pinguins da geladeira"
 
-> **Rascunho de 10/11/2026, aguardando aprovação.**
+> **Aprovado em 10/11/2026.**
 
 - **Contagem real:** 2 soldados (1 comum, 1 LOTÉRICA). Placar: **GATOS 3 × 10.000 PINGUINS**.
 - **Faixa:** 0 a 49, **recuam com honra**. Na frente: **LOTÉRICA** (a única do comércio).

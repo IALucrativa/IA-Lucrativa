@@ -1,6 +1,6 @@
 # Desafio 1 · Batalha (YouTube): "Os pinguins da geladeira"
 
-> **Rascunho de 10/11/2026, aguardando aprovação.**
+> **Aprovado em 10/11/2026.**
 
 - **Contagem real:** 42 soldados (18 comuns, 11 AÇOUGUE, 5 FEIRANTE, 4 LOTÉRICA, 4 SALÃO). Placar: **GATOS 43 × 10.000 PINGUINS**.
 - **Faixa:** 0 a 49, **recuam com honra** (por oito). Na frente: **AÇOUGUE** (o mais pedido, 11).

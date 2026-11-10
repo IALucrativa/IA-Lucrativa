@@ -1,6 +1,6 @@
 # Desafio 1 · Batalha (Instagram): "Os pinguins da geladeira"
 
-> **Rascunho de 10/11/2026, aguardando aprovação.**
+> **Aprovado em 10/11/2026.**
 
 - **Contagem real:** 23 soldados (17 comuns, 3 AÇOUGUE, 1 FEIRANTE, 1 LOTÉRICA, 1 SALÃO). Placar: **GATOS 24 × 10.000 PINGUINS**.
 - **Faixa:** 0 a 49, **recuam com honra**. Na frente: **AÇOUGUE** (o mais pedido).
