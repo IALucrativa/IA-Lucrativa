@@ -10,7 +10,7 @@ const SW = 1080, SH = 1920;      // canvas de origem (antes da lente)
 const W = 720, H = 1280;         // saída
 const PX = 20;                   // px por grau de câmera
 const K = 0.30;                  // força do olho-de-peixe
-const DURATION = 70;
+const DURATION = 80.5;
 
 const src = document.createElement('canvas'); src.width = SW; src.height = SH;
 const c = src.getContext('2d');
@@ -97,7 +97,7 @@ function person(x, y, s, p) {
     if (pose === 'down') { path(shirt, () => c.roundRect(sx - 22 + side * 6, -205, 44, 120, 20)); rrect(sx - 18 + side * 12, -95, 36, 90, 16, p.sleeveSkin ? skin : skin); circ(sx + side * 14, -2, 22, skin); }
   };
   const L = p.armL || 'down', R = p.armR || 'down';
-  arm(-1, L); arm(1, R);
+  if (!p.handUp) arm(-1, L); arm(1, R);
   // tronco
   path(shirt, () => { c.moveTo(-84, -170); c.quadraticCurveTo(-84, -215, -40, -218); c.lineTo(40, -218); c.quadraticCurveTo(84, -215, 84, -170); c.lineTo(74, 12); c.lineTo(-74, 12); c.closePath(); });
   if (p.torn) { path('#4b3a2a', () => { c.moveTo(-74, 12); for (let i = 0; i <= 8; i++) c.lineTo(-74 + i * 18.5, i % 2 ? -12 : 10); c.lineTo(74, 12); c.closePath(); }, 3); ell(30, -120, 18, 26, '#6b2d2d', 3); }
@@ -156,7 +156,7 @@ function person(x, y, s, p) {
     path(shirt, () => c.roundRect(-92, -205 + w1, 44, 80, 18)); path(shirt, () => c.roundRect(48, -200 + w2, 44, 80, 18));
     zhand(-70, -110 + w1, 1.1); zhand(70, -104 + w2, 1.1);
   }
-  if (p.handUp) { path(shirt, () => c.roundRect(-110, -330, 42, 150, 18)); zhand(-88, -345, 1, skin); }
+  if (p.handUp) { path(shirt, () => c.roundRect(-122, -330, 46, 150, 20)); rrect(-118, -400, 38, 90, 16, skin); path(skin, () => c.roundRect(-128, -462, 58, 70, 22)); for (let i = 0; i < 4; i++) rrect(-128 + i * 15, -500 + Math.abs(i - 1.5) * 5, 13, 44, 6, skin, 4); }
   if (p.desk) desk(0, 30, 1.05);
   c.restore();
 }
@@ -201,8 +201,9 @@ function povArm(x, y, ang, s, kind, sleeve = '#2f62a8') {
 }
 
 // ------------------------------ câmera ------------------------------
+const KNOCKS = [50.3, 50.6, 50.9, 54.0, 54.3, 54.6, 57.5, 57.8, 58.1, 59.6, 59.8, 60.0, 60.2, 60.4, 60.6, 60.8, 61.0, 61.2];
 // keyframes [t, yaw, pitch]
-const CAM = [[0, 0, 50], [6.0, 0, 50], [6.8, 50, 8], [12.3, 50, 8], [13.0, 4, 4], [16.8, 4, 4], [17.6, 0, 50], [20.15, 0, 50], [20.5, 3, 2], [25.0, 3, 2], [26.0, -58, -2], [31, -58, -2]];
+const CAM = [[0, 0, 50], [3.6, 0, 50], [4.4, 50, 8], [9.6, 50, 8], [10.3, 4, 4], [14.0, 4, 4], [14.8, 2, 12], [16.5, 2, 12], [16.85, 3, 2], [21.4, 3, 2], [22.2, 0, -28], [25.9, 0, -28], [26.5, 3, 0], [27.2, 3, 0], [28.2, -58, -2], [33.5, -58, -2], [51.8, 32, 2], [59.8, 32, 2]];
 function camAt(t) {
   for (let i = 0; i < CAM.length - 1; i++) { const a = CAM[i], b = CAM[i + 1]; if (t <= b[0]) { const k = ease(prog(t, a[0], b[0])); return { yaw: lerp(a[1], b[1], k), pitch: lerp(a[2], b[2], k) }; } }
   const l = CAM[CAM.length - 1]; return { yaw: l[1], pitch: l[2] };
@@ -210,9 +211,10 @@ function camAt(t) {
 function shakeAt(t) {
   let x = Math.sin(t * 1.3) * 6 + Math.sin(t * 2.7) * 4, y = Math.sin(t * 1.7) * 5 + Math.cos(t * 0.9) * 4; // respiração
   const hit = (te, amp, dec) => { if (t < te) return; const e = amp * Math.exp(-(t - te) * dec); x += Math.sin(t * 63) * e; y += Math.cos(t * 71) * e; };
-  hit(20.0, 70, 3); hit(45.0, 40, 5); hit(45.6, 40, 5); hit(46.4, 45, 5); hit(47.3, 50, 4);
-  [50.3, 50.6, 50.9, 54.0, 54.3, 54.6, 57.5, 57.8, 58.1, 59.6, 59.8, 60.0, 60.2, 60.4, 60.6, 60.8, 61.0, 61.2].forEach(te => hit(te, 22, 9));
-  if (t > 40.2 && t < 44.8) { const v = (Math.floor(t * 2) % 2 === 0) ? 6 : 0; x += Math.sin(t * 90) * v; }
+  hit(16.5, 70, 3); hit(47.4, 40, 5); hit(48.0, 40, 5); hit(48.8, 45, 5); hit(49.7, 50, 4); hit(24.6, 18, 4);
+  if (t > 52 && t < 55.4) { x += Math.sin(t * 9) * 10; y += Math.abs(Math.sin(t * 4.5)) * 18; }
+  KNOCKS.forEach(te => hit(te + 10.4, 22, 9));
+  if (t > 42.6 && t < 47.2) { const v = (Math.floor(t * 2) % 2 === 0) ? 6 : 0; x += Math.sin(t * 90) * v; }
   return { x, y };
 }
 
@@ -220,7 +222,7 @@ function shakeAt(t) {
 function classroom(t) {
   const cam = camAt(t), sh = shakeAt(t);
   c.save(); c.translate(SW / 2 + sh.x, SH / 2 + sh.y); c.translate(-cam.yaw * PX, -cam.pitch * PX);
-  const flick = (t > 20 && t < 21.4 && Math.floor(t * 14) % 3 === 0) ? 0.55 : 1;
+  const flick = (t > 16.5 && t < 17.9 && Math.floor(t * 14) % 3 === 0) ? 0.55 : 1;
   // teto
   rect(-3200, -2600, 6400, 2100, '#dcd9cf', 0);
   for (let i = -16; i <= 16; i++) line(i * 200, -2600, i * 140, -560, 3, '#b9b5a8');
@@ -268,14 +270,19 @@ function classroom(t) {
   rect(-560, -45, 300, 16, '#5c3c22', 3); rect(-500, -60, 46, 14, '#f3f3f3', 2);
   // porta (frente direita)
   rect(600, -340, 260, 580, '#8a5a32', 6); rect(640, -300, 80, 110, '#9cc0d6', 5); circ(830, -20, 14, '#d8c25a', 4);
+  // alto-falante
+  rrect(-100, -720, 200, 130, 14, '#d8d4c8'); for (let i = 0; i < 4; i++) for (let j = 0; j < 7; j++) circ(-66 + j * 22, -690 + i * 22, 6, '#555', 0);
+  if (t > 21.6 && t < 25.8) circ(80, -705, 9, Math.floor(t * 4) % 2 ? '#e33' : '#711', 3);
+  if (t > 24.6 && t < 25.8) for (let i = 0; i < 6; i++) line(-140 - rnd(i + Math.floor(t * 20)) * 80, -700 + i * 18, -110, -690 + i * 15, 4, '#333');
   // mesa do professor
   poly([-560, 40, -220, 40, -230, 90, -550, 90], '#b98a52'); rect(-545, 90, 300, 150, '#9d6f3c', 5);
   rect(-520, 0, 120, 40, '#e9e3d5', 4); rect(-380, 10, 80, 30, '#d34', 4);
+  if (t > 51) { barricade(t); c.restore(); if (t > 56.6) { c.fillStyle = 'rgba(8,12,35,.62)'; c.fillRect(0, 0, SW, SH); } return; }
   // alunos ao fundo (fileira 2)
-  const fear = t > 20.1;
+  const fear = t > 16.6;
   [[-330, 120, 0.62, SKIN.s1, '#3b2a1e', 'short'], [-40, 110, 0.6, SKIN.s2, '#111', 'curly'], [300, 120, 0.62, SKIN.s3, '#6b3b1e', 'long']].forEach(([x, y, s, sk, hc, hs], i) => {
     desk(x, y + 20 * s, s * 0.95);
-    person(x + (fear ? Math.sin(t * 2 + i) * 6 : 0), y, s, { skin: sk, hairCol: hc, hair: hs, back: !(fear && t > 22 + i * 0.4), face: -0.3 + i * 0.3, expr: 'scared', shirt: '#f4f4f4' });
+    person(x + (fear ? Math.sin(t * 2 + i) * 6 : 0), y, s, { skin: sk, hairCol: hc, hair: hs, back: !(fear && t > 18.5 + i * 0.4), face: -0.3 + i * 0.3, expr: 'scared', shirt: '#f4f4f4' });
     chairBack(x, y + 40 * s, s);
   });
   // professor
@@ -283,7 +290,7 @@ function classroom(t) {
   // fileira 1 (mais perto)
   [[-560, 330, 1.0, SKIN.s3, '#2a1a10', 'short'], [560, 330, 1.0, SKIN.s1, '#c99a3c', 'long']].forEach(([x, y, s, sk, hc, hs], i) => {
     desk(x, y + 10, s * 1.1);
-    const turned = fear && t > 22.3 + i * 0.5;
+    const turned = fear && t > 18.8 + i * 0.5;
     person(x, y, s, { skin: sk, hairCol: hc, hair: hs, back: !turned, face: i ? -0.6 : 0.6, expr: 'scared', shirt: '#f4f4f4', collar: '#2f62a8' });
     chairBack(x, y + 40, s);
   });
@@ -298,23 +305,23 @@ function classroom(t) {
 }
 function talking(t, who) { for (const s of SUBS) if (s[2] === who && t >= s[0] && t <= s[1]) return 0.35 + 0.65 * Math.abs(Math.sin(t * 13)); return 0; }
 function profDraw(t) {
-  const angry = t > 12.6 && t < 17;
-  const after = t > 20.2;
+  const angry = t > 10.0 && t < 14.2;
+  const after = t > 16.7;
   person(140, 150, 0.9, { standing: true, skin: SKIN.prof, hair: 'bald', hairCol: '#6b6b6b', glasses: true, mustache: true, shirt: '#e9e2c7', pants: '#4a4a52',
-    expr: angry ? 'angry' : after ? 'scared' : 'neutral', mouth: talking(t, 'PROFESSOR'), armR: angry ? 'point' : 'down', armL: after && !angry ? 'down' : 'down', face: after ? -0.6 : 0.1, badge: false });
+    expr: angry ? 'angry' : after ? 'scared' : 'neutral', mouth: talking(t, 'PROFESSOR'), armR: angry ? 'point' : 'down', armL: after && !angry ? 'down' : 'down', face: after ? -0.6 : 0.1, back: t > 14.2 && t < 16.6 });
 }
 function leoDraw(t) {
-  const toUs = (t > 7.4 && t < 12.3) || (t > 20.3 && t < 25);
+  const toUs = (t > 5.0 && t < 9.7) || (t > 16.8 && t < 21.5);
   const s = 1.7, x = 1080, y = 640;
   desk(x + 100, y + 60, 1.9);
-  person(x, y, s, { skin: SKIN.leo, hair: 'short', hairCol: '#3b2414', shirt: '#f4f4f4', collar: '#2f62a8', logo: '#2f62a8', face: toUs ? -0.55 : 0.9, expr: t > 20.1 ? 'scared' : (toUs ? 'angry' : 'neutral'), mouth: talking(t, 'LÉO') });
+  person(x, y, s, { skin: SKIN.leo, hair: 'short', hairCol: '#3b2414', shirt: '#f4f4f4', collar: '#2f62a8', logo: '#2f62a8', face: toUs ? -0.55 : 0.9, expr: t > 16.6 ? 'scared' : (toUs ? 'angry' : 'neutral'), mouth: talking(t, 'LÉO') });
   poly([x - 140, y + 60, x + 360, y + 60, x + 330, y + 100, x - 120, y + 100], '#d9a86c');
   rect(x - 40, y + 50, 160, 14, '#fff', 3);
 }
 function biaDraw(t) {
-  const standing = t > 25.2;
+  const standing = t > 27.4;
   const x = standing ? -960 : -1000, y = standing ? 220 : 470;
-  person(x, y, 1.45, { standing, skin: SKIN.bia, hair: 'long', hairCol: '#1d120c', shirt: '#f4f4f4', collar: '#2f62a8', face: standing ? (t > 27.6 && t < 30 ? 0.7 : -0.7) : 0.5, expr: t > 20.1 ? 'scared' : 'neutral', mouth: talking(t, 'BIA'), handUp: standing });
+  person(x, y, 1.45, { standing, skin: SKIN.bia, hair: 'long', hairCol: '#1d120c', shirt: '#f4f4f4', collar: '#2f62a8', face: standing ? (t > 30 && t < 32.4 ? 0.7 : -0.7) : 0.5, expr: t > 16.6 ? 'scared' : 'neutral', mouth: talking(t, 'BIA'), handUp: standing });
   if (!standing) desk(x, y + 40, 1.5);
 }
 function myDesk(t) {
@@ -331,22 +338,38 @@ function myDesk(t) {
   text('24', 170, -250, 34, '#555', { font: '"DejaVu Serif"', rot: -0.1 });
   text('x = 6', 170, -178, 34, '#555', { font: '"DejaVu Serif"', rot: -0.08 });
   path(null, () => { c.moveTo(-310, 140); c.lineTo(310, 140); c.moveTo(-310, 220); c.lineTo(310, 220); c.moveTo(-310, 300); c.lineTo(310, 300); }, 2, '#c9c9d6');
-  const sc = prog(t, 1, 5.5); // rabisco nervoso
+  const sc = prog(t, 0.6, 3.4); // rabisco nervoso
   if (sc > 0) path(null, () => { c.moveTo(-280, 180); for (let i = 0; i < sc * 30; i++) c.lineTo(-280 + i * 7, 170 + Math.sin(i * 1.7) * 12); }, 3, '#666');
   text('?', 260, 30, 70, '#b22', { rot: 0.2 });
   c.restore();
   // mãos
-  const writing = t < 6 || (t > 17.4 && t < 20);
+  const writing = t < 3.6;
   const px = 260 + (writing ? Math.sin(t * 9) * 18 : 0), py = 1240 + (writing ? Math.cos(t * 7) * 10 : 0);
-  if (t < 20.05) povArmWorld(px, py, -0.35, 1.5, 'pencil');
+  if (t < 16.55) povArmWorld(px, py, -0.35, 1.5, 'pencil');
   else povArmWorld(330, 1520, -0.3, 1.5, 'flat');
   povArmWorld(-470, 1460, 0.35, 1.5, 'flat');
 }
 function povArmWorld(x, y, a, s, k) { povArm(x, y, a, s, k); }
 
+// ---------------------------- BARRICADA ----------------------------
+function barricade(t) {
+  const k1 = ease(prog(t, 52.0, 53.8)), k2 = ease(prog(t, 53.4, 55.4));
+  // professor trancando a porta (de costas)
+  person(715, 30, 0.95, { standing: true, back: true, skin: SKIN.prof, hair: 'bald', hairCol: '#6b6b6b', shirt: '#e9e2c7', pants: '#4a4a52' });
+  if (t < 55.5) { c.save(); c.translate(820 + Math.sin(t * 22) * 5, -8); circ(0, 0, 12, null, 4); rect(-4, 8, 8, 34, '#d8c25a', 3); rect(8, 6, 8, 28, '#c0c4c8', 3); c.restore(); }
+  // carteira que o Léo arrasta
+  desk(lerp(1120, 870, k1), lerp(330, 270, k1), 1.05);
+  person(lerp(1280, 1030, k1), 300, 1.3, { standing: true, step: Math.sin(t * 8) * (k1 < 1 ? 1 : 0), skin: SKIN.leo, hair: 'short', hairCol: '#3b2414', shirt: '#f4f4f4', collar: '#2f62a8', face: talking(t, 'LÉO') ? -0.3 : -0.9, expr: 'scared', mouth: talking(t, 'LÉO') });
+  // nossa carteira sendo empurrada
+  const dx = lerp(470, 600, k2), dy = lerp(860, 560, k2);
+  desk(dx, dy, 2.6);
+  povArm(dx - 230, dy + 330, -0.12, 1.5, 'flat'); povArm(dx + 230, dy + 330, 0.12, 1.5, 'flat');
+}
+
 // ------------------------- JANELA (pátio) -------------------------
-function windowSet(t) {
-  const sh = shakeAt(t);
+function windowSet(T) {
+  const t = T - 2.4;
+  const sh = shakeAt(T);
   const zoom = t > 37.8 && t < 40.4 ? lerp(1, 1.45, ease(prog(t, 37.8, 39.2))) : 1;
   const pan = Math.sin(t * 0.6) * 15 + (t < 34 ? lerp(60, 0, ease(prog(t, 30.6, 33))) : 0);
   c.save(); c.translate(SW / 2 + sh.x + pan, SH / 2 + sh.y);
@@ -385,7 +408,7 @@ function windowSet(t) {
   if (t < 40.1) { povArm(250, 1720, -0.2, 1.3, 'flat'); povArm(840, 1740, 0.25, 1.3, 'flat'); }
   c.restore();
   // Bia na borda esquerda
-  if (t < 40.1) person(40, 1500, 1.9, { skin: SKIN.bia, hair: 'long', hairCol: '#1d120c', shirt: '#f4f4f4', collar: '#2f62a8', face: talking(t, 'BIA') > 0 ? 0.8 : -0.4, expr: 'scared', mouth: talking(t, 'BIA') });
+  if (t < 40.1) person(40, 1500, 1.9, { skin: SKIN.bia, hair: 'long', hairCol: '#1d120c', shirt: '#f4f4f4', collar: '#2f62a8', face: talking(T, 'BIA') > 0 ? 0.8 : -0.4, expr: 'scared', mouth: talking(T, 'BIA') });
 }
 const jorgeX = t => lerp(1000, 640, prog(t, 32.4, 40));
 const groundY = t => lerp(840, 1180, prog(t, 32.4, 40));
@@ -401,9 +424,10 @@ function zombies(t) {
   if (t > 32.4) { const g = groundY(t), s = (g - 700) / 330, look = t > 38.4;
     person(jorgeX(t), g, s, { standing: true, step: Math.sin(t * 2.6), skin: SKIN.z, shirt: '#24365c', pants: '#1c2233', hair: 'cap', hairCol: '#1c2a48', badge: true, expr: 'zombie', torn: true, zarms: !look, zt: t, face: look ? 0 : -0.6, mouth: look ? 1 : 0.4, rot: look ? 0 : Math.sin(t * 2) * 0.07 }); }
 }
-function glassAttack(t) {
+function glassAttack(T) {
+  const t = T - 2.4;
   // zumbis colados no vidro
-  const sh = shakeAt(t);
+  const sh = shakeAt(T);
   c.save(); c.translate(sh.x, sh.y);
   const k = ease(prog(t, 44.9, 45.25));
   rect(-50, -50, SW + 100, SH + 100, '#c9c2b1', 0);
@@ -423,11 +447,12 @@ function glassAttack(t) {
 }
 
 // ------------------------------ CELULAR ------------------------------
-function phoneOverlay(t) {
+function phoneOverlay(T) {
+  const t = T - 2.4;
   const k = ease(prog(t, 40.15, 40.7)) * (1 - ease(prog(t, 44.6, 44.95)));
   if (k <= 0) return;
   c.fillStyle = `rgba(0,0,0,${0.45 * k})`; c.fillRect(0, 0, SW, SH);
-  const sh = shakeAt(t);
+  const sh = shakeAt(T);
   const y = lerp(SH + 900, SH / 2 + 60, k);
   c.save(); c.translate(SW / 2 + sh.x, y + sh.y); c.rotate(-0.06);
   povArm(40, 520, 0.05, 1.6, 'phone');
@@ -445,9 +470,10 @@ function phoneOverlay(t) {
 }
 
 // ------------------------------- PORTA -------------------------------
-function doorSet(t) {
-  const sh = shakeAt(t);
-  const bang = [50.3, 50.6, 50.9, 54.0, 54.3, 54.6, 57.5, 57.8, 58.1, 59.6, 59.8, 60.0, 60.2, 60.4, 60.6, 60.8, 61.0, 61.2].some(te => t > te && t < te + 0.08);
+function doorSet(T) {
+  const t = T - 10.4;
+  const sh = shakeAt(T);
+  const bang = KNOCKS.some(te => t > te && t < te + 0.08);
   const push = ease(prog(t, 49.4, 50.2));
   c.save(); c.translate(SW / 2 + sh.x, SH / 2 + sh.y); c.scale(lerp(0.85, 1, push), lerp(0.85, 1, push)); c.translate(-SW / 2, -SH / 2);
   rect(-400, -400, SW + 800, SH + 800, '#efe4bf', 0);
@@ -470,7 +496,7 @@ function doorSet(t) {
   if (zk > 0) for (let i = 0; i < 3; i++) { const s = 0.25 + zk * 0.35 + i * 0.05; person(330 + i * 110 + Math.sin(t * 2 + i) * 10, 700 - 20 * i + zk * 60, s, { standing: true, skin: '#3a4438', shirt: '#22262b', hair: 'short', hairCol: '#111', expr: 'zombie', zarms: true, zt: t + i, face: 0, mouth: 0.8 }); }
   // Davi
   const dk = prog(t, 49.6, 50.3), panic = t > 57.4;
-  person(450 + Math.sin(t * (panic ? 14 : 6)) * (panic ? 10 : 4), 840 + (1 - dk) * 300, 1.25, { skin: SKIN.davi, hair: 'curly', hairCol: '#1a120c', shirt: '#f4f4f4', collar: '#2f62a8', expr: 'scared', sweat: true, mouth: talking(t, 'DAVI') || 0.15, face: panic ? Math.sin(t * 5) * 0.6 : 0 });
+  person(450 + Math.sin(t * (panic ? 14 : 6)) * (panic ? 10 : 4), 840 + (1 - dk) * 300, 1.25, { skin: SKIN.davi, hair: 'curly', hairCol: '#1a120c', shirt: '#f4f4f4', collar: '#2f62a8', expr: 'scared', sweat: true, mouth: talking(T, 'DAVI') || 0.15, face: panic ? Math.sin(t * 5) * 0.6 : 0 });
   c.restore();
   c.globalAlpha = 0.18; poly([310, 280, 380, 280, 320, 520, 310, 520], '#fff', 0); c.globalAlpha = 1;
   rect(300, 260, 300, 440, null, 7);
@@ -478,34 +504,42 @@ function doorSet(t) {
   rect(770, 900, 40, 120, '#c8b04a', 5); rrect(700, 950, 120, 34, 16, '#d8c25a', 5);
   c.restore();
   c.restore();
+  { const ps = lerp(0.85, 1, push), vx = (300 + dx - SW / 2) * ps + SW / 2 + sh.x, vy = (260 - SH / 2) * ps + SH / 2 + sh.y;
+    c.save(); c.beginPath(); c.rect(-10, -10, SW + 20, SH + 20); c.rect(vx, vy, 300 * ps, 440 * ps); c.clip('evenodd'); c.fillStyle = 'rgba(8,12,35,.55)'; c.fillRect(0, 0, SW, SH); c.restore(); }
   // nossa mão indo até a maçaneta
   const r = ease(prog(t, 56.8, 59.4)), back = t > 61.4 ? ease(prog(t, 61.4, 62.2)) : 0;
   const hx = lerp(1150, 830, r * (1 - back * 0.4)), hy = lerp(2350, 1220, r * (1 - back * 0.4));
   povArm(hx + sh.x * 0.5, hy + sh.y * 0.5, -0.55, 1.4, 'reach');
+  c.fillStyle = 'rgba(8,12,35,.45)'; c.fillRect(0, 1300, SW, SH);
   // mão do Léo segurando nosso ombro (Não abre!)
   if (t > 54.2 && t < 57.4) { const k = ease(prog(t, 54.2, 54.6)); povArm(-60 + k * 200, 1650 - k * 260, 0.75, 1.4, 'flat', '#f4f4f4'); }
 }
 
 // ----------------------------- LEGENDAS -----------------------------
 const SUBS = [
-  [0.9, 5.6, 'VOCÊ', 'Questão 7... eu não estudei nada disso.'],
-  [6.9, 9.5, 'VOCÊ', 'Psiu... Léo! Qual é a da sete?'],
-  [9.6, 12.3, 'LÉO', 'Fica quieto, mano! O professor tá olhando!'],
-  [13.0, 16.7, 'PROFESSOR', 'Vocês dois aí! Mais uma palavra e é ZERO!'],
-  [21.8, 24.9, 'PROFESSOR', 'Ninguém se mexe. Deve ser obra na rua.'],
-  [26.2, 29.8, 'BIA', 'Gente... tem alguém correndo lá no pátio.'],
-  [31.4, 33.9, 'VOCÊ', 'Ué... por que ele tá correndo assim?'],
-  [34.3, 37.5, 'BIA', 'Aquele ali não é o seu Jorge... o porteiro?'],
-  [37.8, 40.0, 'LÉO', 'Mano... ele tá olhando pra cá.'],
-  [40.8, 44.6, 'VOCÊ', '"Alerta extremo... não abra portas pra ninguém."'],
-  [45.7, 49.0, 'PROFESSOR', 'Todo mundo pro fundo da sala! AGORA!'],
-  [50.6, 53.9, 'DAVI', 'Professor! Sou eu, o Davi! Abre a porta!'],
-  [54.3, 57.2, 'LÉO', 'Não abre! Ele pode ter sido mordido!'],
-  [57.6, 59.4, 'DAVI', 'Eles tão vindo!'],
-  [59.6, 62.2, 'DAVI', 'POR FAVOR, ABRE!!!'],
+  [0.6, 3.5, 'VOCÊ', 'Questão 7... eu não estudei nada disso.'],
+  [4.6, 7.0, 'VOCÊ', 'Psiu... Léo! Qual é a da sete?'],
+  [7.1, 9.6, 'LÉO', 'Fica quieto, mano! O professor tá olhando!'],
+  [10.4, 13.9, 'PROFESSOR', 'Vocês dois aí! Mais uma palavra e é ZERO!'],
+  [18.3, 21.3, 'PROFESSOR', 'Ninguém se mexe. Deve ser obra na rua.'],
+  [21.9, 24.5, 'ALTO-FALANTE', 'Atenção, alunos! Permaneçam nas salas. Repito, perman—'],
+  [25.9, 27.6, 'VOCÊ', 'Isso foi... um grito?'],
+  [28.6, 32.2, 'BIA', 'Gente... tem alguém correndo lá no pátio.'],
+  [33.8, 36.3, 'VOCÊ', 'Ué... por que ele tá correndo assim?'],
+  [36.7, 39.9, 'BIA', 'Aquele ali não é o seu Jorge... o porteiro?'],
+  [40.2, 42.4, 'LÉO', 'Mano... ele tá olhando pra cá.'],
+  [43.2, 47.0, 'VOCÊ', '"Alerta extremo... não abra portas pra ninguém."'],
+  [48.1, 51.4, 'PROFESSOR', 'Todo mundo pro fundo da sala! AGORA!'],
+  [52.0, 54.6, 'PROFESSOR', 'Tranca a porta! Encosta as carteiras!'],
+  [54.8, 56.4, 'LÉO', 'Apaga a luz! Apaga!'],
+  [57.0, 59.6, 'PROFESSOR', 'Shhh... ninguém faz um barulho.'],
+  [61.0, 64.3, 'DAVI', 'Professor! Sou eu, o Davi! Abre a porta!'],
+  [64.7, 67.6, 'LÉO', 'Não abre! Ele pode ter sido mordido!'],
+  [68.0, 69.8, 'DAVI', 'Eles tão vindo!'],
+  [70.0, 72.6, 'DAVI', 'POR FAVOR, ABRE!!!'],
 ];
-const COL = { 'VOCÊ': '#ffffff', 'LÉO': '#ffd23f', 'PROFESSOR': '#ff9a62', 'BIA': '#d4b3ff', 'DAVI': '#7fe3ff' };
-const SFX = [[20.0, 21.3, 'BUM!'], [45.0, 46.2, 'PÁ! PÁ!'], [50.25, 51.1, 'TOC TOC TOC'], [57.5, 58.3, 'TOC TOC'], [59.6, 61.4, 'BAM! BAM! BAM!']];
+const COL = { 'VOCÊ': '#ffffff', 'LÉO': '#ffd23f', 'PROFESSOR': '#ff9a62', 'BIA': '#d4b3ff', 'DAVI': '#7fe3ff', 'ALTO-FALANTE': '#9df29d' };
+const SFX = [[16.5, 17.8, 'BUM!'], [24.6, 25.7, 'AAAAAH!'], [47.4, 48.6, 'PÁ! PÁ!'], [52.1, 53.2, 'RRRRRSHHH'], [56.6, 57.3, 'CLIC'], [60.65, 61.5, 'TOC TOC TOC'], [67.9, 68.7, 'TOC TOC'], [70.0, 71.8, 'BAM! BAM! BAM!']];
 function wrap(s, max) { const w = s.split(' '); const lines = []; let cur = ''; o.font = 'bold 34px "DejaVu Sans"'; for (const x of w) { const tr = cur ? cur + ' ' + x : x; if (o.measureText(tr).width > max && cur) { lines.push(cur); cur = x; } else cur = tr; } lines.push(cur); return lines; }
 function otext(s, x, y, size, col, ow = 7, align = 'center') { o.font = `bold ${size}px "DejaVu Sans"`; o.textAlign = align; o.textBaseline = 'middle'; o.lineJoin = 'round'; o.lineWidth = ow; o.strokeStyle = '#000'; o.strokeText(s, x, y); o.fillStyle = col; o.fillText(s, x, y); }
 function overlay(t) {
@@ -513,7 +547,7 @@ function overlay(t) {
   if (t < 3.6) { const a = Math.min(1, t / 0.3, (3.6 - t) / 0.4); o.globalAlpha = a; o.fillStyle = '#ffd23f'; o.beginPath(); o.roundRect(70, 110, 580, 120, 18); o.fill(); o.lineWidth = 6; o.strokeStyle = '#000'; o.stroke();
     o.fillStyle = '#000'; o.font = 'bold 34px "DejaVu Sans"'; o.textAlign = 'center'; o.textBaseline = 'middle'; o.fillText('POV: você tá fazendo prova', 360, 150); o.fillText('quando tudo começa...', 360, 192); o.globalAlpha = 1; }
   // banner de alerta
-  if (t > 40.3 && t < 49) { const a = Math.min(1, (t - 40.3) / 0.3, (49 - t) / 0.4); o.globalAlpha = a; o.fillStyle = Math.floor(t * 3) % 2 ? '#c41d1d' : '#e02828'; o.beginPath(); o.roundRect(40, 60, 640, 110, 14); o.fill(); o.lineWidth = 5; o.strokeStyle = '#fff'; o.stroke();
+  if (t > 42.7 && t < 51.4) { const a = Math.min(1, (t - 42.7) / 0.3, (51.4 - t) / 0.4); o.globalAlpha = a; o.fillStyle = Math.floor(t * 3) % 2 ? '#c41d1d' : '#e02828'; o.beginPath(); o.roundRect(40, 60, 640, 110, 14); o.fill(); o.lineWidth = 5; o.strokeStyle = '#fff'; o.stroke();
     o.fillStyle = '#fff'; o.beginPath(); o.moveTo(100, 82); o.lineTo(140, 148); o.lineTo(60, 148); o.closePath(); o.fill(); o.fillStyle = '#c41d1d'; o.font = 'bold 44px "DejaVu Sans"'; o.textAlign = 'center'; o.fillText('!', 100, 125);
     o.fillStyle = '#fff'; o.textAlign = 'left'; o.font = 'bold 24px "DejaVu Sans"'; o.fillText('ALERTA EXTREMO • DEFESA CIVIL', 170, 92); o.font = 'bold 36px "DejaVu Sans"'; o.fillText('FIQUE EM LOCAL FECHADO', 170, 138); o.globalAlpha = 1; }
   // efeitos sonoros escritos
@@ -521,13 +555,14 @@ function overlay(t) {
   // falas
   for (const [a, b, who, s] of SUBS) if (t >= a && t <= b) {
     const al = Math.min(1, (t - a) / 0.12, (b - t) / 0.12); o.globalAlpha = al;
-    const lines = wrap(s, 600), y0 = (t > 40.2 && t < 45 ? 1110 : 880) - (lines.length - 1) * 22;
+    const lines = wrap(s, 600), y0 = (t > 42.6 && t < 47.4 ? 1110 : 880) - (lines.length - 1) * 22;
     otext(who, 360, y0 - 52, 22, COL[who], 6);
     lines.forEach((l, i) => otext(l, 360, y0 + i * 46, 34, COL[who], 8));
     o.globalAlpha = 1;
   }
 }
 function endScreen(t) {
+  t -= 10.4;
   const k = ease(prog(t, 62.9, 63.6));
   o.fillStyle = `rgba(10,10,14,${0.82 * k})`; o.fillRect(0, 0, W, H);
   if (t < 63.1) return;
@@ -548,16 +583,17 @@ function endScreen(t) {
 // ---------------------------- quadro final ----------------------------
 function renderFrame(t) {
   c.save(); c.fillStyle = '#000'; c.fillRect(0, 0, SW, SH);
-  if (t < 30.6) classroom(t);
-  else if (t < 44.95) { windowSet(t); phoneOverlay(t); }
-  else if (t < 49.4) glassAttack(t);
-  else if (t < 62.8) doorSet(t);
-  else doorSet(62.8);
+  if (t < 33.0) classroom(t);
+  else if (t < 47.35) { windowSet(t); phoneOverlay(t); }
+  else if (t < 51.8) glassAttack(t);
+  else if (t < 59.8) classroom(t);
+  else if (t < 73.2) doorSet(t);
+  else doorSet(73.2);
   // transições "chicote"
   const whip = (a) => { const d = Math.abs(t - a); if (d < 0.22) { const k = 1 - d / 0.22; c.save(); c.globalAlpha = 0.85 * k; c.filter = 'blur(18px)'; c.drawImage(src, -140 * k, 0); c.drawImage(src, 140 * k, 0); c.restore(); } };
-  whip(30.6); whip(44.95); whip(49.4);
+  whip(33.0); whip(47.35); whip(51.8); whip(59.8);
   // flash do estrondo
-  if (t > 20 && t < 20.35) { c.fillStyle = `rgba(255,255,240,${0.8 * (1 - (t - 20) / 0.35)})`; c.fillRect(0, 0, SW, SH); }
+  if (t > 16.5 && t < 16.85) { c.fillStyle = `rgba(255,255,240,${0.8 * (1 - (t - 16.5) / 0.35)})`; c.fillRect(0, 0, SW, SH); }
   // fade de entrada
   if (t < 0.4) { c.fillStyle = `rgba(0,0,0,${1 - t / 0.4})`; c.fillRect(0, 0, SW, SH); }
   c.restore();
