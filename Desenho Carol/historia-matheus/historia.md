@@ -43,9 +43,14 @@ Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 - O público vota nos comentários. A opção mais votada vira o próximo episódio.
 - Mesmo formato do Bilhete na Porta.
 
-### Escolha do fim do Ep. 1
+### Escolha do fim do Ep. 1 (aprovada)
 
-A definir com a Carol. Ideia descartada: "dinheiro para o aluguel ou para o aniversário" (o aniversário não entra como opção agora).
+A mãe pergunta "Onde você tava até agora, Matheus?"
+
+- **A:** conta a verdade (que vende paçoca no semáforo).
+- **B:** esconde da mãe e continua vendendo escondido.
+
+Roteiro em `ep01/roteiro.md`. Ideia descartada: "dinheiro para o aluguel ou para o aniversário" (o aniversário não entra como opção agora).
 
 ## Decisões sobre o vídeo
 
