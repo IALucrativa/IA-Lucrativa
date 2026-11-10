@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 960" width="600" height="960">
+<rect width="600" height="960" fill="#fdf3dc"/>
+<ellipse cx="300" cy="905" rx="150" ry="20" fill="#e8d9b8"/>
+
+<!-- cabelo de trás (liso, até o ombro) -->
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M174,250 Q166,118 300,112 Q434,118 426,250 L438,438 Q300,462 162,438 Z" fill="#4a2e1f"/>
+<!-- pernas e sapatos -->
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M214,650 L210,866 L292,866 L300,716 L308,866 L390,866 L386,650 Z" fill="#2f2f3a"/>
+<path d="M300,716 L300,668" stroke="#14141a" stroke-width="5"/>
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M196,872 Q198,850 222,852 L284,856 Q300,866 298,890 L196,890 Z" fill="#14141a"/>
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M404,872 Q402,850 378,852 L316,856 Q300,866 302,890 L404,890 Z" fill="#14141a"/>
+<!-- pescoço -->
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M274,372 L274,418 L326,418 L326,372 Z" fill="#efc6a6"/>
+<!-- braços -->
+<path d="M192,440 Q170,540 190,630" fill="none" stroke="#2a2233" stroke-width="44" stroke-linecap="round"/><path d="M192,440 Q170,540 190,630" fill="none" stroke="#f6d3b6" stroke-width="30" stroke-linecap="round"/>
+<path d="M408,440 Q430,540 410,630" fill="none" stroke="#2a2233" stroke-width="44" stroke-linecap="round"/><path d="M408,440 Q430,540 410,630" fill="none" stroke="#f6d3b6" stroke-width="30" stroke-linecap="round"/>
+<circle stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" cx="190" cy="640" r="22" fill="#f6d3b6"/>
+<circle stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" cx="410" cy="640" r="22" fill="#f6d3b6"/>
+<!-- camisa polo vermelha do mercado -->
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M224,404 Q300,424 376,404 L414,420 L436,500 L394,512 L390,490 L390,660 L210,660 L210,490 L206,512 L164,500 L186,420 Z" fill="#d6453d"/>
+<path d="M170,486 L208,498 M430,486 L392,498" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+<!-- gola polo -->
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M258,406 L300,446 L280,456 L246,416 Z" fill="#ffffff"/>
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M342,406 L300,446 L320,456 L354,416 Z" fill="#ffffff"/>
+<path d="M300,446 L300,500" stroke="#2a2233" stroke-width="5"/>
+<circle cx="300" cy="470" r="4" fill="#2a2233"/><circle cx="300" cy="490" r="4" fill="#2a2233"/>
+<!-- crachá -->
+<rect stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" x="318" y="500" width="62" height="40" rx="6" fill="#ffffff"/>
+<rect x="322" y="504" width="54" height="12" rx="3" fill="#1f9d55"/>
+<text x="349" y="533" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="12" fill="#2a2233">SANDRA</text>
+<path d="M340,500 L330,470 M358,500 L366,470" stroke="#2a2233" stroke-width="3"/>
+<!-- logo do mercado na manga/peito -->
+<text x="252" y="530" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="16" fill="#ffd34d">MAIS</text>
+<text x="252" y="548" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="12" fill="#ffd34d">MERCADO</text>
+<!-- orelhas e cabeça -->
+<circle stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" cx="182" cy="276" r="22" fill="#f6d3b6"/>
+<circle stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" cx="418" cy="276" r="22" fill="#f6d3b6"/>
+<ellipse stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" cx="300" cy="262" rx="120" ry="122" fill="#f6d3b6"/>
+<!-- franja lisa repartida de lado -->
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M180,262 Q176,132 300,124 Q424,132 420,262 Q408,196 356,172 Q300,160 262,178 Q214,200 180,262 Z" fill="#4a2e1f"/>
+<path d="M262,178 Q300,140 356,140" stroke="#6b4a36" stroke-width="5" fill="none"/>
+<!-- fio branco -->
+<path d="M372,150 Q404,190 410,236" stroke="#cfc7c2" stroke-width="5" fill="none" stroke-linecap="round"/>
+<!-- sobrancelhas preocupadas -->
+<path d="M226,262 Q250,256 274,248" stroke="#4a2e1f" stroke-width="8" fill="none" stroke-linecap="round"/>
+<path d="M326,248 Q350,256 374,262" stroke="#4a2e1f" stroke-width="8" fill="none" stroke-linecap="round"/>
+<!-- olhos cansados (pálpebra caída) -->
+<circle stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" cx="252" cy="300" r="24" fill="#fff"/>
+<circle stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" cx="348" cy="300" r="24" fill="#fff"/>
+<circle cx="254" cy="306" r="13" fill="#3b2a20"/><circle cx="350" cy="306" r="13" fill="#3b2a20"/>
+<circle cx="258" cy="303" r="4" fill="#fff"/><circle cx="354" cy="303" r="4" fill="#fff"/>
+<path d="M226,298 A26,26 0 0 1 278,298 Z" fill="#f0c4a6"/>
+<path d="M322,298 A26,26 0 0 1 374,298 Z" fill="#f0c4a6"/>
+<path d="M226,298 L278,298 M322,298 L374,298" stroke="#2a2233" stroke-width="6" stroke-linecap="round"/>
+<path d="M226,298 A26,26 0 0 1 278,298 M322,298 A26,26 0 0 1 374,298" stroke="#2a2233" stroke-width="7" fill="none"/>
+<!-- olheiras -->
+<path d="M234,334 Q252,344 272,334 M328,334 Q348,344 366,334" stroke="#b98a7a" stroke-width="5" fill="none" stroke-linecap="round"/>
+<!-- bochechas leves -->
+<ellipse cx="214" cy="342" rx="15" ry="9" fill="#f39a9a" opacity=".45"/>
+<ellipse cx="386" cy="342" rx="15" ry="9" fill="#f39a9a" opacity=".45"/>
+<!-- nariz e boca cansada -->
+<path d="M294,322 Q300,334 308,326" stroke="#c98a6a" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M276,360 Q300,368 324,358" stroke="#2a2233" stroke-width="6" fill="none" stroke-linecap="round"/>
+<!-- gota de suor -->
+<path stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" d="M420,214 Q432,236 420,244 Q408,236 420,214 Z" fill="#8fd3ff" stroke-width="4"/>
+
+<g transform="rotate(-4 300 50)"><rect stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" x="198" y="22" width="204" height="56" rx="16" fill="#1f9d55"/>
+<text x="300" y="62" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="30" fill="#fff">SANDRA</text></g>
+<rect stroke="#2a2233" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" x="222" y="924" width="156" height="30" rx="12" fill="#fff"/>
+<text x="300" y="946" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="18" fill="#2a2233">48 ANOS</text>
+</svg>

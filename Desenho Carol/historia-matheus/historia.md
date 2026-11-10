@@ -7,8 +7,8 @@ Contada pela Carol. Este arquivo vai crescendo conforme ela conta o resto.
 | Personagem | Idade | Quem é |
 |---|---|---|
 | **Matheus** | 17 anos | Filho mais velho. Protagonista. Quer ajudar a mãe e fazer algo pelo aniversário da irmã. |
-| **Sandra** | 48 anos | A mãe. Trabalha no caixa de um mercado grande. Ganha pouco. |
-| **Bia** | quase 3 anos | A irmãzinha. O aniversário dela está chegando. |
+| **Sandra** | 48 anos | A mãe. Trabalha no caixa de um mercado grande. Ganha pouco. Cabelo liso, cara de cansada. |
+| **Bia** | quase 3 anos | A irmãzinha. O aniversário dela está chegando. Cabelo cacheado. |
 | **Vó** | — | Avó do Matheus e da Bia. Cuida da Bia à tarde. (Personagem de apoio.) |
 
 Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
@@ -50,4 +50,24 @@ A definir com a Carol. Ideia descartada: "dinheiro para o aluguel ou para o aniv
 ## Decisões sobre o vídeo
 
 - **Tela verde com moedas** (o dinheiro que o Matheus ganha com o público): **só a partir do Ep. 2**. O jeito de ele ganhar dinheiro ainda vai ser definido pela Carol.
-- **@ do perfil:** a Carol vai mandar.
+- **@ do perfil:** @vocedecideai.tv
+
+## A meta do Matheus: R$ 3.000
+
+Aparece sempre no topo da tela, como no vídeo de referência ("META R$ 3.000,00").
+
+| O que ele precisa | Valor |
+|---|---|
+| Aluguel atrasado (3 meses × R$ 600) | R$ 1.800 |
+| Aniversário da Bia | R$ 500 |
+| Contas atrasadas da mãe | R$ 700 |
+| **Total** | **R$ 3.000** |
+
+Obs.: a Carol falou em R$ 500 de contas, mas aí a soma dá R$ 2.800. Para fechar nos R$ 3.000 que ela quer, as contas ficaram em R$ 700 (a confirmar).
+
+## Gorjetas do público (a partir do Ep. 2)
+
+Igual ao vídeo de referência: tela verde, moedas caindo, uma lista com quanto vale cada coisa e o aviso "GORJETAS FICTÍCIAS • VALORES DA ANIMAÇÃO".
+
+- **Cada seguidor novo:** R$ 1,00
+- Os outros valores (curtida, compartilhamento, salvamento, comentário) ainda a definir. Sugestão: copiar os do vídeo de referência (curtida R$ 0,70, compartilhamento R$ 0,75, salvamento R$ 0,35, comentário R$ 0,05).
