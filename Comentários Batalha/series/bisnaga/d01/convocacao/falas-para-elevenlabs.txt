@@ -1,0 +1,59 @@
+BISNAGA · DESAFIO 1 · CONVOCAÇÃO
+Narração para o ElevenLabs (uma voz só: o narrador)
+
+COMO GERAR
+- Voz: a do narrador da série (grave, calma, de documentário). Use sempre a mesma.
+- Modelo: Eleven Multilingual v2 (fala português do Brasil).
+- Ajustes sugeridos: Estabilidade 50 · Similaridade 75 · Estilo 0 · Velocidade 0,95.
+- Gere um bloco por vez. Copie só o texto entre aspas (sem as aspas).
+- Baixe em MP3 e salve com o nome indicado em: series/bisnaga/d01/convocacao/audios/
+- As reticências (...) são pausas. Os nomes dos tipos estão em minúsculas de propósito:
+  em maiúsculas, a voz pode soletrar letra por letra.
+- Se uma palavra sair estranha, gere de novo só aquele bloco.
+
+------------------------------------------------------------
+
+01-abertura.mp3
+"Dez mil pinguins de geladeira... acabaram de ganhar vida."
+
+02-dormindo.mp3
+"E o único que pode parar eles... está dormindo."
+
+03-bisnaga.mp3
+"Esse é o Bisnaga, gato da padaria. E o exército dele... quem monta é você."
+
+04-sozinho.mp3
+"Sozinho, ele não segura nem o primeiro pinguim."
+
+05-regra.mp3
+"Cada comentário... é um gato a mais."
+
+06-acougue.mp3
+"Se comentar açougue, chega o mais forte do bairro... mas ele só luta depois de comer."
+
+07-feirante.mp3
+"Se comentar feirante, chega um que grita mais alto que a feira inteira... até ficar rouco."
+
+08-loterica.mp3
+"Lotérica acerta tudo sem querer... e erra tudo quando tenta."
+
+09-salao.mp3
+"E salão luta com estilo... mas foge se despentear."
+
+10-pinguins.mp3
+"Os pinguins: vinte centímetros de louça. Não sentem frio. E escorregam mais rápido do que qualquer gato corre."
+
+11-meta.mp3
+"Se passar de quinhentos comentários... vocês vão ouvir uma musiquinha. E o bairro inteiro vai abrir a janela."
+
+12-prazo.mp3
+"Vocês têm vinte e quatro horas. Amanhã, ao meio-dia, a gente conta comentário por comentário. Nem um gato a mais, nem um a menos. E quem tiver mais pedidos... abre a fila."
+
+13-ameaca.mp3
+"Por enquanto, o exército do Bisnaga... é o Bisnaga. E os pinguins já desceram da geladeira."
+
+14-pergunta.mp3
+"Quem você convoca?"
+
+------------------------------------------------------------
+14 arquivos. Quando todos estiverem na pasta audios/, me avise.
