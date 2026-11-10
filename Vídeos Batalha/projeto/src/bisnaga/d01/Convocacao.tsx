@@ -22,7 +22,7 @@ const camMove = (de: {pos: Vec; alvo: Vec}, para: {pos: Vec; alvo: Vec}, k: numb
 });
 
 // queda de um gato no balcão (0 = no ar, 1 = pousou), com quiquezinho
-const queda = (f: number, inicio: number) => {
+export const queda = (f: number, inicio: number) => {
   const k = Math.max(0, Math.min(1, (f - inicio) / 9));
   const y = (1 - k * k) * 0.9;
   const quique = f - inicio > 9 && f - inicio < 15 ? Math.sin(((f - inicio - 9) / 6) * Math.PI) * 0.03 : 0;
@@ -72,7 +72,7 @@ const Lousa: React.FC<{pos: Vec; giro: number}> = ({pos, giro}) => {
   );
 };
 
-const Farinha: React.FC<{f: number; centro: Vec}> = ({f, centro}) => {
+export const Farinha: React.FC<{f: number; centro: Vec}> = ({f, centro}) => {
   const m = useMaterial(ESTILO);
   return (
     <>
@@ -97,7 +97,7 @@ const Titulo: React.FC<{f: number}> = ({f}) => {
   );
 };
 
-const Placar: React.FC<{gatos: number; pulso?: number}> = ({gatos, pulso = 0}) => (
+export const Placar: React.FC<{gatos: number; pulso?: number}> = ({gatos, pulso = 0}) => (
   <div style={{position: 'absolute', top: 250, width: '100%', display: 'flex', justifyContent: 'center', gap: 70, textShadow: SOMBRA}}>
     <div style={{textAlign: 'center'}}>
       <div style={{color: AMARELO, fontWeight: 800, fontSize: 32, letterSpacing: 3}}>GATOS</div>
@@ -111,7 +111,7 @@ const Placar: React.FC<{gatos: number; pulso?: number}> = ({gatos, pulso = 0}) =
   </div>
 );
 
-const Etiqueta: React.FC<{texto: string; x: number; y: number; linha?: number; f: number; amarela?: boolean; tam?: number}> = ({
+export const Etiqueta: React.FC<{texto: string; x: number; y: number; linha?: number; f: number; amarela?: boolean; tam?: number}> = ({
   texto,
   x,
   y,
@@ -129,7 +129,7 @@ const Etiqueta: React.FC<{texto: string; x: number; y: number; linha?: number; f
   );
 };
 
-const NumeroGrande: React.FC<{num: string; rotulo?: string; f: number}> = ({num, rotulo, f}) => {
+export const NumeroGrande: React.FC<{num: string; rotulo?: string; f: number}> = ({num, rotulo, f}) => {
   const k = interpolate(f, [0, 6], [1.6, 1], {extrapolateRight: 'clamp'});
   const o = interpolate(f, [0, 3], [0, 1], {extrapolateRight: 'clamp'});
   return (

@@ -317,6 +317,8 @@ export type ParamsCena = {
   olhoAberto?: number;
   janela?: number; // 0..1: luz da rua acendendo
   extras?: React.ReactNode;
+  recuoChao?: number; // empurra os pinguins do chão para trás (m)
+  bisnaga?: {pos: Vec; giro: number}; // onde o Bisnaga dorme (padrão: no balcão, perto da luminária)
 };
 
 export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
@@ -333,6 +335,8 @@ export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
   olhoAberto = 0,
   janela = 0,
   extras = null,
+  recuoChao = 0,
+  bisnaga = {pos: [0.14, 0.92, 0.22], giro: -0.95},
 }) => {
   const p = PALETAS[estilo];
   const m = useMaterial(estilo);
@@ -448,7 +452,7 @@ export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
       <Peca forma={{tipo: 'cilindro', r: 0.025, h: 0.4}} pos={[0.36, 0.95, -0.15]} rot={[Math.PI / 2, 0, 0.3]} mat={m(p.madeira)} estilo={estilo} />
       <Peca forma={{tipo: 'cilindro', r: 0.18, h: 0.006}} pos={[0.14, 0.925, 0.35]} esc={[1.3, 1, 0.8]} mat={m(p.farinha)} estilo={estilo} contorno={0} />
 
-      <Bisnaga estilo={estilo} p={p} pos={[0.14, 0.92, 0.22]} giro={-0.95} respira={respira} olhoAberto={olhoAberto} />
+      <Bisnaga estilo={estilo} p={p} pos={bisnaga.pos} giro={bisnaga.giro} respira={respira} olhoAberto={olhoAberto} />
 
       {/* geladeiras no fundo, a da direita aberta */}
       {[-1.4, 1.4].map((x) => (
@@ -480,7 +484,7 @@ export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
           if (i < derrubados) tomba = 1;
         }
         if (pg.onde === 'chao') {
-          z += marcha * 0.8 + escorregando * 1.8;
+          z += marcha * 0.8 + escorregando * 1.8 - recuoChao;
           tomba = escorregando > 0 ? Math.min(1, escorregando * 4) : 0;
           if (marcha > 0 && !escorregando) balanco = Math.sin(t * 9 + pg.fase) * 0.12;
         }
