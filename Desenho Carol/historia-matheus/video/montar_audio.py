@@ -38,7 +38,10 @@ def fim_da_fala(f):
 # --- textos (lidos do timeline.js)
 tl = open(os.path.join(AQUI, 'timeline.js'), encoding='utf-8').read()
 frases = re.findall(r"\{ id: '(\w+)', voz: '(\w+)', cena: '\w+', texto: '([^']+)' \}", tl)
-narr = [(i, t.replace('*', '')) for i, v, t in frases if v == 'narrador']
+# Falas que NÃO estão no narrador.mp3: cada uma vem de um arquivo próprio e é encaixada depois de outra frase.
+CLIPES = [('N7', 'B1', 'bia.mp3'), ('N8', 'N8b', 'gorjetas.mp3'), ('N11', 'S1', 'sandra.mp3')]
+PROVISORIO = 7.0  # segundos de silêncio enquanto o áudio de um clipe não chega
+narr = [(i, t.replace('*', '')) for i, v, t in frases if v == 'narrador' and i not in {c[1] for c in CLIPES}]
 
 
 def trechos(txt):
@@ -131,7 +134,8 @@ def dividir(txt, a, b):
 ids = [i for i, _ in narr]
 idx = {i: k for k, i in enumerate(ids)}
 GAP = 0.35
-insercoes = [('N7', 'B1', 'bia.mp3'), ('N11', 'S1', 'sandra.mp3')]
+insercoes = CLIPES
+faltando = [a for _, _, a in CLIPES if not os.path.exists(os.path.join(PASTA, a))]
 tempos = {}
 offset = 0.0
 pecas = []  # (arquivo, ini, fim) do narrador ou clipe
@@ -140,7 +144,7 @@ for apos, fid, arq in insercoes:
     corte = spans[idx[apos]][1] + 0.12
     pecas.append(('N', cursor, corte))
     cursor = corte
-    pecas.append((arq, 0.0, fim_da_fala(os.path.join(PASTA, arq))))
+    pecas.append((arq, 0.0, PROVISORIO if arq in faltando else fim_da_fala(os.path.join(PASTA, arq))))
 pecas.append(('N', cursor, DN))
 
 # tempos: narrador desloca conforme os clipes inseridos antes
@@ -182,8 +186,10 @@ for apos, fid, arq in insercoes:
 # --- montar o áudio com ffmpeg
 filtros, entradas = [], []
 for k, p in enumerate(pecas):
-    arq = fN if p[0] == 'N' else os.path.join(PASTA, p[0])
-    entradas += ['-i', arq]
+    if p[0] in faltando:
+        entradas += ['-f', 'lavfi', '-t', str(PROVISORIO), '-i', f'anullsrc=r={SR}:cl=mono']
+    else:
+        entradas += ['-i', fN if p[0] == 'N' else os.path.join(PASTA, p[0])]
     f = f'[{k}:a]aresample={SR},aformat=channel_layouts=mono,atrim={p[1]}:{p[2]},asetpts=PTS-STARTPTS'
     if p[0] != 'N':
         f += f',adelay={int(GAP * 1000)},apad=pad_dur={GAP}'
@@ -198,5 +204,6 @@ open(os.path.join(AQUI, 'audio-tempos.js'), 'w', encoding='utf-8').write(
     'window.TEMPOS = ' + json.dumps(tempos, ensure_ascii=False, indent=1) + ';\n')
 
 print(f'narrador: {DN:.1f} s, áudio final: {dur(mix):.1f} s')
+if faltando: print('AINDA SEM ÁUDIO (silêncio no lugar):', ', '.join(faltando))
 for fid, v in tempos.items():
     print(f"{fid:4s} {v['start']:6.2f} – {v['end']:6.2f}  trechos: {len(v['trechos'])}")

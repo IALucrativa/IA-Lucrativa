@@ -347,6 +347,44 @@ const CENAS = {
     return s;
   },
 
+  gorjetas(ep, t, c) {
+    let s = fundoVerde(t);
+    const ic = {
+      seguidor: `<circle cx="0" cy="-8" r="9" fill="${COR.azul}"/><path d="M-15,14 Q-15,0 0,0 Q15,0 15,14 Z" fill="${COR.azul}"/>`,
+      curtida: `<path d="M0,13 C-26,-4 -14,-24 0,-10 C14,-24 26,-4 0,13 Z" fill="${COR.vermelho}"/>`,
+      compart: `<path d="M-15,2 L16,-13 L6,16 L1,5 Z" fill="${COR.azul}"/>`,
+      salvar: `<path d="M-10,-14 L10,-14 L10,15 L0,7 L-10,15 Z" fill="${COR.laranja}"/>`,
+      coment: `<path d="M-15,-12 L15,-12 L15,6 L-2,6 L-10,14 L-8,6 L-15,6 Z" fill="${COR.verde}"/>`,
+    };
+    const linhas = [
+      ['seguidor', 'CADA SEGUIDOR NOVO', 'R$ 1,00', 'seguidor'],
+      ['curtida', 'CADA CURTIDA', 'R$ 0,70', 'curtida'],
+      ['compart', 'CADA COMPARTILHAMENTO', 'R$ 0,75', 'compartilhamento'],
+      ['salvar', 'CADA SALVAMENTO', 'R$ 0,35', 'salvamento'],
+      ['coment', 'CADA COMENTÁRIO', 'R$ 0,05', 'comentário'],
+    ];
+    s += `<g transform="translate(360,600)">
+      <rect x="-300" y="-250" width="608" height="520" rx="30" fill="${INK_}"/>
+      <rect x="-306" y="-258" width="608" height="520" rx="30" fill="#fff" stroke="${INK_}" stroke-width="7"/>
+      <text x="0" y="-194" text-anchor="middle" class="t" font-size="40" fill="${COR.verde}">GORJETAS PRO MATHEUS</text>`;
+    linhas.forEach(([k, a, b, w], i) => {
+      const t0 = wt(ep, 'N8b', w);
+      const kk = easeOutBack((t - t0) / 0.3);
+      if (kk <= 0) return;
+      const brilho = clamp(1 - (t - t0) / 0.8);
+      s += `<g transform="translate(0,${-120 + i * 80}) scale(${kk})">
+        <rect x="-275" y="-33" width="550" height="64" rx="14" fill="${brilho > 0 ? '#fff4c2' : '#f2f7f3'}" stroke="#d3e6d9" stroke-width="3"/>
+        <g transform="translate(-240,-1)">${ic[k]}</g>
+        <text x="-208" y="11" class="t" font-size="25" fill="${INK_}">${a}</text>
+        <rect x="140" y="-22" width="122" height="42" rx="12" fill="${COR.verde}"/>
+        <text x="201" y="10" text-anchor="middle" class="t" font-size="27" fill="#fff">${b}</text></g>`;
+    });
+    s += '</g>';
+    s += etiqueta(t, c.start + 0.15, 360, 220, 'VOCÊ PODE AJUDAR 💛', 'amarelo', { fs: 52, txt: INK_, rot: -3 });
+    s += etiqueta(t, wt(ep, 'N8b', 'seguidor') + 0.4, 360, 1160, 'GORJETAS FICTÍCIAS • VALORES DA ANIMAÇÃO', COR.escuro, { fs: 22, rot: 0 });
+    return s;
+  },
+
   rotina(ep, t, c) {
     const u = t - c.start;
     const tb = wt(ep, 'N9', 'busca'), tv = wt(ep, 'N9', 'deixa'), ts = wt(ep, 'N9', 'vai');

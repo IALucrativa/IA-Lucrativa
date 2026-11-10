@@ -18,6 +18,7 @@ const EP = {
     { id: 'N7', voz: 'narrador', cena: 'aniver', texto: 'E daqui a *sete dias*... a *Bia*, irmãzinha dele, faz *três anos*.' },
     { id: 'B1', voz: 'bia', cena: 'aniver', texto: 'Vai ter *bolo*, Matheus?' },
     { id: 'N8', voz: 'narrador', cena: 'meta', texto: 'Dois mil e *oitocentos* reais. Em *sete dias*.' },
+    { id: 'N8b', voz: 'narrador', cena: 'gorjetas', texto: 'E você pode *ajudar*! Cada *seguidor* novo vale *um real* pro Matheus. *Curtida*, *compartilhamento*, *salvamento* e *comentário* também *contam*.' },
     { id: 'N9', voz: 'narrador', cena: 'rotina', texto: 'Então todo dia, ele sai da *escola*, busca a *Bia*, deixa na casa da *vó*... e vai pro *semáforo*.' },
     { id: 'N10', voz: 'narrador', cena: 'rotina', texto: 'No primeiro dia, vendeu *trinta e oito* paçocas.' },
     { id: 'N11', voz: 'narrador', cena: 'virada', texto: 'Só que naquela *noite*... a mãe dele tava *esperando*.' },

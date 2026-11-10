@@ -54,7 +54,7 @@ Roteiro em `ep01/roteiro.md`. Ideia descartada: "dinheiro para o aluguel ou para
 
 ## Decisões sobre o vídeo
 
-- **Tela verde com moedas** (o dinheiro que o Matheus ganha com o público): **só a partir do Ep. 2**. O jeito de ele ganhar dinheiro ainda vai ser definido pela Carol.
+- **Tela verde com moedas:** no Ep. 1 só aparece a tabela (cada seguidor R$ 1 etc.). A contagem do dinheiro ganho começa no Ep. 2.
 - **@ do perfil:** @vocedecideai.tv
 
 ## A meta do Matheus: R$ 2.800
@@ -68,7 +68,10 @@ Aparece sempre no topo da tela, como no vídeo de referência ("META R$ 2.800,00
 | Contas atrasadas da mãe | R$ 500 |
 | **Total** | **R$ 2.800** |
 
-## Gorjetas do público (a partir do Ep. 2)
+## Gorjetas do público
+
+- **Ep. 1:** só apresenta a tabela de valores (cena nova depois da meta, com narração própria).
+- **A partir do Ep. 2:** mostra quanto o Matheus ganhou com o engajamento do episódio anterior.
 
 Igual ao vídeo de referência: tela verde, moedas caindo, uma lista com quanto vale cada coisa e o aviso "GORJETAS FICTÍCIAS • VALORES DA ANIMAÇÃO".
 

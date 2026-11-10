@@ -35,3 +35,8 @@ Vai ter bolo, Matheus?
 === SANDRA (voz de mulher cansada, uns 48 anos, gerar separado) ===
 
 Onde você tava até agora, Matheus?
+
+
+=== GORJETAS (NOVO: mesma voz do narrador, gerar separado e salvar como "gorjetas") ===
+
+E você pode ajudar! Cada seguidor novo vale um real pro Matheus. Curtida, compartilhamento, salvamento e comentário também contam.
