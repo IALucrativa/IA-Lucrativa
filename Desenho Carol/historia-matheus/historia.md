@@ -26,7 +26,7 @@ Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 
 ## A rotina do Matheus (todo dia)
 
-1. Sai do trabalho (ou da escola: a confirmar com a Carol).
+1. Sai da escola.
 2. Busca a Bia na escolinha.
 3. Deixa a Bia na casa da avó.
 4. Vai para o sinal (semáforo) vender bala ou paçoca.
@@ -34,5 +34,4 @@ Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 ## Falta a Carol contar
 
 - O que acontece depois (meio e final).
-- O Matheus sai do trabalho ou da escola?
 - Referências de como ela quer o desenho.
