@@ -20,6 +20,7 @@ const { spawn } = require('child_process');
     for (const s of rest) fs.writeFileSync(path.join(target, `t${s}.jpg`), await grab(parseFloat(s)));
   } else {
     const fps = 30, dur = await page.evaluate(() => DURATION), n = Math.round(dur * fps);
+    if (dur < 60 || dur > 120) { console.error(`Regra do projeto: o vídeo precisa ter entre 60 s e 120 s (atual: ${dur} s).`); process.exit(1); }
     const audio = rest[0];
     const args = ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-'];
     if (audio) args.push('-i', audio);
