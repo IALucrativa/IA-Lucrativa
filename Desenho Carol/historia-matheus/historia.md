@@ -9,6 +9,7 @@ Contada pela Carol. Este arquivo vai crescendo conforme ela conta o resto.
 | **Matheus** | 17 anos | Filho mais velho. Protagonista. Quer ajudar a mãe e fazer algo pelo aniversário da irmã. |
 | **Sandra** | 48 anos | A mãe. Trabalha no caixa de um mercado grande. Ganha pouco. |
 | **Bia** | quase 3 anos | A irmãzinha. O aniversário dela está chegando. |
+| **Vó** | — | Avó do Matheus e da Bia. Cuida da Bia à tarde. (Personagem de apoio.) |
 
 Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 
@@ -22,9 +23,16 @@ Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 - O aluguel está atrasado há 3 meses.
 - O aniversário da irmã mais nova está chegando.
 - O Matheus quer fazer alguma coisa pela irmã e ajudar a mãe.
-- (A abertura dá a entender que ele começa a vender bala e paçoca.)
+
+## A rotina do Matheus (todo dia)
+
+1. Sai do trabalho (ou da escola: a confirmar com a Carol).
+2. Busca a Bia na escolinha.
+3. Deixa a Bia na casa da avó.
+4. Vai para o sinal (semáforo) vender bala ou paçoca.
 
 ## Falta a Carol contar
 
 - O que acontece depois (meio e final).
+- O Matheus sai do trabalho ou da escola?
 - Referências de como ela quer o desenho.
