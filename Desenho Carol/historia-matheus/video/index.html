@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Matheus & Bia: Ep. 1</title>
+<style>
+  @font-face { font-family: "Baloo 2"; font-weight: 700; src: url(fonts/baloo-2-latin-700-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Baloo 2"; font-weight: 800; src: url(fonts/baloo-2-latin-800-normal.woff2) format("woff2"); }
+  html, body { margin: 0; background: #000; }
+  svg { display: block; }
+  .o { stroke: #2a2233; stroke-width: 7; stroke-linejoin: round; stroke-linecap: round; }
+  .t { font-family: "Baloo 2", "Noto Color Emoji", sans-serif; font-weight: 800; }
+  .cap { fill: #fff; stroke: #1a1626; stroke-width: 14; paint-order: stroke; stroke-linejoin: round; letter-spacing: -0.5px; }
+  .small { fill: #fff; stroke: #1a1626; stroke-width: 5; paint-order: stroke; }
+  .big { fill: #fff; stroke: #1a1626; stroke-width: 12; paint-order: stroke; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<svg id="tela" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1280" width="720" height="1280"></svg>
+<script src="chars.js"></script>
+<script src="timeline.js"></script>
+<script src="audio-tempos.js" onerror="window.TEMPOS=null"></script>
+<script src="scenes.js"></script>
+<script>
+  const _wt = wt; // wt(ep, ...) definido em timeline.js
+  window.ready = (async () => {
+    await document.fonts.load('800 40px "Baloo 2"');
+    await document.fonts.load('700 40px "Baloo 2"');
+    prepararEpisodio(EP, window.TEMPOS || null);
+    window.DURACAO = EP.duracao;
+    window.CENAS_INFO = EP.cenas.map(c => ({ id: c.id, start: c.start, end: c.end }));
+    const tela = document.getElementById('tela');
+    window.renderAt = t => { tela.innerHTML = quadro(EP, t); };
+    const q = new URLSearchParams(location.search);
+    if (q.has('t')) renderAt(+q.get('t'));
+    else if (!navigator.webdriver) { // abrir no navegador: toca a animação
+      const t0 = performance.now();
+      const loop = () => { renderAt(((performance.now() - t0) / 1000) % EP.duracao); requestAnimationFrame(loop); };
+      loop();
+    }
+    return true;
+  })();
+</script>
+</body>
+</html>

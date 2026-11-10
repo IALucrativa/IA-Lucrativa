@@ -9,7 +9,7 @@ Contada pela Carol. Este arquivo vai crescendo conforme ela conta o resto.
 | **Matheus** | 17 anos | Filho mais velho. Protagonista. Quer ajudar a mãe e fazer algo pelo aniversário da irmã. |
 | **Sandra** | 48 anos | A mãe. Trabalha no caixa de um mercado grande. Ganha pouco. Cabelo liso, cara de cansada. |
 | **Bia** | quase 3 anos | A irmãzinha. O aniversário dela está chegando. Cabelo cacheado. |
-| **Vó** | — | Avó do Matheus e da Bia. Cuida da Bia à tarde. (Personagem de apoio.) |
+| **Vó Lurdes** | 72 anos | Avó do Matheus e da Bia. Cuida da Bia à tarde. (Personagem de apoio. Nome e idade sugeridos pelo Claude.) |
 
 Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 
