@@ -605,5 +605,20 @@ function renderFrame(t) {
   endScreen(t);
   return out.toDataURL('image/jpeg', 0.9);
 }
+// ------------------------------- CAPA -------------------------------
+function renderCover() {
+  c.save(); c.fillStyle = '#000'; c.fillRect(0, 0, SW, SH); windowSet(41.4); c.restore();
+  applyLens();
+  let g = o.createLinearGradient(0, 0, 0, 420); g.addColorStop(0, 'rgba(0,0,0,.85)'); g.addColorStop(1, 'rgba(0,0,0,0)'); o.fillStyle = g; o.fillRect(0, 0, W, 420);
+  g = o.createLinearGradient(0, H - 420, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.9)'); o.fillStyle = g; o.fillRect(0, H - 420, W, 420);
+  otext('POV:', 360, 92, 44, '#fff', 8);
+  otext('VOCÊ TÁ FAZENDO PROVA', 360, 160, 42, '#fff', 10);
+  otext('QUANDO ELES CHEGAM...', 360, 225, 44, '#ffd23f', 11);
+  o.save(); o.translate(360, H - 170); o.rotate(-0.04);
+  o.fillStyle = '#c62828'; o.beginPath(); o.roundRect(-290, -62, 580, 124, 18); o.fill(); o.lineWidth = 7; o.strokeStyle = '#fff'; o.stroke();
+  otext('VOCÊ ABRIRIA A PORTA?', 0, 2, 40, '#fff', 7); o.restore();
+  return out.toDataURL('image/png');
+}
+window.renderCover = renderCover;
 window.renderFrame = renderFrame; window.DURATION = DURATION;
 </script></body></html>

@@ -1,5 +1,6 @@
 // Uso:
 //   node render.js stills <pasta> 3 8 14 ...   -> salva quadros soltos (PNG/JPG) para conferir
+//   node render.js cover <capa_720.png>          -> capa do post
 //   node render.js video <saida.mp4> [audio.wav] -> renderiza o vídeo completo (30 fps)
 const { chromium } = require('playwright');
 const path = require('path');
@@ -15,7 +16,9 @@ const { spawn } = require('child_process');
   await page.waitForFunction(() => window.renderFrame);
   const grab = async t => Buffer.from((await page.evaluate(t => renderFrame(t), t)).split(',')[1], 'base64');
 
-  if (mode === 'stills') {
+  if (mode === 'cover') {
+    fs.writeFileSync(target, Buffer.from((await page.evaluate(() => renderCover())).split(',')[1], 'base64'));
+  } else if (mode === 'stills') {
     fs.mkdirSync(target, { recursive: true });
     for (const s of rest) fs.writeFileSync(path.join(target, `t${s}.jpg`), await grab(parseFloat(s)));
   } else {
