@@ -21,7 +21,7 @@ Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 
 - A mãe trabalha no caixa de um mercado grande e não recebe muito.
 - O aluguel está atrasado há 3 meses.
-- O aniversário da irmã mais nova está chegando.
+- O aniversário da Bia é **daqui a 7 dias**. Isso é apresentado ao público logo no começo (é o prazo da história), mas **não** entra como opção de voto agora.
 - O Matheus quer fazer alguma coisa pela irmã e ajudar a mãe.
 
 ## A rotina do Matheus (todo dia)
@@ -43,9 +43,6 @@ Nomes da mãe e da irmã sugeridos pelo Claude. A Carol pode trocar.
 - O público vota nos comentários. A opção mais votada vira o próximo episódio.
 - Mesmo formato do Bilhete na Porta.
 
-### Ideia de escolha para o fim do Ep. 1 (sugestão do Claude)
+### Escolha do fim do Ep. 1
 
-No fim da primeira semana no semáforo, o Matheus juntou um dinheiro, mas não dá para tudo.
-
-- **A:** entrega o dinheiro para a mãe ajudar no aluguel.
-- **B:** guarda o dinheiro para o aniversário da Bia.
+A definir com a Carol. Ideia descartada: "dinheiro para o aluguel ou para o aniversário" (o aniversário não entra como opção agora).
