@@ -7,6 +7,7 @@ import {Cena3D, ParamsCena, Peca, Pinguim, texturaCanvas, useMaterial, Vec} from
 import {GatoSentado, Pelagem} from '../Gatos';
 import {ELENCO} from '../Elenco';
 import {Etiqueta, Farinha, NumeroGrande, Placar, queda} from './Convocacao';
+import {Capa, CapaProps} from '../Capa';
 import {Bloco, CenaBatalha, ConfigBatalha, soldados, Tipo} from './batalhas';
 
 // Desafio 1 · Batalha: o exército real de cada plataforma contra os pinguins.
@@ -724,3 +725,15 @@ export const Batalha: React.FC<{cfg: ConfigBatalha}> = ({cfg}) => {
     </AbsoluteFill>
   );
 };
+
+// ---------- A cena da capa: o Bisnaga dormindo em cima da fornada, os pinguins empurrando ----------
+export const cenaCapaBatalha = (cfg: ConfigBatalha): ParamsCena => ({
+  cam: {pos: [1.15, 1.45, 0.9], alvo: [0.1, 1.2, -0.45], fov: 50},
+  marcha: 0.6,
+  recuo: 1.55,
+  recuoChao: 0.6,
+  bisnaga: {pos: [0.1, YB + 0.035, -0.3], giro: -0.45},
+  extras: [<Bandeja key="bandeja" />, <Empurradores key="emp" t={0.3} z={-0.62} />],
+});
+
+export const CapaBatalha: React.FC<Omit<CapaProps, 'cena'> & {cfg: ConfigBatalha}> = ({cfg, ...textos}) => <Capa {...textos} cena={cenaCapaBatalha(cfg)} />;
