@@ -97,7 +97,7 @@ function person(x, y, s, p) {
     if (pose === 'down') { path(shirt, () => c.roundRect(sx - 22 + side * 6, -205, 44, 120, 20)); rrect(sx - 18 + side * 12, -95, 36, 90, 16, p.sleeveSkin ? skin : skin); circ(sx + side * 14, -2, 22, skin); }
   };
   const L = p.armL || 'down', R = p.armR || 'down';
-  if (!p.handUp) arm(-1, L); arm(1, R);
+  if (!p.zarms) { if (!p.handUp) arm(-1, L); arm(1, R); }
   // tronco
   path(shirt, () => { c.moveTo(-84, -170); c.quadraticCurveTo(-84, -215, -40, -218); c.lineTo(40, -218); c.quadraticCurveTo(84, -215, 84, -170); c.lineTo(74, 12); c.lineTo(-74, 12); c.closePath(); });
   if (p.torn) { path('#4b3a2a', () => { c.moveTo(-74, 12); for (let i = 0; i <= 8; i++) c.lineTo(-74 + i * 18.5, i % 2 ? -12 : 10); c.lineTo(74, 12); c.closePath(); }, 3); ell(30, -120, 18, 26, '#6b2d2d', 3); }
@@ -152,9 +152,12 @@ function person(x, y, s, p) {
   if (R === 'point') { path(shirt, () => { c.moveTo(60, -200); c.lineTo(160, -250); c.lineTo(175, -215); c.lineTo(78, -150); c.closePath(); }); circ(185, -240, 24, skin); line(195, -245, 225, -262, 12, INK); line(195, -245, 225, -262, 6, skin); }
   if (L === 'cross' || R === 'cross') { path(shirt, () => c.roundRect(-80, -120, 160, 46, 22)); circ(-70, -98, 20, skin); circ(70, -98, 20, skin); }
   if (p.zarms) {
-    const w1 = Math.sin(p.zt * 3) * 10, w2 = Math.cos(p.zt * 3) * 10;
-    path(shirt, () => c.roundRect(-92, -205 + w1, 44, 80, 18)); path(shirt, () => c.roundRect(48, -200 + w2, 44, 80, 18));
-    zhand(-70, -110 + w1, 1.1); zhand(70, -104 + w2, 1.1);
+    const zarm = (side, w) => {
+      path(shirt, () => { c.moveTo(side * 58, -216); c.lineTo(side * 106, -204); c.lineTo(side * 110, -150 + w); c.lineTo(side * 66, -146 + w); c.closePath(); });
+      path(skin, () => c.roundRect(side > 0 ? 66 : -108, -158 + w, 42, 46, 14));
+      c.save(); c.translate(side * 86, -104 + w); c.rotate(Math.PI + side * 0.12); zhand(0, 0, 0.95, skin); c.restore();
+    };
+    zarm(-1, Math.sin(p.zt * 3) * 8); zarm(1, Math.cos(p.zt * 3) * 8);
   }
   if (p.handUp) { path(shirt, () => c.roundRect(-122, -330, 46, 150, 20)); rrect(-118, -400, 38, 90, 16, skin); path(skin, () => c.roundRect(-128, -462, 58, 70, 22)); for (let i = 0; i < 4; i++) rrect(-128 + i * 15, -500 + Math.abs(i - 1.5) * 5, 13, 44, 6, skin, 4); }
   if (p.desk) desk(0, 30, 1.05);
@@ -432,8 +435,8 @@ function glassAttack(T) {
   const k = ease(prog(t, 44.9, 45.25));
   rect(-50, -50, SW + 100, SH + 100, '#c9c2b1', 0);
   const sky = c.createLinearGradient(0, 0, 0, 700); sky.addColorStop(0, '#5f9fd8'); sky.addColorStop(1, '#d6ecf8'); rect(-50, -50, SW + 100, 640, sky, 0);
-  person(820, 1500, 2.4, { standing: true, skin: SKIN.z, shirt: '#b0b0b0', hair: 'long', hairCol: '#5a3a1a', expr: 'zombie', torn: true, zt: t, face: -0.2, mouth: 0.6 + 0.4 * Math.sin(t * 6) });
-  person(lerp(540, 470, k), lerp(2300, 1820, k), 3.2, { standing: true, skin: SKIN.z, shirt: '#24365c', hair: 'cap', hairCol: '#1c2a48', badge: true, expr: 'zombie', torn: true, face: 0, mouth: 0.7 + 0.3 * Math.sin(t * 7) });
+  person(820, 1500, 2.4, { standing: true, armL: 'none', armR: 'none', skin: SKIN.z, shirt: '#b0b0b0', hair: 'long', hairCol: '#5a3a1a', expr: 'zombie', torn: true, zt: t, face: -0.2, mouth: 0.6 + 0.4 * Math.sin(t * 6) });
+  person(lerp(540, 470, k), lerp(2300, 1820, k), 3.2, { standing: true, armL: 'none', armR: 'none', skin: SKIN.z, shirt: '#24365c', hair: 'cap', hairCol: '#1c2a48', badge: true, expr: 'zombie', torn: true, face: 0, mouth: 0.7 + 0.3 * Math.sin(t * 7) });
   [[300, 760, 45.0], [760, 820, 45.6], [420, 1180, 46.4], [700, 1240, 47.3]].forEach(([x, y, te], i) => { if (t >= te) zhand(x, y, 2.6 + (i % 2) * 0.3); });
   c.restore();
   // vidro + rachaduras
