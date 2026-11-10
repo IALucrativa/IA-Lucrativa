@@ -532,4 +532,10 @@ function quadro(ep, t) {
     ${legenda(ep, t, capY)}`;
 }
 
+// ---------- fundos para a capa
+const CENA_CAPA = {
+  semaforo: () => ceu('#ff9a5a', '#ffd9a0') + nuvem(600, 620, 0.9) + predios(940) + rua(1010) + semaforo(660, 560, 'r') + carro(110, 1180, '#2f6fe0', 0.9),
+  cozinhaNoite: () => cozinha(true) + mesa(910, true),
+};
+
 if (typeof module !== 'undefined') module.exports = { quadro };
