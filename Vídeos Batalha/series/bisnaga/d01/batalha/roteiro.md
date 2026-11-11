@@ -1,6 +1,6 @@
 # Desafio 1 · Batalha: "Os pinguins da geladeira"
 
-> **Aguardando aprovação.** Uma Batalha só, a mesma nas três plataformas (contagem somada).
+> **Aprovado em 11/11/2026.** Uma Batalha só, a mesma nas três plataformas (contagem somada).
 
 - **Contagem real:** 200 soldados (40 comuns, 50 AÇOUGUE, 40 FEIRANTE, 40 LOTÉRICA, 30 SALÃO). Placar: **GATOS 201 × 10.000 PINGUINS**.
 - **Faixa:** 200 ou mais, **vitória**: os pinguins fogem. Meta bônus (500) não batida: a musiquinha não toca.
