@@ -319,6 +319,8 @@ export type ParamsCena = {
   extras?: React.ReactNode;
   recuoChao?: number; // empurra os pinguins do chão para trás (m)
   bisnaga?: {pos: Vec; giro: number}; // onde o Bisnaga dorme (padrão: no balcão, perto da luminária)
+  tombaChao?: number; // pinguins do chão caídos, em metros contados da frente da multidão (a mais perto dos gatos)
+  portaGeladeira?: number; // 0 = aberta, 1 = fechada
 };
 
 export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
@@ -337,6 +339,8 @@ export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
   extras = null,
   recuoChao = 0,
   bisnaga = {pos: [0.14, 0.92, 0.22], giro: -0.95},
+  tombaChao = 0,
+  portaGeladeira = 0,
 }) => {
   const p = PALETAS[estilo];
   const m = useMaterial(estilo);
@@ -461,7 +465,14 @@ export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
           <Peca forma={{tipo: 'caixa', d: [0.04, 0.5, 0.04]}} pos={[x + (x < 0 ? 0.5 : -0.5), 1.2, -5.15]} mat={m('#777')} estilo={estilo} contorno={0} />
         </group>
       ))}
-      <Peca forma={{tipo: 'caixa', d: [0.05, 1.7, 0.6]}} pos={[2.06, 0.9, -4.9]} rot={[0, -0.9, 0]} mat={m(p.geladeira, {brilho: 0.6})} estilo={estilo} />
+      {portaGeladeira <= 0 ? (
+        <Peca forma={{tipo: 'caixa', d: [0.05, 1.7, 0.6]}} pos={[2.06, 0.9, -4.9]} rot={[0, -0.9, 0]} mat={m(p.geladeira, {brilho: 0.6})} estilo={estilo} />
+      ) : (
+        // a porta girando na dobradiça até fechar
+        <group position={[2.03, 0.9, -5.17]} rotation={[0, 0.68 * (1 - Math.min(1, portaGeladeira)), 0]}>
+          <Peca forma={{tipo: 'caixa', d: [0.6, 1.7, 0.05]}} pos={[-0.3, 0, 0.03]} mat={m(p.geladeira, {brilho: 0.6})} estilo={estilo} />
+        </group>
+      )}
 
       {/* forno e prateleiras de pão na parede da esquerda */}
       <Peca forma={{tipo: 'caixa', d: [0.7, 1.2, 1.2]}} pos={[-2.5, 0.6, -4.2]} mat={m(p.forno, {brilho: 0.5})} estilo={estilo} />
@@ -486,6 +497,7 @@ export const Cena3D: React.FC<{estilo: Estilo} & ParamsCena> = ({
         if (pg.onde === 'chao') {
           z += marcha * 0.8 + escorregando * 1.8 - recuoChao;
           tomba = escorregando > 0 ? Math.min(1, escorregando * 4) : 0;
+          if (tombaChao > 0 && pg.pos[2] > 0.2 - tombaChao) tomba = 1;
           if (marcha > 0 && !escorregando) balanco = Math.sin(t * 9 + pg.fase) * 0.12;
         }
         if (pg.onde === 'geladeira' && pulando > 0) {
