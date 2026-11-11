@@ -17,18 +17,18 @@ Para criar uma série, use a `entrevista-da-serie.md` adaptando as perguntas a e
 
 ## O ciclo de um desafio
 1. **Convocação** (dia 1): o herói sozinho contra N inimigos, o cardápio de tipos de soldado, a meta bônus, o prazo e a pergunta final. Termina com o herói ainda sozinho e o inimigo avançando.
-2. **Contagem** (antes da Batalha): a pessoa me passa os números reais **de cada plataforma**: total de comentários e quantos pediram cada tipo. Comentário que não cita um tipo conta como soldado comum. Se ela não souber contar, explico como (ou peço prints dos comentários).
+2. **Contagem** (antes da Batalha): a pessoa me passa os números reais **somados das três plataformas** (Instagram, TikTok e YouTube): total de comentários e quantos pediram cada tipo. Comentário que não cita um tipo conta como soldado comum. Se ela não souber contar, explico como (ou peço prints dos comentários).
 3. **Batalha** (dia 2): o exército entra com o número exato, o tipo mais pedido vai na frente, cada tipo usa a sua força e o seu defeito, e o resultado sai da conta (ver "Como a batalha se resolve"). Termina com o gancho do próximo desafio.
 
 ## Antes de qualquer vídeo
 1. Leia a `biblia.md` e o `banco-de-desafios.md` da série.
-2. Na Batalha, confira com a pessoa a contagem **de cada plataforma**. O número é sempre o real, nem um a mais, nem um a menos.
+2. Na Batalha, confira com a pessoa a contagem **somada das três plataformas**. O número é sempre o real, nem um a mais, nem um a menos.
 3. Roteiro (a narração e a imagem de cada cena) → aprovação → narração para o ElevenLabs → só então a produção.
 
 ## Três plataformas: Instagram, TikTok e YouTube
 - A **Convocação** é o mesmo vídeo nas três plataformas.
-- A **Batalha** segue a contagem de cada plataforma. Plataformas com contagens diferentes têm **Batalhas diferentes** (o número de soldados e a mistura de tipos mudam). Pastas: `d01/batalha-instagram/`, `d01/batalha-tiktok/`, `d01/batalha-youtube/`; entregas `entregas/AAAA-MM-DD_nome-d01-batalha-<plataforma>/`.
-- Se uma plataforma venceu e outra perdeu, cada uma segue a sua linha a partir dali. A bíblia guarda **um placar e um histórico de contagens para cada plataforma**.
+- A **Batalha** também é uma só: a contagem **soma os comentários das três plataformas** (o total e cada tipo), e o mesmo vídeo sai nas três. Pastas: `dNN/batalha/`; entrega `entregas/AAAA-MM-DD_nome-dNN-batalha/`. (Decidido em 11/11/2026.)
+- A bíblia guarda **um placar e um histórico de contagens só**, com a soma.
 
 ## Regras de criação
 - Fale em português do Brasil.
@@ -74,7 +74,7 @@ Para criar uma série, use a `entrevista-da-serie.md` adaptando as perguntas a e
 ## Como trabalhar
 - Mostre prévias em folha de quadros (vários quadros numa imagem) antes do render final, e só avance com aprovação.
 - O trabalho pesado roda no computador (render, transcrição, mixagem): rode o script e leia só o resumo.
-- Depois de cada Batalha publicada, atualize a bíblia com a contagem de cada plataforma, o resultado e o estado do herói.
+- Depois de cada Batalha publicada, atualize a bíblia com a contagem somada, o resultado e o estado do herói.
 - Ao finalizar a **Convocação**, entregue a legenda do post (`legenda-do-post.txt` na pasta da entrega e no chat, pronta para copiar), nesta estrutura:
   ```
   1 <HERÓI> CONTRA <N> <INIMIGOS> <emoji>
