@@ -752,7 +752,6 @@ const CenaCapa: React.FC<{cfg: ConfigBatalha}> = ({cfg}) => {
   const ex = montaExercito(cfg);
   return (
     <>
-      <Prateleiras frenteZ={ex.frenteZ} cai={() => 0} />
       {ex.lista.map((s) => (
         <SoldadoGato key={s.n} s={s} pose={{pos: ex.vagas[s.n], giro: GIRO_FRENTE + Math.sin(s.n * 2.3) * 0.15, boca: s.tipo === 'FEIRANTE' ? 'aberta' : undefined}} />
       ))}
@@ -763,7 +762,7 @@ const CenaCapa: React.FC<{cfg: ConfigBatalha}> = ({cfg}) => {
 export const cenaCapaBatalha = (cfg: ConfigBatalha): ParamsCena => {
   const ex = montaExercito(cfg);
   return {
-    cam: {pos: [1.55, 1.3, 0.75], alvo: [-0.2, 0.8, -3.0], fov: 52},
+    cam: {pos: [2.35, 2.35, ex.frenteZ + 2.3], alvo: [0.3, 0.25, ex.frenteZ - 0.75], fov: 56},
     marcha: 0.3,
     recuo: 0.1 - ex.frenteZ + 0.3,
     recuoChao: 0.55 - ex.frenteZ + 0.24,
