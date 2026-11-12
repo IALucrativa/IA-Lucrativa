@@ -96,4 +96,4 @@ Iguais às do Bisnaga (confirmadas em 09/11/2026 naquela série).
 
 ## Estado atual (antes do Desafio 1)
 - O Seu Casco come alface no quintal da vó. Nenhum desafio jogado.
-- **Desafio 1:** a escolher entre as 3 ideias de `d01-ideia.md`.
+- **Desafio 1 escolhido (12/11/2026):** Ideia A, "As lesmas da horta" (`d01-ideia.md`).
