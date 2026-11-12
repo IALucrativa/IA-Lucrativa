@@ -104,7 +104,7 @@
 - **Marlene:** sabe dos bilhetes, acreditou nele e virou aliada. Vai instalar uma câmera no corredor amanhã (problema #16).
 - **Pistas:** no livro da portaria, às 23h02 de ontem, alguém assinou a entrada pro 5º andar; o nome está riscado, só o "T" é legível. Na lista do 5º andar, só a Tânia (501) começa com T (pode ser pista falsa).
 - **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"? ☐ Quem é "T"?
-- **Voto do Ep. 2:** Marlene · Tânia (a confirmar).
+- **Voto do Ep. 2:** Tânia.
 
 ## Estado após o Ep. 2 — linha IG+YT (Instagram e YouTube) (noite 2)
 - **Noite:** 2 de 30 (faltam 28). **Chaves:** 12 + a mestra (secreta). **Bilhetes:** 3.
@@ -113,7 +113,7 @@
 - **Pistas:** na porta do 501, a placa BEM-VINDOS ficou torta (semente colhida); perto do capacho, um pedaço de papel igual ao dos bilhetes (pode ser pista falsa).
 - **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"? ☐ Quem me viu no 5º?
 - **O público não sabe:** o segredo (chave mestra); o 3º bilhete chega perto dele.
-- **Voto do Ep. 2:** Bater · Vigiar (a confirmar).
+- **Voto do Ep. 2:** Bater (Instagram e YouTube votaram igual e seguem juntos).
 
 ## Duração
 - Ep. 1: 48 s (ficou assim, decisão da pessoa).
@@ -132,8 +132,8 @@
 | Ep. | Opções | Instagram | TikTok | YouTube |
 |---|---|---|---|---|
 | 1 | Contar · Esconder | Esconder | Contar | Esconder |
-| 2 (IG+YT) | Bater · Vigiar | a confirmar | — | a confirmar |
-| 2 (TT) | Marlene · Tânia | — | a confirmar | — |
+| 2 (IG+YT) | Bater · Vigiar | Bater | — | Bater |
+| 2 (TT) | Marlene · Tânia | — | Tânia | — |
 
 ## Calendário interno
 - Episódio N = noite N. A mudança acontece na noite 30.
