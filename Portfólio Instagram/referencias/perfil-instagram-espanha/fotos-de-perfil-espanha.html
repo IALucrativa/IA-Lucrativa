@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Foto de perfil España</title>
+<style>
+body{margin:0;background:#1d1d22;font-family:Inter,Arial,sans-serif;color:#f2f2f2}
+#folha{display:inline-block;padding:28px}
+h1{margin:0 0 18px;font-size:26px}
+.linha{display:flex;gap:40px}
+.op{display:flex;flex-direction:column;align-items:center;gap:14px}
+.grande{width:360px;height:360px;border-radius:50%;overflow:hidden}
+.peq{display:flex;align-items:center;gap:12px;font-size:14px;color:#b9b9c4}
+.peq div{width:44px;height:44px;border-radius:50%;overflow:hidden}
+.rot{font-size:20px;font-weight:bold}
+svg{display:block;width:100%;height:100%}
+.solo{width:1080px;height:1080px}
+</style></head><body>
+<div id="folha"><h1>Versão Espanha · foto de perfil (3 opções)</h1><div class="linha" id="linha"></div></div>
+<div id="solos"></div>
+<script>
+// Mesmo balão com "play" da conta brasileira, nas cores da Espanha (vermelho #c60b1e e amarelo #ffc400).
+// Sem brasão nem texto: só as cores, para a logo continuar sendo a mesma marca.
+const VERM = '#c60b1e', VERM2 = '#e8384a', AMAR = '#ffc400', AMAR2 = '#ffd95a', ESC = '#1b1b2a';
+const balao = (id, fundo, cor, contorno, play) => `
+<svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="ver${id}" cx="0.5" cy="0.4" r="0.7"><stop offset="0" stop-color="${VERM2}"/><stop offset="1" stop-color="${VERM}"/></radialGradient>
+    <radialGradient id="ama${id}" cx="0.5" cy="0.4" r="0.7"><stop offset="0" stop-color="${AMAR2}"/><stop offset="1" stop-color="#f2a91c"/></radialGradient>
+  </defs>
+  ${fundo(id)}
+  <g transform="translate(540,520)">
+    <path d="M-300,-230 Q-300,-280 -250,-280 L250,-280 Q300,-280 300,-230 L300,150 Q300,200 250,200 L-40,200 L-170,320 L-140,200 L-250,200 Q-300,200 -300,150 Z"
+      fill="${cor}" stroke="${contorno}" stroke-width="34" stroke-linejoin="round"/>
+    <path d="M-70,-150 L130,-40 L-70,70 Z" fill="${play}" stroke="${play}" stroke-width="40" stroke-linejoin="round"/>
+  </g>
+</svg>`;
+// faixas da bandeira: vermelho 1/4, amarelo 1/2, vermelho 1/4
+const faixas = () => `<rect width="1080" height="1080" fill="${VERM}"/><rect y="270" width="1080" height="540" fill="${AMAR}"/>`;
+const vermelho = (id) => `<rect width="1080" height="1080" fill="url(#ver${id})"/>`;
+const amarelo = (id) => `<rect width="1080" height="1080" fill="url(#ama${id})"/>`;
+const ops = [
+  ['A · Faixas da bandeira', balao('a', faixas, ESC, ESC, AMAR), 'foto-perfil-es-a.png'],
+  ['B · Amarelo no vermelho', balao('b', vermelho, AMAR, ESC, VERM), 'foto-perfil-es-b.png'],
+  ['C · Vermelho no amarelo', balao('c', amarelo, VERM, ESC, AMAR), 'foto-perfil-es-c.png'],
+];
+const linha = document.getElementById('linha'), solos = document.getElementById('solos');
+ops.forEach(([nome, svg], i) => {
+  linha.insertAdjacentHTML('beforeend', `<div class="op"><div class="grande">${svg}</div>
+    <div class="peq"><div>${svg}</div> tamanho no feed</div><div class="rot">${nome}</div></div>`);
+  solos.insertAdjacentHTML('beforeend', `<div class="solo" id="solo${i}">${svg}</div>`);
+});
+</script></body></html>
