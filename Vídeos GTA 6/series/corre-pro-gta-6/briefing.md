@@ -10,7 +10,7 @@
 | **Voto** | Pelos comentários; duas opções de uma palavra; "Vocês escolheram: X". |
 | **Meta dos Seguidores** | +N seguidores até o dia seguinte, 12h = o Kaique desbloqueia um item que ajuda na missão. |
 | **Tom** | Comédia de correria. Narrador sério de trailer de ação contando uma missão doméstica. |
-| **Estilo do desenho** | A decidir na prancha (sugestão: o mesmo cartoon com contorno do Bilhete na Porta, para o perfil ter cara única, com cores mais quentes de fim de tarde). |
+| **Estilo do desenho** | A · Cartoon com contorno (cores vivas, contorno escuro, olhos expressivos), escolhido na prancha 1. Falta o refinamento do Kaique. |
 | **Voz** | Gerada no ElevenLabs pela própria pessoa, que manda o arquivo de áudio. Voz grave, de trailer. |
 | **Formato** | 1080×1920, 30 fps, áudio em −14 LUFS, no mínimo 60 s. |
 | **Referência** | Bilhete na Porta (a nossa própria série): só a estrutura (voto, prazo, placar na tela, capa padrão). |
