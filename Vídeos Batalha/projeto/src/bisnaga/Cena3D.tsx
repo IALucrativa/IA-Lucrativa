@@ -103,13 +103,15 @@ export type Forma =
   | {tipo: 'caixa'; d: [number, number, number]}
   | {tipo: 'cilindro'; r: number; h: number; r2?: number}
   | {tipo: 'cone'; r: number; h: number}
-  | {tipo: 'esfera'; r: number};
+  | {tipo: 'esfera'; r: number}
+  | {tipo: 'cupula'; r: number}; // meia esfera (casco de jabuti)
 
 const geometria = (f: Forma, folga: number, lp: boolean): THREE.BufferGeometry => {
   const seg = lp ? 7 : 22;
   if (f.tipo === 'caixa') return new THREE.BoxGeometry(f.d[0] + folga * 2, f.d[1] + folga * 2, f.d[2] + folga * 2);
   if (f.tipo === 'cilindro') return new THREE.CylinderGeometry((f.r2 ?? f.r) + folga, f.r + folga, f.h + folga * 2, seg);
   if (f.tipo === 'cone') return new THREE.ConeGeometry(f.r + folga, f.h + folga * 2, seg);
+  if (f.tipo === 'cupula') return new THREE.SphereGeometry(f.r + folga, seg, lp ? 4 : 10, 0, Math.PI * 2, 0, Math.PI / 2);
   return new THREE.SphereGeometry(f.r + folga, seg, lp ? 6 : 18);
 };
 

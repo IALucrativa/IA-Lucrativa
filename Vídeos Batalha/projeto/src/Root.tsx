@@ -7,6 +7,7 @@ import {Capa, CAPA_D01_CONVOCACAO} from './bisnaga/Capa';
 import {Convocacao, DURACAO_CONVOCACAO} from './bisnaga/d01/Convocacao';
 import {Batalha, CapaBatalha} from './bisnaga/d01/Batalha';
 import {BATALHA_D01} from './bisnaga/d01/batalhas';
+import {PranchaSeuCasco, ElencoSeuCasco} from './seucasco/Prancha';
 
 // Formato do estúdio: vertical 1080×1920, 30 fps.
 export const RemotionRoot: React.FC = () => {
@@ -37,6 +38,8 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
       />
+      <Composition id="SeuCasco-Prancha" component={PranchaSeuCasco} durationInFrames={1} fps={30} width={1080} height={1920} />
+      <Composition id="SeuCasco-Elenco" component={ElencoSeuCasco} durationInFrames={1} fps={30} width={1080} height={1920} />
       <Composition id="Bisnaga-Elenco" component={Elenco} durationInFrames={1} fps={30} width={1920} height={1080} />
     </>
   );
