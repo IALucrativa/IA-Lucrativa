@@ -1,6 +1,6 @@
 # Desafio 1 · Convocação: "As lesmas da horta"
 
-> **Aguardando aprovação.**
+> **Aprovado em 12/11/2026.**
 
 - **Duração prevista:** cerca de 70 s (cerca de 185 palavras, voz calma, com pausas).
 - **Tom:** documentário de guerra sobre a batalha mais lenta da história. O narrador nunca ri.
