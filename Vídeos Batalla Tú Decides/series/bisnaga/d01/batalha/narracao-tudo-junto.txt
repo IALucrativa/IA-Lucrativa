@@ -1,0 +1,26 @@
+BISNAGA · DESAFIO 1 · BATALHA (as três plataformas)
+Narração inteira, para gerar de uma vez só no ElevenLabs
+
+COMO GERAR
+- Voz: Leo Antonio - Welcoming, Serene (a mesma da Convocação).
+- Modelo: Eleven Multilingual v2. Ajustes: Estabilidade 50 · Similaridade 75 · Estilo 0 · Velocidade 0,95.
+- Copie todo o texto entre as linhas tracejadas.
+- Baixe em MP3 com o nome narracao.mp3 e salve em: series/bisnaga/d01/batalha/audios/
+- Eu corto o áudio nas pausas e encaixo cada trecho na sua cena.
+
+------------------------------------------------------------
+Duzentos gatos atenderam o chamado.
+Quarenta comuns... e cento e sessenta do comércio. Nem um a mais, nem um a menos.
+Na frente, o mais pedido: açougue. Cinquenta gatos. A maior força que esse bairro já viu.
+Eles avançam... e param. Ninguém luta de barriga vazia.
+Os pinguins não esperam. Mil, escorregando de barriga pelo chão encerado.
+Quarenta feirantes gritam ao mesmo tempo. A cozinha inteira trava... até as vozes acabarem.
+Quarenta lotéricas miram com cuidado... e erram todas. Desistem. Viram de costas... e tropeçam. Quarenta tropeços. Todas as prateleiras no chão.
+Trinta salões desfilam em formação pelo chão encerado... até cair farinha no primeiro topete.
+Os quarenta comuns fazem o que gato faz de melhor: deitam na porta. Ninguém passa.
+E o açougue? Terminou de comer. Cinquenta patadas. Cinquenta filas no chão.
+Pela primeira vez... os pinguins recuam. Um. Depois cem. Depois todos, de volta para dentro da geladeira.
+E o Bisnaga? Acordou agora. Olhou a cozinha vazia... e voltou a dormir.
+Vitória. A cozinha é dos gatos. Vocês mandaram duzentos soldados. Com quinhentos... o bairro inteiro vai ouvir a musiquinha.
+Mas lá fora, na porta de aço... tem alguma coisa roendo.
+------------------------------------------------------------

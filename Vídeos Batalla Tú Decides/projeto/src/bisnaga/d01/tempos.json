@@ -1,0 +1,270 @@
+{
+ "fps": 30,
+ "total": 2581,
+ "cenas": [
+  {
+   "nome": "01-abertura",
+   "inicio": 0,
+   "duracao": 149,
+   "audio": 4.52,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Dez mil pinguins de geladeira..."
+    },
+    {
+     "de": 79,
+     "texto": "acabaram de ganhar vida."
+    }
+   ]
+  },
+  {
+   "nome": "02-dormindo",
+   "inicio": 149,
+   "duracao": 125,
+   "audio": 3.71,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "E o único que pode parar eles..."
+    },
+    {
+     "de": 76,
+     "texto": "está dormindo."
+    }
+   ]
+  },
+  {
+   "nome": "03-bisnaga",
+   "inicio": 274,
+   "duracao": 197,
+   "audio": 6.11,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Esse é o Bisnaga, gato da padaria."
+    },
+    {
+     "de": 86,
+     "texto": "E o exército dele..."
+    },
+    {
+     "de": 134,
+     "texto": "quem monta é você."
+    }
+   ]
+  },
+  {
+   "nome": "04-sozinho",
+   "inicio": 471,
+   "duracao": 118,
+   "audio": 3.47,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Sozinho, ele não segura"
+    },
+    {
+     "de": 52,
+     "texto": "nem o primeiro pinguim."
+    }
+   ]
+  },
+  {
+   "nome": "05-regra",
+   "inicio": 588,
+   "duracao": 104,
+   "audio": 3.0,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Cada comentário..."
+    },
+    {
+     "de": 44,
+     "texto": "é um gato a mais."
+    }
+   ]
+  },
+  {
+   "nome": "06-acougue",
+   "inicio": 692,
+   "duracao": 199,
+   "audio": 6.19,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Se comentar AÇOUGUE,"
+    },
+    {
+     "de": 45,
+     "texto": "chega o mais forte do bairro..."
+    },
+    {
+     "de": 114,
+     "texto": "mas ele só luta depois de comer."
+    }
+   ]
+  },
+  {
+   "nome": "07-feirante",
+   "inicio": 891,
+   "duracao": 206,
+   "audio": 6.43,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Se comentar FEIRANTE,"
+    },
+    {
+     "de": 47,
+     "texto": "chega um que grita mais alto que a feira inteira..."
+    },
+    {
+     "de": 146,
+     "texto": "até ficar rouco."
+    }
+   ]
+  },
+  {
+   "nome": "08-loterica",
+   "inicio": 1098,
+   "duracao": 156,
+   "audio": 4.75,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "LOTÉRICA acerta tudo sem querer..."
+    },
+    {
+     "de": 84,
+     "texto": "e erra tudo quando tenta."
+    }
+   ]
+  },
+  {
+   "nome": "09-salao",
+   "inicio": 1254,
+   "duracao": 144,
+   "audio": 4.36,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "E SALÃO luta com estilo..."
+    },
+    {
+     "de": 68,
+     "texto": "mas foge se despentear."
+    }
+   ]
+  },
+  {
+   "nome": "10-pinguins",
+   "inicio": 1398,
+   "duracao": 262,
+   "audio": 8.28,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Os pinguins: vinte centímetros de louça."
+    },
+    {
+     "de": 36,
+     "texto": "Não sentem frio."
+    },
+    {
+     "de": 99,
+     "texto": "E escorregam mais rápido"
+    },
+    {
+     "de": 136,
+     "texto": "do que qualquer gato corre."
+    }
+   ]
+  },
+  {
+   "nome": "11-meta",
+   "inicio": 1660,
+   "duracao": 238,
+   "audio": 7.47,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Se passar de quinhentos comentários..."
+    },
+    {
+     "de": 84,
+     "texto": "vocês vão ouvir uma musiquinha."
+    },
+    {
+     "de": 142,
+     "texto": "E o bairro inteiro vai abrir a janela."
+    }
+   ]
+  },
+  {
+   "nome": "12-prazo",
+   "inicio": 1898,
+   "duracao": 372,
+   "audio": 11.96,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Vocês têm vinte e quatro horas."
+    },
+    {
+     "de": 67,
+     "texto": "Amanhã, ao meio-dia,"
+    },
+    {
+     "de": 110,
+     "texto": "a gente conta comentário por comentário."
+    },
+    {
+     "de": 197,
+     "texto": "Nem um gato a mais, nem um a menos."
+    },
+    {
+     "de": 272,
+     "texto": "E quem tiver mais pedidos..."
+    },
+    {
+     "de": 333,
+     "texto": "abre a fila."
+    }
+   ]
+  },
+  {
+   "nome": "13-ameaca",
+   "inicio": 2270,
+   "duracao": 219,
+   "audio": 6.84,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Por enquanto, o exército do Bisnaga..."
+    },
+    {
+     "de": 87,
+     "texto": "é o Bisnaga."
+    },
+    {
+     "de": 126,
+     "texto": "E os pinguins já desceram da geladeira."
+    }
+   ]
+  },
+  {
+   "nome": "14-pergunta",
+   "inicio": 2489,
+   "duracao": 56,
+   "audio": 1.41,
+   "legendas": [
+    {
+     "de": 0,
+     "texto": "Quem você convoca?"
+    }
+   ]
+  }
+ ]
+}
