@@ -23,3 +23,6 @@
 - A Tânia tem álibi para a noite 1 (plantão no hospital); é enfermeira e trabalha à noite.
 - Pista nova: alguém de **macacão azul igual ao do Rodnei** circula pelo prédio.
 - A câmera da Marlene foi instalada (problema #16 usado): a gravação mostra o bilhete chegando sem ninguém passar.
+
+## Produção
+- 2026-11-12: prévias (folha de quadros e vídeo sem som) e o visual da Tânia **aprovados**. Aguardando a narração.

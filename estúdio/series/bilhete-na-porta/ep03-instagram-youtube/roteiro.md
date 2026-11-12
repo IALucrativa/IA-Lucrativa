@@ -22,3 +22,6 @@
 - Explica as pistas do Ep. 2: o papel no capacho era o bilhete da Tânia; a placa entortou quando ela bateu a porta.
 - Novo: a Tânia também recebe bilhetes ("Fique longe do térreo"). O autor tem um **prazo: noite 7**.
 - O segredo (chave mestra) continua sem ser dito.
+
+## Produção
+- 2026-11-12: prévias (folha de quadros e vídeo sem som) e o visual da Tânia **aprovados**. Aguardando a narração.

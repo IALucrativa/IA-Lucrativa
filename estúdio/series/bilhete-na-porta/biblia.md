@@ -33,6 +33,7 @@
 - **Mora no 102 (térreo)**, porta verde com a placa "SÍNDICA".
 
 ### Tânia, do 501
+- **Visual (aprovado no Ep. 3):** uns 30 anos, enfermeira que trabalha à noite. Tranças longas presas num rabo de cavalo, argolas pequenas douradas. Dois visuais: **plantão** (pijama cirúrgico verde-água, crachá no cordão azul, tênis branco) e **casa** (moletom vinho, calça escura, tênis branco). Boneco em `projeto/src/bilhete/Tania.tsx`.
 - **Papel:** suspeita.
 - Chegou ao prédio na mesma semana em que os bilhetes começaram.
 
