@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Prancha de estilos</title>
+<style>
+  body { margin: 0; background: #1d1d22; font-family: Arial, Helvetica, sans-serif; color: #f2f2f2; }
+  #prancha { display: inline-block; padding: 28px 28px 20px; background: #1d1d22; }
+  h1 { margin: 0 0 4px; font-size: 26px; }
+  .sub { margin: 0 0 18px; font-size: 15px; color: #b9b9c4; }
+  .linha { display: flex; gap: 24px; }
+  .painel { width: 540px; }
+  .painel svg { display: block; width: 540px; height: 960px; border-radius: 10px; }
+  .rotulo { margin-top: 10px; font-size: 20px; font-weight: bold; }
+  .desc { font-size: 14px; color: #b9b9c4; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div id="prancha">
+  <h1>Corre Pro GTA 6 · Prancha de estilos 1 (rascunho)</h1>
+  <p class="sub">Ep. 1, primeiro segundo: o videogame solta fumaça e o Kaique abana com o boné. Mesma cena, três estilos.</p>
+  <div class="linha" id="linha"></div>
+</div>
+
+<script>
+// Cada estilo muda só cores, traço e acabamento. O Kaique e a cena são os mesmos.
+const estilos = [
+  {
+    id: 'A', nome: 'A · Cartoon com contorno', desc: 'O mesmo estilo do Bilhete na Porta: o perfil fica com cara única.',
+    line: '#1b1b2a', lw: 3,
+    parede: '#4d5d8f', paredeSomb: '#43527f', rodape: '#2f3a5e', chao: '#8a5a3c', chaoLinha: '#764b30', tapete: '#c4473a',
+    ceu: '#16204a', predio: '#26305e', janelaLuz: '#ffd76a', lua: '#f5f0d6',
+    movel: '#6b4630', movelDet: '#56371f', tv: '#141418', tvBorda: '#2a2a31', reflexo: '#ffffff',
+    console: '#d9dbe0', consoleDet: '#9aa0aa', fumaca: '#c9c9cf', faisca: '#ffd23f', fogo: '#ff7a1a',
+    jaqueta: '#b6e021', jaquetaSomb: '#93b817', faixa: '#e6e9ee', calca: '#2b3550', calcaSomb: '#222a40', pele: '#a86b45', peleSomb: '#8d5735',
+    cabelo: '#1a1412', bone: '#d8342b', boneDet: '#a8231c', tenis: '#f2f2f2', solado: '#9a9aa2',
+    bau: '#2f9e57', bauDet: '#247d44', papel: '#fbf7ea', tinta: '#2a2a33', vermelho: '#e0322b',
+    hud: '#ffd23f', hudTxt: '#1b1b2a', pilula: '#1b1b2a', pilulaTxt: '#ffffff', legenda: '#ffffff', legendaBorda: '#000000',
+    brilhoFogo: 0.25, retícula: false, fssh: false
+  },
+  {
+    id: 'B', nome: 'B · Noite com luz da TV', desc: 'Sem contorno, quarto escuro, o laranja do fogo ilumina tudo.',
+    line: 'none', lw: 0,
+    parede: '#1c2640', paredeSomb: '#172036', rodape: '#0f1526', chao: '#2b2a3a', chaoLinha: '#232231', tapete: '#5a2a35',
+    ceu: '#070b1c', predio: '#121a33', janelaLuz: '#ffc45a', lua: '#e8e4cc',
+    movel: '#3a2a22', movelDet: '#2a1d17', tv: '#08080b', tvBorda: '#15151b', reflexo: '#ff9a4a',
+    console: '#8f949e', consoleDet: '#5d626c', fumaca: '#8a8796', faisca: '#ffe08a', fogo: '#ff7a1a',
+    jaqueta: '#9cc21a', jaquetaSomb: '#5f7a0e', faixa: '#c9ccd2', calca: '#1b2236', calcaSomb: '#121828', pele: '#9a5f3c', peleSomb: '#6a3e24',
+    cabelo: '#0c0a09', bone: '#b52a22', boneDet: '#7d1b16', tenis: '#d9d9de', solado: '#6d6d75',
+    bau: '#22703f', bauDet: '#174f2c', papel: '#f1e8cf', tinta: '#2a2a33', vermelho: '#ff3b30',
+    hud: '#ffb02e', hudTxt: '#0b0b10', pilula: '#000000', pilulaTxt: '#ffd27a', legenda: '#ffe2a8', legendaBorda: '#000000',
+    brilhoFogo: 0.6, retícula: false, fssh: false
+  },
+  {
+    id: 'C', nome: 'C · Gibi com retícula', desc: 'Contorno grosso, cores chapadas, pontinhos de gibi e onomatopeia.',
+    line: '#111111', lw: 4.5,
+    parede: '#3fa7d6', paredeSomb: '#3596c2', rodape: '#1f5f80', chao: '#f0a43a', chaoLinha: '#d98b22', tapete: '#e2384f',
+    ceu: '#26285c', predio: '#3a3d7a', janelaLuz: '#fff06a', lua: '#ffffff',
+    movel: '#8a5a3c', movelDet: '#6d4429', tv: '#151515', tvBorda: '#333333', reflexo: '#ffffff',
+    console: '#ffffff', consoleDet: '#b9b9b9', fumaca: '#e9e9e9', faisca: '#fff200', fogo: '#ff5a1f',
+    jaqueta: '#c6f02a', jaquetaSomb: '#9ac21c', faixa: '#ffffff', calca: '#2b3a70', calcaSomb: '#1f2b55', pele: '#b0703f', peleSomb: '#8d5530',
+    cabelo: '#111111', bone: '#ff2d2d', boneDet: '#c41d1d', tenis: '#ffffff', solado: '#aaaaaa',
+    bau: '#22b35a', bauDet: '#178a43', papel: '#ffffff', tinta: '#111111', vermelho: '#ff2d2d',
+    hud: '#fff200', hudTxt: '#111111', pilula: '#ffffff', pilulaTxt: '#111111', legenda: '#ffffff', legendaBorda: '#111111',
+    brilhoFogo: 0.2, retícula: true, fssh: true
+  }
+];
+
+const F = 'Liberation Sans, Arial, Helvetica, sans-serif';
+
+function cena(e) {
+  const S = e.line === 'none' ? '' : `stroke="${e.line}" stroke-width="${e.lw}" stroke-linejoin="round" stroke-linecap="round"`;
+  const Sf = e.line === 'none' ? '' : `stroke="${e.line}" stroke-width="${Math.max(1.5, e.lw - 1.2)}" stroke-linejoin="round" stroke-linecap="round"`;
+  const id = e.id;
+  // prédios da janela
+  const predios = [[338,300,30,80],[370,270,28,110],[400,315,34,65],[436,285,26,95],[464,310,18,70]];
+  let janelasPredio = '';
+  predios.forEach(([x,y,w,h],i) => {
+    for (let yy = y + 10; yy < y + h - 6; yy += 16) for (let xx = x + 6; xx < x + w - 6; xx += 10) {
+      if ((xx * 7 + yy * 3 + i) % 3 !== 0) janelasPredio += `<rect x="${xx}" y="${yy}" width="5" height="7" fill="${e.janelaLuz}" opacity="0.85"/>`;
+    }
+  });
+  return `
+<svg viewBox="0 0 540 960" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="fogo${id}" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="${e.fogo}" stop-opacity="${e.brilhoFogo}"/>
+      <stop offset="1" stop-color="${e.fogo}" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="ret${id}" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <circle cx="4.5" cy="4.5" r="1.7" fill="#000" opacity="0.16"/>
+    </pattern>
+    <clipPath id="vista${id}"><rect x="334" y="212" width="142" height="168"/></clipPath>
+  </defs>
+
+  <!-- PAREDE E CHÃO -->
+  <rect x="0" y="0" width="540" height="650" fill="${e.parede}"/>
+  <rect x="0" y="0" width="540" height="90" fill="${e.paredeSomb}"/>
+  ${e.retícula ? `<rect x="0" y="0" width="540" height="650" fill="url(#ret${id})"/>` : ''}
+  <rect x="0" y="650" width="540" height="310" fill="${e.chao}"/>
+  <g stroke="${e.chaoLinha}" stroke-width="3">
+    <line x1="0" y1="700" x2="540" y2="700"/><line x1="0" y1="770" x2="540" y2="770"/><line x1="0" y1="855" x2="540" y2="855"/>
+    <line x1="120" y1="650" x2="120" y2="700"/><line x1="330" y1="650" x2="330" y2="700"/><line x1="220" y1="700" x2="220" y2="770"/>
+    <line x1="460" y1="700" x2="460" y2="770"/><line x1="90" y1="770" x2="90" y2="855"/><line x1="380" y1="770" x2="380" y2="855"/>
+    <line x1="250" y1="855" x2="250" y2="960"/>
+  </g>
+  <rect x="0" y="638" width="540" height="14" fill="${e.rodape}" ${Sf}/>
+  <!-- tapete -->
+  <ellipse cx="330" cy="900" rx="190" ry="44" fill="${e.tapete}" ${Sf}/>
+  <ellipse cx="330" cy="900" rx="160" ry="32" fill="none" stroke="${e.papel}" stroke-width="3" stroke-dasharray="8 7" opacity="0.6"/>
+
+  <!-- JANELA com a cidade à noite -->
+  <rect x="326" y="204" width="158" height="184" rx="4" fill="${e.movel}" ${S}/>
+  <g clip-path="url(#vista${id})">
+    <rect x="334" y="212" width="142" height="168" fill="${e.ceu}"/>
+    <circle cx="448" cy="242" r="13" fill="${e.lua}"/>
+    ${predios.map(([x,y,w,h]) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${e.predio}"/>`).join('')}
+    ${janelasPredio}
+  </g>
+  <line x1="405" y1="212" x2="405" y2="380" stroke="${e.movel}" stroke-width="7"/>
+  <line x1="334" y1="296" x2="476" y2="296" stroke="${e.movel}" stroke-width="7"/>
+  <rect x="318" y="384" width="174" height="12" rx="3" fill="${e.movelDet}" ${Sf}/>
+
+  <!-- PÔSTER DA CONTAGEM (feito à mão, preso com fita) -->
+  <g transform="rotate(-3 130 280)">
+    <rect x="52" y="176" width="160" height="210" fill="${e.papel}" ${S}/>
+    <rect x="112" y="168" width="40" height="14" fill="#f3e3a0" opacity="0.85" transform="rotate(4 132 175)"/>
+    <text x="132" y="208" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="15" fill="${e.tinta}">CONTAGEM</text>
+    <text x="132" y="228" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="15" fill="${e.tinta}">PRO GTA 6</text>
+    ${[13,14,15,16,17,18].map((d,i) => {
+      const cx = 78 + (i % 3) * 54, cy = 282 + Math.floor(i / 3) * 34;
+      const riscado = d <= 12 ? '' : '';
+      return `<text x="${cx}" y="${cy}" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="22" fill="${e.tinta}">${d}</text>${riscado}`;
+    }).join('')}
+    <text x="132" y="366" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="30" fill="${e.vermelho}">19/11</text>
+    <ellipse cx="132" cy="356" rx="52" ry="22" fill="none" stroke="${e.vermelho}" stroke-width="3"/>
+    <!-- dias que já passaram, riscados -->
+    <text x="132" y="252" text-anchor="middle" font-family="${F}" font-size="13" fill="${e.tinta}" opacity="0.7">9 10 11 12</text>
+    <line x1="100" y1="248" x2="164" y2="248" stroke="${e.vermelho}" stroke-width="2.5"/>
+  </g>
+
+  <!-- PRATELEIRA com a lata do dinheiro -->
+  <rect x="330" y="456" width="160" height="12" fill="${e.movel}" ${Sf}/>
+  <path d="M345 468 L345 486 L360 468 Z" fill="${e.movelDet}" ${Sf}/>
+  <path d="M475 468 L475 486 L460 468 Z" fill="${e.movelDet}" ${Sf}/>
+  <rect x="350" y="404" width="44" height="52" rx="4" fill="#c98a2a" ${Sf}/>
+  <rect x="350" y="418" width="44" height="22" fill="${e.papel}" ${Sf}/>
+  <text x="372" y="428" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="7.5" fill="${e.tinta}">NÃO</text>
+  <text x="372" y="437" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="7.5" fill="${e.tinta}">MEXER</text>
+  <rect x="406" y="426" width="22" height="30" rx="3" fill="${e.bone}" ${Sf}/>
+  <circle cx="417" cy="420" r="9" fill="${e.pele}" ${Sf}/>
+  <rect x="440" y="434" width="38" height="22" rx="3" fill="${e.consoleDet}" ${Sf}/>
+  <rect x="446" y="430" width="26" height="6" rx="2" fill="${e.console}" ${Sf}/>
+
+  <!-- RACK, TV e o VIDEOGAME pegando fogo -->
+  <rect x="24" y="590" width="290" height="130" rx="4" fill="${e.movel}" ${S}/>
+  <rect x="38" y="640" width="122" height="66" rx="3" fill="${e.movelDet}" ${Sf}/>
+  <rect x="176" y="640" width="122" height="66" rx="3" fill="${e.movelDet}" ${Sf}/>
+  <circle cx="148" cy="673" r="4" fill="${e.consoleDet}"/><circle cx="188" cy="673" r="4" fill="${e.consoleDet}"/>
+  <rect x="36" y="720" width="14" height="14" fill="${e.movelDet}" ${Sf}/><rect x="288" y="720" width="14" height="14" fill="${e.movelDet}" ${Sf}/>
+  <!-- TV desligada -->
+  <rect x="104" y="568" width="40" height="22" fill="${e.tvBorda}" ${Sf}/>
+  <rect x="34" y="440" width="180" height="128" rx="6" fill="${e.tvBorda}" ${S}/>
+  <rect x="44" y="450" width="160" height="108" rx="3" fill="${e.tv}"/>
+  <path d="M54 458 L96 458 L62 540 L54 540 Z" fill="${e.reflexo}" opacity="0.12"/>
+  <!-- brilho do fogo -->
+  <circle cx="262" cy="560" r="150" fill="url(#fogo${id})"/>
+  <!-- videogame genérico (sem marca) -->
+  <rect x="222" y="560" width="78" height="30" rx="7" fill="${e.console}" ${S}/>
+  <rect x="230" y="572" width="34" height="5" rx="2" fill="${e.consoleDet}"/>
+  <circle cx="288" cy="575" r="4" fill="${e.vermelho}"/>
+  <path d="M236 560 Q242 548 250 560" fill="none" stroke="${e.tinta}" stroke-width="3" opacity="0.6"/>
+  <!-- fio até a tomada -->
+  <path d="M300 584 Q318 600 310 622 T322 640" fill="none" stroke="${e.tinta}" stroke-width="3"/>
+  <!-- chamas -->
+  <path d="M268 562 Q262 540 274 526 Q276 542 284 534 Q290 548 284 562 Z" fill="${e.fogo}" ${Sf}/>
+  <path d="M272 562 Q270 548 277 540 Q280 552 282 562 Z" fill="${e.faisca}"/>
+  <!-- fumaça subindo -->
+  <g fill="${e.fumaca}" ${Sf} opacity="0.92">
+    <circle cx="262" cy="512" r="18"/><circle cx="280" cy="492" r="22"/><circle cx="258" cy="466" r="26"/>
+    <circle cx="282" cy="434" r="28"/><circle cx="252" cy="404" r="24"/>
+  </g>
+  <!-- faíscas -->
+  <g fill="${e.faisca}" ${Sf}>
+    <path d="M214 534 l6 10 l11 -2 l-8 8 l5 10 l-10 -5 l-9 7 l2 -11 l-9 -7 l11 -1 Z"/>
+    <path d="M308 520 l4 7 l8 -1 l-6 6 l3 7 l-7 -3 l-6 5 l1 -8 l-6 -5 l8 0 Z"/>
+  </g>
+  ${e.fssh ? `<text x="150" y="400" font-family="${F}" font-weight="900" font-size="46" fill="${e.faisca}" stroke="#111" stroke-width="5" paint-order="stroke" transform="rotate(-12 200 390)">FSSSH!</text>` : ''}
+
+  <!-- BAÚ DE ENTREGA e CAPACETE no chão -->
+  <rect x="26" y="770" width="104" height="96" rx="8" fill="${e.bau}" ${S}/>
+  <rect x="26" y="770" width="104" height="20" rx="6" fill="${e.bauDet}" ${Sf}/>
+  <text x="78" y="834" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="14" fill="#ffffff">ENTREGAS</text>
+  <path d="M146 866 Q146 820 186 818 Q226 820 226 866 Z" fill="${e.tenis}" ${S}/>
+  <path d="M152 846 L220 846" stroke="${e.vermelho}" stroke-width="6"/>
+  <rect x="196" y="832" width="30" height="20" rx="4" fill="${e.tv}" opacity="0.85"/>
+
+  <!-- KAIQUE -->
+  <ellipse cx="392" cy="908" rx="70" ry="12" fill="#000" opacity="0.22"/>
+  <!-- pernas -->
+  <path d="M362 770 L360 892 L386 892 L390 790 Z" fill="${e.calca}" ${S}/>
+  <path d="M396 790 L400 892 L426 892 L424 770 Z" fill="${e.calcaSomb}" ${S}/>
+  <!-- tênis com cadarço de cor diferente -->
+  <path d="M352 888 Q352 876 368 876 L388 878 L390 900 L346 900 Q344 892 352 888 Z" fill="${e.tenis}" ${S}/>
+  <path d="M398 878 L418 876 Q434 876 436 888 Q442 892 440 900 L396 900 Z" fill="${e.tenis}" ${S}/>
+  <rect x="344" y="898" width="48" height="6" rx="2" fill="${e.solado}"/><rect x="394" y="898" width="48" height="6" rx="2" fill="${e.solado}"/>
+  <path d="M362 882 l8 6 M368 880 l8 6" stroke="#ff8a00" stroke-width="3"/>
+  <path d="M410 880 l8 6 M416 880 l8 6" stroke="#2f7dff" stroke-width="3"/>
+  <!-- chaveiro de controle pendurado na calça -->
+  <line x1="420" y1="784" x2="426" y2="808" stroke="${e.consoleDet}" stroke-width="2"/>
+  <path d="M416 808 Q426 804 436 808 Q440 818 434 819 Q426 815 418 819 Q412 818 416 808 Z" fill="#2f7dff" ${Sf}/>
+  <circle cx="431" cy="810" r="1.6" fill="#ffd23f"/><circle cx="421" cy="811" r="1.6" fill="#ffffff"/>
+  <!-- braço direito (do lado de cá), caído, mão na cintura -->
+  <path d="M424 672 Q450 700 446 752 L430 754 Q432 712 414 690 Z" fill="${e.jaqueta}" ${S}/>
+  <circle cx="438" cy="764" r="13" fill="${e.pele}" ${S}/>
+  <!-- tronco: jaqueta corta-vento -->
+  <path d="M346 664 Q392 648 434 664 L428 786 L354 786 Z" fill="${e.jaqueta}" ${S}/>
+  <path d="M392 668 L392 786" stroke="${e.jaquetaSomb}" stroke-width="4"/>
+  <rect x="352" y="722" width="78" height="10" fill="${e.faixa}" opacity="0.9"/>
+  <rect x="354" y="770" width="74" height="16" fill="${e.jaquetaSomb}" ${Sf}/>
+  <path d="M370 662 L392 690 L414 662" fill="${e.jaquetaSomb}" ${Sf}/>
+  <rect x="402" y="698" width="22" height="12" rx="2" fill="${e.papel}" ${Sf}/>
+  <text x="413" y="707" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="6.5" fill="${e.tinta}">KAIQUE</text>
+  <!-- braço esquerdo levantado, abanando a fumaça com o boné -->
+  <path d="M352 672 Q324 660 312 628 L328 618 Q338 646 362 656 Z" fill="${e.jaqueta}" ${S}/>
+  <circle cx="318" cy="612" r="13" fill="${e.pele}" ${S}/>
+  <g transform="rotate(-28 304 598)">
+    <path d="M276 604 Q278 576 304 574 Q330 576 332 604 Z" fill="${e.bone}" ${S}/>
+    <path d="M276 604 L250 610 Q262 618 282 612 Z" fill="${e.boneDet}" ${S}/>
+    <circle cx="304" cy="574" r="3" fill="${e.boneDet}"/>
+  </g>
+  <path d="M296 600 l-14 -6 M300 590 l-16 -12 M306 584 l-8 -18" stroke="${e.papel}" stroke-width="3" opacity="0.8"/>
+  <!-- pescoço e cabeça -->
+  <rect x="380" y="636" width="22" height="22" fill="${e.peleSomb}" ${Sf}/>
+  <circle cx="358" cy="606" r="9" fill="${e.pele}" ${Sf}/>
+  <circle cx="424" cy="606" r="9" fill="${e.pele}" ${Sf}/>
+  <ellipse cx="391" cy="604" rx="34" ry="38" fill="${e.pele}" ${S}/>
+  <!-- cabelo crespo curto -->
+  <g fill="${e.cabelo}">
+    <circle cx="364" cy="582" r="11"/><circle cx="376" cy="570" r="12"/><circle cx="391" cy="566" r="13"/>
+    <circle cx="406" cy="570" r="12"/><circle cx="418" cy="582" r="11"/><circle cx="384" cy="578" r="10"/><circle cx="400" cy="578" r="10"/>
+  </g>
+  <!-- sobrancelhas levantadas -->
+  <path d="M366 586 Q374 578 382 584" fill="none" stroke="${e.cabelo}" stroke-width="4" stroke-linecap="round"/>
+  <path d="M396 584 Q404 578 412 586" fill="none" stroke="${e.cabelo}" stroke-width="4" stroke-linecap="round"/>
+  <!-- olhos arregalados olhando o videogame -->
+  <ellipse cx="376" cy="600" rx="10" ry="12" fill="#ffffff" ${Sf}/>
+  <ellipse cx="403" cy="600" rx="10" ry="12" fill="#ffffff" ${Sf}/>
+  <circle cx="371" cy="602" r="4.5" fill="#111"/><circle cx="398" cy="602" r="4.5" fill="#111"/>
+  <circle cx="370" cy="600" r="1.5" fill="#fff"/><circle cx="397" cy="600" r="1.5" fill="#fff"/>
+  <!-- nariz e boca de susto -->
+  <path d="M389 608 Q385 618 392 618" fill="none" stroke="${e.peleSomb}" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="389" cy="628" rx="8" ry="9" fill="#5a1f1f" ${Sf}/>
+  <!-- gota de suor -->
+  <path d="M428 584 Q424 594 428 598 Q434 594 428 584 Z" fill="#9fd8ff" ${Sf}/>
+
+  <!-- HUD: contador, dinheiro, videogame, meta -->
+  <g font-family="${F}" font-weight="bold">
+    <g transform="rotate(-2 150 70)">
+      <rect x="20" y="24" width="276" height="96" rx="12" fill="${e.hud}" stroke="#111" stroke-width="3"/>
+      <text x="158" y="70" text-anchor="middle" font-size="36" textLength="244" lengthAdjust="spacingAndGlyphs" fill="${e.hudTxt}">FALTAM 6 DIAS</text>
+      <text x="158" y="104" text-anchor="middle" font-size="22" fill="${e.hudTxt}">PRO GTA 6</text>
+    </g>
+    <rect x="318" y="26" width="200" height="42" rx="21" fill="${e.pilula}" ${e.id === 'C' ? 'stroke="#111" stroke-width="3"' : ''}/>
+    <circle cx="344" cy="47" r="12" fill="#ffc400" stroke="#8a6a00" stroke-width="2"/>
+    <text x="344" y="53" text-anchor="middle" font-size="15" fill="#6a4f00">$</text>
+    <text x="364" y="55" font-size="24" fill="${e.pilulaTxt}">R$ 620</text>
+    <rect x="318" y="76" width="200" height="42" rx="21" fill="${e.pilula}" ${e.id === 'C' ? 'stroke="#111" stroke-width="3"' : ''}/>
+    <path d="M332 92 Q344 86 356 92 Q362 108 354 108 Q346 102 334 108 Q326 108 332 92 Z" fill="${e.pilulaTxt}"/>
+    <text x="368" y="105" font-size="22" fill="${e.vermelho}">QUEIMADO</text>
+    <!-- meta dos seguidores -->
+    <rect x="20" y="132" width="498" height="40" rx="10" fill="${e.pilula}" opacity="0.92" ${e.id === 'C' ? 'stroke="#111" stroke-width="3"' : ''}/>
+    <text x="34" y="158" font-size="17" fill="${e.hud === '#fff200' ? '#111' : e.hud}">META:</text>
+    <text x="96" y="158" font-size="17" fill="${e.pilulaTxt}">+100 SEGUIDORES</text>
+    <text x="268" y="158" font-size="17" fill="${e.pilulaTxt}">→</text>
+    <rect x="292" y="146" width="14" height="12" rx="2" fill="${e.pilulaTxt}"/>
+    <path d="M295 147 L295 141 Q299 135 303 141 L303 147" fill="none" stroke="${e.pilulaTxt}" stroke-width="2.5"/>
+    <text x="314" y="158" font-size="17" fill="${e.pilulaTxt}">PEÇA DE BRINDE</text>
+  </g>
+
+  <!-- legenda da narração -->
+  <text x="270" y="946" text-anchor="middle" font-family="${F}" font-weight="bold" font-size="25" fill="${e.legenda}" stroke="${e.legendaBorda}" stroke-width="5" paint-order="stroke">e o videogame dele pegou fogo.</text>
+</svg>`;
+}
+
+const linha = document.getElementById('linha');
+estilos.forEach(e => {
+  const d = document.createElement('div');
+  d.className = 'painel';
+  d.innerHTML = cena(e) + `<div class="rotulo">${e.nome}</div><div class="desc">${e.desc}</div>`;
+  linha.appendChild(d);
+});
+</script>
+</body>
+</html>

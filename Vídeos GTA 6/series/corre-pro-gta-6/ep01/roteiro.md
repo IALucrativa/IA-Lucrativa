@@ -1,4 +1,4 @@
-# Ep. 1: "Fumaça" (roteiro PARA APROVAÇÃO, 2026-11-12)
+# Ep. 1: "Fumaça" (roteiro aprovado em 2026-11-12)
 
 - **Postagem:** sex 13/11, 12h · **Contador:** FALTAM 6 DIAS
 - **Dinheiro:** R$ 620 · **Videogame:** FUNCIONANDO → QUEIMADO · **Desbloqueados:** 0 de 6

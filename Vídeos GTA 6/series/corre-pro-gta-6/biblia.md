@@ -124,3 +124,8 @@ Sempre no mesmo lugar da tela:
 | Ep. | Meta | Seguidores novos (soma) | Resultado |
 |---|---|---|---|
 | 1 | +100 → peça de brinde | | |
+
+## Decisões de produção
+- **2026-11-12:** a pessoa aprovou a proposta ("pode começar"): nomes, perfil Você Decide Aí, meta de +100, roteiro do Ep. 1 "Fumaça" e o teaser (Ep. 0).
+- **Estilo:** a escolher na prancha 1 (`prancha/prancha.png`): A · Cartoon com contorno, B · Noite com luz da TV, C · Gibi com retícula. A prancha é rascunho: o rosto e o corpo do Kaique ainda serão refinados.
+- **Preço do jogo:** a confirmar.
