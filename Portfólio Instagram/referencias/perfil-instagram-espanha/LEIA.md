@@ -1,5 +1,10 @@
 # Conta da Espanha: foto de perfil
 
+## ✅ Escolhida: `foto-perfil-es-final.png` (2026-11-12)
+Igual à logo do Brasil (balão escuro no fundo amarelo). Só o triângulo do "play" virou a bandeira da Espanha (faixas vermelho, amarelo, vermelho). Para refazer: `foto-perfil-es-final.html`.
+
+## Opções anteriores (não escolhidas)
+
 O mesmo balão com "play" da conta brasileira (`../perfil-instagram/foto-perfil-c.png`), nas cores da Espanha: vermelho `#c60b1e` e amarelo `#ffc400`. Sem brasão e sem texto, para continuar sendo a mesma marca.
 
 | Opção | Arquivo | Ideia |
