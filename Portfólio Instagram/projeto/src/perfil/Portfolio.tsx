@@ -451,3 +451,130 @@ export const Story: React.FC<{tipo: TipoStory; ep?: number; escolha?: string}> =
     </svg>
   </AbsoluteFill>
 );
+
+// ---------- 5. Pesquisa com o público: que história e que conteúdo vocês querem? ----------
+// 3 Stories em sequência. Os cartões mostram o que já existe no canal; a enquete (até 4 opções)
+// vai no espaço tracejado.
+type Icone = 'bilhete' | 'pin' | 'coracao' | 'espadas' | 'controle' | 'olho' | 'claquete' | 'lupa' | 'urna';
+
+const IconeCartao: React.FC<{tipo: Icone; x: number; y: number}> = ({tipo, x, y}) => (
+  <g transform={`translate(${x},${y})`} fill={C.hud}>
+    {tipo === 'bilhete' && (
+      <g transform="rotate(-8)">
+        <rect x={-20} y={-15} width={40} height={30} rx={2} fill={C.papel} stroke={C.hud} strokeWidth={3} />
+        <rect x={-13} y={-7} width={26} height={3.5} rx={1.5} />
+        <rect x={-13} y={1} width={18} height={3.5} rx={1.5} />
+      </g>
+    )}
+    {tipo === 'pin' && (
+      <g>
+        <path d="M0,22 Q-20,-2 -20,-8 A20,20 0 1 1 20,-8 Q20,-2 0,22 Z" />
+        <text x={0} y={-1} fontSize={22} fontWeight="900" textAnchor="middle" fill={C.acento} fontFamily={F}>
+          ?
+        </text>
+      </g>
+    )}
+    {tipo === 'coracao' && <path d="M0,18 L-20,-2 A11,11 0 0 1 0,-14 A11,11 0 0 1 20,-2 Z" fill="#e0463a" stroke={C.hud} strokeWidth={3} strokeLinejoin="round" />}
+    {tipo === 'espadas' && (
+      <g stroke={C.hud} strokeWidth={6} strokeLinecap="round">
+        <line x1={-16} y1={-16} x2={16} y2={16} />
+        <line x1={16} y1={-16} x2={-16} y2={16} />
+        <line x1={-20} y1={8} x2={-8} y2={20} />
+        <line x1={20} y1={8} x2={8} y2={20} />
+      </g>
+    )}
+    {tipo === 'controle' && (
+      <g>
+        <path d="M-24,-10 Q0,-16 24,-10 Q30,14 22,16 Q14,18 8,6 L-8,6 Q-14,18 -22,16 Q-30,14 -24,-10 Z" />
+        <rect x={-17} y={-5} width={10} height={3} fill={C.acento} />
+        <rect x={-13.5} y={-8.5} width={3} height={10} fill={C.acento} />
+        <circle cx={12} cy={-5} r={2.5} fill={C.acento} />
+        <circle cx={17} cy={0} r={2.5} fill={C.acento} />
+      </g>
+    )}
+    {tipo === 'olho' && (
+      <g>
+        <path d="M-24,0 Q0,-22 24,0 Q0,22 -24,0 Z" fill="#fff" stroke={C.hud} strokeWidth={3.5} />
+        <circle cx={0} cy={0} r={8} />
+      </g>
+    )}
+    {tipo === 'claquete' && (
+      <g>
+        <rect x={-20} y={-4} width={40} height={24} rx={3} />
+        <g transform="rotate(-14 -20 -4)">
+          <rect x={-20} y={-14} width={40} height={9} rx={2} />
+          {[0, 1, 2].map((i) => (
+            <rect key={i} x={-15 + i * 12} y={-14} width={5} height={9} fill={C.acento} />
+          ))}
+        </g>
+      </g>
+    )}
+    {tipo === 'lupa' && (
+      <g>
+        <circle cx={-4} cy={-4} r={14} fill="#fff" stroke={C.hud} strokeWidth={5} />
+        <rect x={6} y={6} width={8} height={18} rx={3} transform="rotate(-45 10 15)" />
+      </g>
+    )}
+    {tipo === 'urna' && (
+      <g>
+        <rect x={-10} y={-20} width={20} height={20} rx={2} fill="#fff" stroke={C.hud} strokeWidth={3} />
+        <path d="M-5,-11 L-1,-6 L6,-15" fill="none" stroke={C.hud} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
+        <rect x={-20} y={-2} width={40} height={22} rx={3} />
+      </g>
+    )}
+  </g>
+);
+
+const CartaoOpcao: React.FC<{x: number; y: number; icone: Icone; titulo: string; sub: string; rot?: number}> = ({x, y, icone, titulo, sub, rot = 0}) => (
+  <g transform={`rotate(${rot} ${x + 95} ${y + 45})`} fontFamily={F}>
+    <rect x={x} y={y} width={190} height={90} rx={12} fill="#000" opacity={0.3} transform="translate(4,5)" />
+    <rect x={x} y={y} width={190} height={90} rx={12} fill="#f6efdc" {...T} />
+    <circle cx={x + 40} cy={y + 45} r={28} fill={C.acento} {...Tf} />
+    <IconeCartao tipo={icone} x={x + 40} y={y + 45} />
+    <text x={x + 78} y={y + 42} fontSize={17} fontWeight="900" fill={C.hud}>
+      {titulo}
+    </text>
+    <text x={x + 78} y={y + 62} fontSize={11.5} fontWeight="bold" fill="#6a6380">
+      {sub}
+    </text>
+  </g>
+);
+
+export const PesquisaPublico: React.FC<{tela: 1 | 2 | 3}> = ({tela}) => (
+  <AbsoluteFill style={{background: '#000'}}>
+    <svg viewBox="0 0 540 960" width={1080} height={1920}>
+      <Fundo h={960} />
+      <Selo y={135} texto={`VOCÊ DECIDE AÍ · PESQUISA ${tela}/3`} />
+      {tela === 1 && (
+        <g>
+          <Titulo y={215} linhas={['QUE HISTÓRIA', ['VOCÊ QUER ', 'VER?']]} tam={44} />
+          <Texto y={300} linhas={['Aqui você já decide o episódio.', 'Agora decide o próximo GÊNERO. 👀']} tam={19} cor="#fff" />
+          <CartaoOpcao x={65} y={340} icone="lupa" titulo="MISTÉRIO" sub="Bilhete na Porta" rot={-2} />
+          <CartaoOpcao x={285} y={340} icone="pin" titulo="SUSPENSE" sub="Fora do Mapa" rot={2} />
+          <CartaoOpcao x={65} y={445} icone="coracao" titulo="DRAMA" sub="Matheus e Bia" rot={2} />
+          <CartaoOpcao x={285} y={445} icone="espadas" titulo="BATALHA" sub="Bisnaga" rot={-2} />
+          <LugarFigurinha y={560} h={215} texto="cole aqui a ENQUETE (4 opções)" />
+        </g>
+      )}
+      {tela === 2 && (
+        <g>
+          <Titulo y={215} linhas={['QUE VÍDEO', ['VOCÊ QUER ', 'MAIS?']]} tam={44} />
+          <Texto y={300} linhas={['O jeito de contar também', 'é você quem escolhe. 🗳️']} tam={19} cor="#fff" />
+          <CartaoOpcao x={65} y={340} icone="urna" titulo="SÉRIE" sub="você vota no final" rot={-2} />
+          <CartaoOpcao x={285} y={340} icone="olho" titulo="POV" sub="você é o herói" rot={2} />
+          <CartaoOpcao x={65} y={445} icone="espadas" titulo="EXÉRCITO" sub="comente e lute" rot={2} />
+          <CartaoOpcao x={285} y={445} icone="claquete" titulo="BASTIDOR" sub="como é feito" rot={-2} />
+          <LugarFigurinha y={560} h={215} texto="cole aqui a ENQUETE (4 opções)" />
+        </g>
+      )}
+      {tela === 3 && (
+        <g>
+          <Titulo y={215} linhas={['ME CONTA A', ['HISTÓRIA ', 'QUE VOCÊ'], 'QUER VER AQUI']} tam={40} />
+          <Texto y={360} linhas={['A melhor ideia pode virar', 'a próxima série do canal. ✍️']} tam={19} cor="#fff" />
+          <LugarFigurinha y={400} h={190} texto="cole aqui a CAIXINHA DE PERGUNTAS" />
+          <Bilhete x={95} y={625} w={350} linhas={['Ex.: "um porteiro que', 'ouve tudo pelo interfone..."']} tam={20} rot={-3} />
+        </g>
+      )}
+    </svg>
+  </AbsoluteFill>
+);

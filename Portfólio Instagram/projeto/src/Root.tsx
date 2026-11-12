@@ -5,13 +5,14 @@ import {RigTeste} from './bilhete/RigTeste';
 import {Ep01, DURACAO_EP01} from './bilhete/Ep01';
 import {Capa, capaEp01} from './bilhete/Capa';
 import {ComoFunciona, Destaque} from './perfil/Perfil';
-import {DestaqueNovo, ArquivoDoCaso, QuemEORodnei, Story} from './perfil/Portfolio';
+import {DestaqueNovo, ArquivoDoCaso, QuemEORodnei, Story, PesquisaPublico} from './perfil/Portfolio';
 
 // Formato do estúdio: vertical 1080×1920, 30 fps.
 export const RemotionRoot: React.FC = () => {
   return (
     <>
     {/* Portfólio do Instagram */}
+    <Composition id="PesquisaPublico" component={PesquisaPublico} defaultProps={{tela: 1 as 1 | 2 | 3}} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="DestaqueNovo" component={DestaqueNovo} defaultProps={{tipo: 'vote' as const}} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="ArquivoDoCaso" component={ArquivoDoCaso} defaultProps={{slide: 1}} durationInFrames={1} fps={30} width={1080} height={1350} />
     <Composition id="QuemEORodnei" component={QuemEORodnei} defaultProps={{slide: 1}} durationInFrames={1} fps={30} width={1080} height={1350} />

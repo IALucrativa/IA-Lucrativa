@@ -11,6 +11,18 @@ Em `entregas/2026-11-09_portfolio-instagram/` (guia completo em `guia.md`):
 
 Já existia (em `entregas/2026-11-09_perfil-instagram/`): carrossel "Como funciona", destaques COMO FUNCIONA e BILHETE NA PORTA.
 
+## Pronto para postar (2026-11-12)
+Em `entregas/2026-11-12_portfolio-pesquisa-stories/` (passo a passo em `como-postar.md`):
+- Pesquisa em 3 Stories: enquete "Que história você quer ver?" (Mistério, Suspense, Drama, Batalha), enquete "Que vídeo você quer mais?" (Série, POV, Exército, Bastidores) e caixinha "Me conta a história que você quer ver".
+- Séries do canal citadas nos cartões: Bilhete na Porta, Fora do Mapa, Matheus e Bia, Bisnaga.
+
+## Resultado da pesquisa
+| Pergunta | Vencedor | Observação |
+|---|---|---|
+| Que história? | a confirmar | |
+| Que vídeo? | a confirmar | |
+| Ideias da caixinha | a confirmar | anotar as melhores aqui |
+
 ## Situação do perfil
 | Item | Situação |
 |---|---|
