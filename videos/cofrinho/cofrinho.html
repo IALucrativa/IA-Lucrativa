@@ -358,6 +358,40 @@ function render(frame){
   if (frame>=OUTRO_START) outro(frame-OUTRO_START);
 }
 
+/* ================= CAPA ================= */
+function renderCover(){
+  ctx.setTransform(S,0,0,S,0,0);
+  background();
+  // cena mais abaixo: bigorna quase encostando
+  ctx.save(); ctx.translate(0,110);
+  crane(PIG_TOP-26-ANVIL_H, 0); table();
+  pig(330, false, '', 1, 0.25);
+  anvil(360, PIG_TOP-26, false);
+  // linhas de tensao
+  ctx.strokeStyle=C.red; ctx.lineWidth=5; ctx.lineCap='round';
+  for (const [x1,y1,x2,y2] of [[180,760,140,730],[540,760,580,730],[170,800,120,800],[550,800,600,800]]){
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); }
+  ctx.restore();
+
+  // selo
+  ctx.save(); ctx.translate(360,196); ctx.rotate(-0.04);
+  rr(-170,-26,340,52,26); ctx.fillStyle=C.red; ctx.fill();
+  text('NÍVEL IMPOSSÍVEL', 0, 1, 26, '#fff', 900); ctx.restore();
+  // titulo
+  ctx.save(); ctx.shadowColor='rgba(245,200,66,0.6)'; ctx.shadowBlur=30;
+  fitText('SÓ 1 FRAME', 360, 300, 640, 118, C.gold, 900); ctx.restore();
+  fitText('REVELA A PALAVRA', 360, 392, 640, 62, '#ffffff', 900);
+  // cofrinho dourado misterioso
+  ctx.save(); ctx.translate(560,500); ctx.rotate(0.12);
+  rr(-62,-40,124,80,20); ctx.fillStyle='rgba(20,16,4,0.95)'; ctx.fill(); ctx.strokeStyle=C.gold; ctx.lineWidth=3; ctx.stroke();
+  text('7 LETRAS', 0, -12, 18, C.gold, 900); text('? ? ?', 0, 16, 22, '#fff', 900); ctx.restore();
+  // chamada
+  rr(120,1150,480,80,40); ctx.fillStyle=C.green; ctx.fill();
+  text('VOCÊ CONSEGUE PAUSAR?', 360, 1191, 28, '#04130d', 900);
+  return cv.toDataURL('image/png');
+}
+window.renderCover = renderCover;
+
 /* exporta pro renderizador */
 window.TOTAL_FRAMES = TOTAL_FRAMES; window.FPS = FPS; window.ROUNDS = ROUNDS; window.OUTRO_START = OUTRO_START;
 window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
