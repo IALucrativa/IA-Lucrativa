@@ -10,6 +10,7 @@ import {BATALHA_D01} from './bisnaga/d01/batalhas';
 import {PranchaSeuCasco, ElencoSeuCasco} from './seucasco/Prancha';
 import {ConvocacaoSeuCasco, DURACAO_CONV_SC} from './seucasco/d01/Convocacao';
 import {CONVOCACAO_D01 as CONV_SC_D01} from './seucasco/d01/tempos';
+import {CapaSeuCasco, CAPA_SC_D01_CONVOCACAO} from './seucasco/Capa';
 
 // Formato do estúdio: vertical 1080×1920, 30 fps.
 export const RemotionRoot: React.FC = () => {
@@ -42,6 +43,7 @@ export const RemotionRoot: React.FC = () => {
       />
       <Composition id="SeuCasco-Prancha" component={PranchaSeuCasco} durationInFrames={1} fps={30} width={1080} height={1920} />
       <Composition id="SeuCasco-D01-Convocacao" component={ConvocacaoSeuCasco} defaultProps={{cfg: CONV_SC_D01}} durationInFrames={DURACAO_CONV_SC} fps={30} width={1080} height={1920} />
+      <Composition id="SeuCasco-D01-Convocacao-Capa" component={CapaSeuCasco} defaultProps={CAPA_SC_D01_CONVOCACAO} durationInFrames={1} fps={30} width={1080} height={1920} />
       <Composition id="SeuCasco-Elenco" component={ElencoSeuCasco} durationInFrames={1} fps={30} width={1080} height={1920} />
       <Composition id="Bisnaga-Elenco" component={Elenco} durationInFrames={1} fps={30} width={1920} height={1080} />
     </>
