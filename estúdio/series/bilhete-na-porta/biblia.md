@@ -108,6 +108,15 @@
 - **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"? ☐ Por que a Tânia?
 - **Voto do Ep. 3:** Confiar · Desconfiar (a confirmar).
 
+## Estado após o Ep. 3 — linha TT (TikTok) (noite 3)
+- **Noite:** 3 de 30 (faltam 27). **Chaves:** 12 + a mestra (secreta). **Bilhetes:** 4.
+  4. "Câmera não me vê. Devolve o que é meu." (às 23h; a câmera gravou o bilhete aparecendo sem ninguém passar)
+- **Tânia:** enfermeira, estava de plantão na noite 1 (álibi). "Quem é T?" foi riscada. Ela é aliada nesta linha.
+- **Pista nova:** na noite 1, por volta de 22h50, a Tânia cruzou no elevador com alguém de **macacão azul igual ao do Rodnei**, de boné, de costas.
+- **Marlene:** aliada; a câmera dela está instalada no corredor do térreo (problema #16 usado).
+- **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"? ☐ Quem usa macacão?
+- **Voto do Ep. 3:** Marlene · Sozinho (a confirmar).
+
 ## Estado após o Ep. 2 — linha TT (TikTok) (noite 2)
 - **Noite:** 2 de 30 (faltam 28). **Chaves:** 12 + a mestra (secreta). **Bilhetes:** 3.
   3. "Você contou pra ela. Agora eu também vou contar." (chegou às 23h, com a porta trancada e a luz acesa)
@@ -145,6 +154,7 @@
 | 2 (IG+YT) | Bater · Vigiar | Bater | — | Bater |
 | 2 (TT) | Marlene · Tânia | — | Tânia | — |
 | 3 (IG+YT) | Confiar · Desconfiar | a confirmar | — | a confirmar |
+| 3 (TT) | Marlene · Sozinho | — | a confirmar | — |
 
 ## Calendário interno
 - Episódio N = noite N. A mudança acontece na noite 30.

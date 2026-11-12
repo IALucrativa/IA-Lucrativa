@@ -20,7 +20,7 @@
 | 13 | A lanterna falha no pior momento. | |
 | 14 | Um chamado de trabalho de madrugada em outro prédio, e o bilhete chega mesmo assim. | |
 | 15 | Alguém troca a fechadura de uma porta que ele precisava abrir. | |
-| 16 | A Marlene instala uma câmera no corredor, e a sombra não aparece na gravação. | anunciada no Ep. 2 (TT) |
+| 16 | A Marlene instala uma câmera no corredor, e a sombra não aparece na gravação. | anunciada no Ep. 2 (TT), usada no Ep. 3 (TT) |
 | 17 | O vizinho de baixo reclama do barulho das caixas. | |
 
 ## O problema que cresce quieto

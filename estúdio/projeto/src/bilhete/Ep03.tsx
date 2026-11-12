@@ -229,7 +229,7 @@ export const Ep03IGYT: React.FC<{semLegenda?: boolean}> = ({semLegenda}) => (
 
 const TtImpacto: React.FC = () => {
   const f = useCurrentFrame();
-  const abriu = f > 165;
+  const abriu = f > 205;
   return (
     <Tela>
       {abriu ? (
@@ -237,7 +237,7 @@ const TtImpacto: React.FC = () => {
       ) : (
         <>
           <PortaLateral numero="501" luzEmbaixo={false} dia />
-          <RodneiBatendo f={f} de={95} ate={130} bilhete />
+          <RodneiBatendo f={f} de={160} ate={195} bilhete />
         </>
       )}
       <Etiqueta texto="7h00 · 5º ANDAR" />
@@ -263,7 +263,7 @@ const TtCracha: React.FC = () => {
   return (
     <Tela>
       <PortaLateral numero="501" aberta dia luzEmbaixo={false} />
-      <Tania x={250} y={960} escala={1.4} frame={f} roupa="plantao" cara={f > 140 ? 'fala' : 'seria'} olhar={[0.6, 0]} />
+      <Tania x={250} y={960} escala={1.4} frame={f} roupa="plantao" cara={f > 135 ? 'fala' : 'seria'} olhar={[0.6, 0]} />
     </Tela>
   );
 };
@@ -275,7 +275,7 @@ const TtRisca: React.FC = () => {
   return (
     <Tela>
       <NaPorta501 f={f} roupa="plantao" dia caraT="seria" medoR={false} />
-      <Placar noite="3/30" chaves={12} entrada={1} perguntas={PERG_TT_ANTES} riscada={2} risco={interpolate(f, [30, 70], [0, 1], clamp)} />
+      <Placar noite="3/30" chaves={12} entrada={1} perguntas={PERG_TT_ANTES} riscada={2} risco={interpolate(f, [55, 90], [0, 1], clamp)} />
     </Tela>
   );
 };
@@ -306,7 +306,7 @@ const TtCamera: React.FC = () => {
   const f = useCurrentFrame();
   return (
     <Tela>
-      <Corredor sombraOp={0} bilheteNoChao={f > 125} feixe={false} camera />
+      <Corredor sombraOp={0} bilheteNoChao={f > 130} feixe={false} camera />
       <Etiqueta texto="23h00" />
     </Tela>
   );
@@ -317,13 +317,13 @@ const TtGravacao: React.FC = () => {
   const seg = 10 + Math.floor(f / 30);
   return (
     <Tela>
-      <TelaGravacao papel={interpolate(f, [85, 92], [0, 1], clamp)} tempo={`23:00:${String(seg).padStart(2, '0')}`} />
+      <TelaGravacao papel={interpolate(f, [80, 87], [0, 1], clamp)} tempo={`23:00:${String(seg).padStart(2, '0')}`} />
     </Tela>
   );
 };
 
 const TtBilhete4: React.FC = () => (
-  <BilheteClose linhas={['Câmera não me vê.', 'Devolve', 'o que é meu.']} de={6} ate={85} fundo={<Corredor sombraOp={0} bilheteNoChao={false} feixe={false} camera />} />
+  <BilheteClose linhas={['Câmera não me vê.', 'Devolve', 'o que é meu.']} de={6} ate={76} fundo={<Corredor sombraOp={0} bilheteNoChao={false} feixe={false} camera />} />
 );
 
 const PERG_TT = ['Quem escreve?', 'O que é "meu"?', 'Quem usa macacão?'];
@@ -352,18 +352,42 @@ const TtVoto: React.FC = () => {
   );
 };
 
+// Tempos acertados pela narração do TikTok (ep03-tiktok-narracao.mp3, 63,1 s).
 export const PARTES_EP03_TT: Parte[] = [
-  {nome: 'impacto', Cena: TtImpacto, dur: 195, legendas: [[2.6, 6.2, 'O Rodnei subiu direto pro quinto andar e bateu na porta do 501.']]},
-  {nome: 'quem', Cena: TtQuem, dur: 285, legendas: [[0.2, 3.0, 'Ele é técnico de elevador, mora no térreo'], [3.0, 5.0, 'e se muda em vinte e oito dias.'], [5.1, 9.2, 'Desde que avisou, alguém deixa um bilhete na porta dele toda noite.']]},
-  {nome: 'cracha', Cena: TtCracha, dur: 285, legendas: [[0.2, 4.4, 'A Tânia abriu de crachá no pescoço, ainda de uniforme de enfermeira.'], [4.6, 9.2, 'Na noite do primeiro bilhete? Eu tava de plantão no hospital.']]},
-  {nome: 'risca', Cena: TtRisca, dur: 195, legendas: [[0.2, 3.6, 'Ir direto nela deu certo: a Tânia não era o T.'], [3.7, 6.2, 'E ela lembrou de uma coisa.']]},
-  {nome: 'flash', Cena: TtFlashElevador, dur: 210, legendas: [[0.2, 3.4, 'Quando eu saí pro plantão, cruzei com alguém no elevador.'], [3.5, 6.8, 'De macacão azul. Igual ao seu.']]},
-  {nome: 'vestido', Cena: TtVestido, dur: 105, legendas: [[0.2, 3.3, 'Alguém no prédio está andando vestido de Rodnei.']]},
-  {nome: 'camera', Cena: TtCamera, dur: 180, legendas: [[0.2, 3.4, 'À noite, a câmera da Marlene já estava no corredor.'], [3.5, 5.8, 'Às onze, o bilhete chegou.']]},
-  {nome: 'gravacao', Cena: TtGravacao, dur: 180, legendas: [[0.2, 3.4, 'Na gravação, a porta dele aparece. O bilhete aparece.'], [3.5, 5.8, 'Mas ninguém passa.']]},
-  {nome: 'bilhete4', Cena: TtBilhete4, dur: 105, legendas: []},
-  {nome: 'placar', Cena: TtPlacar, dur: 90, legendas: [[0.2, 2.8, 'Noite três. Faltam vinte e sete.']]},
-  {nome: 'voto', Cena: TtVoto, dur: 210, legendas: [[0.2, 2.6, 'Ele pede ajuda pra Marlene...'], [2.7, 4.8, '...ou procura esse macacão sozinho?'], [4.9, 6.8, 'Comente: Marlene ou sozinho.']]},
+  {nome: 'impacto', Cena: TtImpacto, dur: 222, fala: [0, 6.81], atraso: 0.2,
+    legendas: [[2.66, 6.81, 'O Rodnei subiu direto pro quinto andar e bateu na porta do 501.']]},
+  {nome: 'quem', Cena: TtQuem, dur: 282, fala: [7.4, 16.19], atraso: 0.2,
+    legendas: [[7.4, 8.76, 'Ele é técnico de elevador,'], [9.01, 11.77, 'mora no térreo e se muda em vinte e oito dias.'], [12.25, 16.19, 'Desde que avisou, alguém deixa um bilhete na porta dele toda noite.']]},
+  {nome: 'cracha', Cena: TtCracha, dur: 246, fala: [16.81, 24.49], atraso: 0.2,
+    legendas: [[16.81, 20.82, 'A Tânia abriu de crachá no pescoço, ainda de uniforme de enfermeira.'], [21.24, 24.49, 'Na noite do primeiro bilhete? Eu tava de plantão no hospital.']]},
+  {nome: 'risca', Cena: TtRisca, dur: 165, fala: [24.95, 29.95], atraso: 0.2,
+    legendas: [[24.95, 28.19, 'Ir direto nela deu certo: a Tânia não era o T.'], [28.66, 29.95, 'E ela lembrou de uma coisa.']]},
+  {nome: 'flash', Cena: TtFlashElevador, dur: 176, fala: [30.26, 35.6], atraso: 0.2,
+    legendas: [[30.26, 33.18, 'Quando eu saí pro plantão, cruzei com alguém no elevador.'], [33.52, 35.6, 'De macacão azul. Igual ao seu.']]},
+  {nome: 'vestido', Cena: TtVestido, dur: 101, fala: [36.0, 38.87], atraso: 0.2,
+    legendas: [[36.0, 38.87, 'Alguém no prédio está andando vestido de Rodnei.']]},
+  {nome: 'camera', Cena: TtCamera, dur: 167, fala: [39.52, 44.56], atraso: 0.2,
+    legendas: [[39.52, 42.5, 'À noite, a câmera da Marlene já estava no corredor.'], [42.94, 44.56, 'Às onze, o bilhete chegou.']]},
+  {nome: 'gravacao', Cena: TtGravacao, dur: 166, fala: [45.07, 50.09], atraso: 0.2,
+    legendas: [[45.07, 48.68, 'Na gravação, a porta dele aparece. O bilhete aparece.'], [49.1, 50.09, 'Mas ninguém passa.']]},
+  {nome: 'bilhete4', Cena: TtBilhete4, dur: 90, fala: [50.47, 52.86], atraso: 0.2, legendas: []},
+  {nome: 'placar', Cena: TtPlacar, dur: 93, fala: [53.45, 56.05], atraso: 0.3,
+    legendas: [[53.45, 56.05, 'Noite três. Faltam vinte e sete.']]},
+  {nome: 'voto', Cena: TtVoto, dur: 223, fala: [56.45, 63.0], atraso: 0.3,
+    legendas: [[56.45, 57.97, 'Ele pede ajuda pra Marlene...'], [58.28, 60.09, '...ou procura esse macacão sozinho?'], [60.58, 63.0, 'Comente: Marlene ou sozinho.']]},
+];
+const TT = montar(PARTES_EP03_TT);
+const EFEITOS_TT: [string, number, number, number?][] = [
+  ['batida', TT.inicio('impacto') + 160, 0.6],
+  ['clique', TT.inicio('impacto') + 203, 0.4],
+  ['suspense_longo', TT.inicio('camera'), 0.16, TT.duracao - TT.inicio('camera')],
+  ['papel', TT.inicio('camera') + 130, 0.5],
+  ['impacto', TT.inicio('camera') + 134, 0.4],
+  ['bip', TT.inicio('gravacao') + 4, 0.25],
+  ['papel', TT.inicio('bilhete4') + 2, 0.35],
+  ['uuush', TT.inicio('voto') + 4, 0.3],
 ];
 export const DURACAO_EP03_TT = montar(PARTES_EP03_TT).duracao;
-export const Ep03TT: React.FC<{semLegenda?: boolean}> = ({semLegenda}) => <Episodio partes={PARTES_EP03_TT} semLegenda={semLegenda} />;
+export const Ep03TT: React.FC<{semLegenda?: boolean}> = ({semLegenda}) => (
+  <Episodio partes={PARTES_EP03_TT} audio="ep03-tiktok-narracao.mp3" efeitos={EFEITOS_TT} semLegenda={semLegenda} />
+);
