@@ -75,6 +75,7 @@ Iguais às do Bisnaga (confirmadas em 09/11/2026 naquela série).
 
 ## Estilo
 - O mesmo do Bisnaga: **cartoon com contorno** (cores fortes, sombra em degraus e contorno preto). Nunca trocar o estilo sem pedido.
+- **Prancha aprovada em 12/11/2026:** `prancha/prancha-v1.jpg` (o Seu Casco, o elenco de jabutis e as lesmas no quintal). Código em `projeto/src/seucasco/` (`Jabutis.tsx` e `Quintal.tsx`).
 
 ## Voz
 - **Narrador:** o mesmo do Bisnaga, **Leo Antonio - Welcoming, Serene** (ElevenLabs), estabilidade 50, similaridade 75. Nunca trocar sem pedido.
