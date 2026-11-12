@@ -61,11 +61,11 @@ export const CartaoNome: React.FC<{linha2: string}> = ({linha2}) => {
   const c = spring({frame: f - 6, fps, config: {damping: 14}});
   return (
     <g transform={`translate(0,${(1 - c) * -120})`} opacity={c} fontFamily="Inter, Arial, sans-serif">
-      <rect x={90} y={120} width={360} height={86} rx={16} fill={C.hud} opacity={0.92} />
-      <text x={270} y={160} fontSize={32} fontWeight="900" textAnchor="middle" fill="#fff">
+      <rect x={90} y={96} width={360} height={86} rx={16} fill={C.hud} opacity={0.92} />
+      <text x={270} y={136} fontSize={32} fontWeight="900" textAnchor="middle" fill="#fff">
         RODNEI
       </text>
-      <text x={270} y={190} fontSize={16} fontWeight="bold" textAnchor="middle" fill={C.acento}>
+      <text x={270} y={166} fontSize={16} fontWeight="bold" textAnchor="middle" fill={C.acento}>
         {linha2}
       </text>
     </g>
@@ -129,14 +129,14 @@ export const CartaoVoto: React.FC<{pergunta: string; opcoes: [string, string]}> 
         {pergunta}
       </text>
       <rect x={62} y={212} width={176} height={62} rx={31} fill={C.acento} />
-      <text x={150} y={254} fontSize={28} fontWeight="900" textAnchor="middle" fill={C.hud}>
+      <text x={150} y={252} fontSize={opcoes[0].length > 8 ? 21 : 28} fontWeight="900" textAnchor="middle" fill={C.hud}>
         {opcoes[0]}
       </text>
       <text x={270} y={252} fontSize={22} fontWeight="bold" textAnchor="middle" fill="#fff">
         ou
       </text>
       <rect x={302} y={212} width={176} height={62} rx={31} fill="#fff" />
-      <text x={390} y={254} fontSize={28} fontWeight="900" textAnchor="middle" fill={C.hud}>
+      <text x={390} y={252} fontSize={opcoes[1].length > 8 ? 21 : 28} fontWeight="900" textAnchor="middle" fill={C.hud}>
         {opcoes[1]}
       </text>
       <text x={270} y={316} fontSize={20} fontWeight="bold" textAnchor="middle" fill={C.acento}>

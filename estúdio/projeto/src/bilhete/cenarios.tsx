@@ -134,7 +134,8 @@ export const Corredor: React.FC<{
   aberturaElevador?: number; // 0 fechado, 1 aberto
   sombraElevador?: number; // sombra dentro do elevador
   portaAberta?: boolean; // porta do apartamento do Rodnei aberta
-}> = ({sombraOp, bilheteNoChao, feixe, aberturaElevador = 0, sombraElevador = 0, portaAberta = false}) => {
+  camera?: boolean; // câmera da Marlene presa na parede
+}> = ({sombraOp, bilheteNoChao, feixe, aberturaElevador = 0, sombraElevador = 0, portaAberta = false, camera = false}) => {
   // bordas de cima e de baixo da porta do elevador (em perspectiva)
   const yCima = (x: number) => 412 - (x - 400) * (39 / 90);
   const yBaixo = (x: number) => 587 + (x - 400) * (150 / 90);
@@ -176,6 +177,14 @@ export const Corredor: React.FC<{
     <rect x={290} y={232} width={20} height={8} fill="#8793a3" {...Tf} />
     <ellipse cx={300} cy={246} rx={24} ry={8} fill={C.papel} {...Tf} />
     <polygon points="276,250 324,250 420,520 180,520" fill="url(#lampCorredor)" />
+    {camera && (
+      <g>
+        <rect x={482} y={262} width={8} height={22} fill="#8793a3" {...Tf} />
+        <rect x={452} y={280} width={40} height={20} rx={4} fill="#e8e8ec" {...Tf} />
+        <rect x={444} y={284} width={10} height={12} rx={2} fill="#333" />
+        <circle cx={482} cy={290} r={3.5} fill="#ff3b3b" />
+      </g>
+    )}
     {/* porta do apartamento do Rodnei */}
     {portaAberta ? (
       <g>
@@ -282,7 +291,7 @@ export const Vizinho: React.FC<{x: number; y: number; escala?: number; frame: nu
 };
 
 // ---------- Placar ----------
-export const Placar: React.FC<{noite: string; chaves: number; entrada: number; perguntas?: string[]}> = ({noite, chaves, entrada, perguntas = ['Quem escreve?']}) => (
+export const Placar: React.FC<{noite: string; chaves: number; entrada: number; perguntas?: string[]; riscada?: number; risco?: number; prazo?: string}> = ({noite, chaves, entrada, perguntas = ['Quem escreve?'], riscada = -1, risco = 0, prazo}) => (
   <g transform={`translate(0,${(1 - entrada) * -140})`} opacity={entrada} fontFamily="Inter, Arial, sans-serif">
     <rect x={18} y={22} width={150} height={44} rx={22} fill={C.hud} opacity={0.9} />
     <text x={93} y={51} fontSize={20} fontWeight="bold" textAnchor="middle" fill={C.hudTxt}>
@@ -305,11 +314,25 @@ export const Placar: React.FC<{noite: string; chaves: number; entrada: number; p
     {perguntas.map((p, i) => (
       <g key={p}>
         <rect x={346} y={58 + i * 26} width={14} height={14} fill="none" stroke={C.hudTxt} strokeWidth={2} />
-        <text x={368} y={70 + i * 26} fontSize={15} fill={C.hudTxt}>
+        <text x={368} y={70 + i * 26} fontSize={15} fill={C.hudTxt} opacity={i === riscada ? 1 - risco * 0.5 : 1}>
           {p}
         </text>
+        {i === riscada && risco > 0 && (
+          <>
+            <line x1={366} y1={65 + i * 26} x2={366 + 140 * risco} y2={65 + i * 26} stroke="#e0463a" strokeWidth={3} />
+            <path d={`M348,${60 + i * 26} l10,10 M358,${60 + i * 26} l-10,10`} stroke="#e0463a" strokeWidth={3} opacity={risco} />
+          </>
+        )}
       </g>
     ))}
+    {prazo && (
+      <g>
+        <rect x={18} y={76} width={150} height={32} rx={16} fill="#e0463a" />
+        <text x={93} y={98} fontSize={15} fontWeight="900" textAnchor="middle" fill="#fff">
+          {prazo}
+        </text>
+      </g>
+    )}
   </g>
 );
 
@@ -398,7 +421,9 @@ export const PortaFrente: React.FC<{
   papelNoChao?: boolean;
   luzEmbaixo?: boolean;
   dia?: boolean;
-}> = ({numero, cor = '#a0623a', corEsc = '#874f2c', placa = 'bemvindos', placaTorta = false, papelNoChao = false, luzEmbaixo = true, dia = false}) => (
+  aberta?: boolean; // porta aberta: aparece a sala de dentro
+  placaAngulo?: number; // sobrepõe placaTorta
+}> = ({numero, cor = '#a0623a', corEsc = '#874f2c', placa = 'bemvindos', placaTorta = false, papelNoChao = false, luzEmbaixo = true, dia = false, aberta = false, placaAngulo}) => (
   <g>
     <rect x={0} y={0} width={540} height={800} fill="#5d5486" />
     <rect x={0} y={780} width={540} height={20} fill="#874f2c" {...Tf} />
@@ -409,28 +434,50 @@ export const PortaFrente: React.FC<{
     <path d="M445,380 L485,380 L478,350 L452,350 Z" fill={dia ? '#e9e3c8' : '#f3d36b'} {...Tf} />
     {/* porta */}
     <rect x={140} y={240} width={260} height={560} fill={corEsc} {...T} />
+    {aberta ? (
+      <g>
+        {/* dentro do apartamento: luz acesa, um quadro e um cabideiro */}
+        <rect x={154} y={254} width={232} height={546} fill={dia ? '#e8d9bc' : '#f3c97a'} {...T} />
+        <rect x={154} y={700} width={232} height={100} fill={dia ? '#c9b48e' : '#d9a85a'} />
+        <rect x={300} y={330} width={60} height={46} fill="#7a9cc0" {...Tf} />
+        <rect x={180} y={420} width={8} height={280} fill="#5a3a24" {...Tf} />
+        <circle cx={184} cy={440} r={14} fill="#7a2e3e" {...Tf} />
+        {/* folha da porta aberta para dentro */}
+        <polygon points="154,254 196,270 196,784 154,800" fill={cor} {...T} />
+      </g>
+    ) : (
     <rect x={154} y={254} width={232} height={546} fill={cor} {...T} />
-    <rect x={180} y={300} width={180} height={190} fill={corEsc} opacity={0.5} />
-    <rect x={180} y={540} width={180} height={220} fill={corEsc} opacity={0.5} />
-    <rect x={225} y={268} width={90} height={36} rx={6} fill="#d8c37a" {...Tf} />
-    <text x={270} y={295} fontSize={26} fontWeight="900" textAnchor="middle" fill="#3a2a1a" fontFamily="Inter, Arial">{numero}</text>
-    <circle cx={270} cy={340} r={6} fill="#1b1b2a" {...Tf} />
-    {placa === 'bemvindos' && (
-      <g transform={placaTorta ? 'rotate(14 270 392)' : ''}>
+    )}
+    {!aberta && <rect x={180} y={300} width={180} height={190} fill={corEsc} opacity={0.5} />}
+    {!aberta && <rect x={180} y={540} width={180} height={220} fill={corEsc} opacity={0.5} />}
+    {aberta ? (
+      <>
+        <rect x={225} y={204} width={90} height={30} rx={6} fill="#d8c37a" {...Tf} />
+        <text x={270} y={227} fontSize={22} fontWeight="900" textAnchor="middle" fill="#3a2a1a" fontFamily="Inter, Arial">{numero}</text>
+      </>
+    ) : (
+      <>
+        <rect x={225} y={268} width={90} height={36} rx={6} fill="#d8c37a" {...Tf} />
+        <text x={270} y={295} fontSize={26} fontWeight="900" textAnchor="middle" fill="#3a2a1a" fontFamily="Inter, Arial">{numero}</text>
+      </>
+    )}
+    {!aberta && <circle cx={270} cy={340} r={6} fill="#1b1b2a" {...Tf} />}
+    {placa === 'bemvindos' && !aberta && (
+      <g transform={`rotate(${placaAngulo ?? (placaTorta ? 14 : 0)} 270 392)`}>
         <circle cx={270} cy={392} r={4} fill="#9aa0a6" {...Tf} />
         <path d="M270,392 L226,428 M270,392 L314,428" stroke="#6a4c3e" strokeWidth={2} fill="none" />
         <rect x={212} y={426} width={116} height={40} rx={6} fill="#f2e6c9" transform="rotate(-4 270 446)" {...Tf} />
         <text x={270} y={452} fontSize={15} fontWeight="bold" textAnchor="middle" fill="#6e3b3b" fontFamily="Inter, Arial" transform="rotate(-4 270 446)">BEM-VINDOS</text>
       </g>
     )}
-    {placa === 'sindica' && (
+    {placa === 'sindica' && !aberta && (
       <g>
         <rect x={205} y={380} width={130} height={36} rx={4} fill="#2f3540" {...Tf} />
         <text x={270} y={404} fontSize={17} fontWeight="900" textAnchor="middle" fill="#f3d36b" fontFamily="Inter, Arial">SÍNDICA</text>
       </g>
     )}
-    <circle cx={372} cy={560} r={9} fill={C.chave} {...Tf} />
-    {luzEmbaixo && (
+    {!aberta && <circle cx={372} cy={560} r={9} fill={C.chave} {...Tf} />}
+    {luzEmbaixo && !aberta && (
       <>
         <rect x={154} y={796} width={232} height={5} fill="#ffe69a" />
         <polygon points="154,801 386,801 430,850 110,850" fill="#ffe69a" opacity={0.25} />
@@ -446,6 +493,19 @@ export const PortaFrente: React.FC<{
     <path d="M440,800 L478,800 L472,760 L446,760 Z" fill="#b5653a" {...T} />
     <path d="M459,760 Q440,720 448,700 Q458,730 459,760 Z" fill="#3f8a4a" {...Tf} />
     <path d="M459,760 Q474,716 488,710 Q474,740 459,760 Z" fill="#4c9c56" {...Tf} />
+  </g>
+);
+
+// ---------- Porta mais à esquerda, com parede e chão em toda a largura ----------
+export const PortaLateral: React.FC<React.ComponentProps<typeof PortaFrente>> = (p) => (
+  <g>
+    <rect x={0} y={0} width={540} height={800} fill="#5d5486" />
+    <rect x={0} y={780} width={540} height={20} fill="#874f2c" />
+    <rect x={0} y={800} width={540} height={160} fill="#7a5a4a" />
+    <line x1={0} y1={880} x2={540} y2={880} stroke="#6a4c3e" strokeWidth={2} />
+    <g transform="translate(-110,0)">
+      <PortaFrente {...p} />
+    </g>
   </g>
 );
 
@@ -555,3 +615,56 @@ export const ListaClose: React.FC<{destaque: number}> = ({destaque}) => {
     </g>
   );
 };
+
+// ---------- Vulto de macacão azul, de costas ----------
+export const VultoMacacao: React.FC<{x: number; y: number; escala?: number}> = ({x, y, escala = 1}) => (
+  <g transform={`translate(${x},${y}) scale(${escala})`}>
+    <ellipse cx={0} cy={10} rx={70} ry={12} fill="#000" opacity={0.25} />
+    <path d="M-48,-144 L-4,-144 L-8,0 L-38,0 Z" fill={C.macacaoSomb} {...T} />
+    <path d="M4,-144 L48,-144 L38,0 L8,0 Z" fill={C.macacaoSomb} {...T} />
+    <path d="M-44,-4 L-6,-4 L-6,12 L-48,12 Z" fill={C.sapato} {...T} />
+    <path d="M6,-4 L44,-4 L48,12 L6,12 Z" fill={C.sapato} {...T} />
+    <path d="M-46,-266 Q0,-276 46,-266 L54,-142 L-54,-142 Z" fill={C.macacao} {...T} />
+    <rect x={-54} y={-154} width={108} height={12} fill={C.cinto} {...Tf} />
+    <rect x={-60} y={-262} width={22} height={124} rx={10} fill={C.macacaoSomb} {...T} />
+    <rect x={38} y={-262} width={22} height={124} rx={10} fill={C.macacaoSomb} {...T} />
+    <rect x={-10} y={-284} width={20} height={18} fill="#6b5a4a" {...Tf} />
+    {/* cabeça de costas, com boné: não dá para ver o rosto */}
+    <ellipse cx={0} cy={-316} rx={33} ry={38} fill="#2a2420" {...T} />
+    <path d="M-36,-326 Q0,-372 36,-326 Z" fill="#2f3540" {...T} />
+  </g>
+);
+
+// ---------- Tela da gravação da câmera ----------
+export const TelaGravacao: React.FC<{papel: number; tempo: string; children?: React.ReactNode}> = ({papel, tempo, children}) => (
+  <g>
+    <rect x={0} y={0} width={540} height={960} fill="#2a2a30" />
+    {/* monitor apoiado na mesa da portaria */}
+    <rect x={0} y={760} width={540} height={200} fill="#8a5a3a" {...T} />
+    <rect x={225} y={700} width={90} height={62} fill="#3a3a40" {...T} />
+    <rect x={30} y={200} width={480} height={510} rx={18} fill="#1b1b22" {...T} />
+    <defs>
+      <filter id="cinza">
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+      <clipPath id="telaClip">
+        <rect x={52} y={222} width={436} height={466} />
+      </clipPath>
+    </defs>
+    <g clipPath="url(#telaClip)">
+      <g filter="url(#cinza)" transform="translate(52,222) scale(0.81,0.485) translate(0,0)">
+        <Corredor sombraOp={0} bilheteNoChao={false} feixe={false} />
+        <g opacity={papel}>
+          <polygon points="80,720 108,685 126,694 98,730" fill="#fff" />
+        </g>
+      </g>
+      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
+        <rect key={i} x={52} y={222 + i * 40} width={436} height={2} fill="#000" opacity={0.25} />
+      ))}
+      <circle cx={80} cy={252} r={8} fill="#ff3b3b" />
+      <text x={96} y={258} fontSize={18} fontWeight="900" fill="#fff" fontFamily="JetBrains Mono, monospace">REC</text>
+      <text x={470} y={258} fontSize={18} fontWeight="bold" fill="#fff" textAnchor="end" fontFamily="JetBrains Mono, monospace">{tempo}</text>
+      {children}
+    </g>
+  </g>
+);
