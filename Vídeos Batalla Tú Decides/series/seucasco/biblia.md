@@ -100,3 +100,6 @@ Iguais às do Bisnaga (confirmadas em 09/11/2026 naquela série).
 ## Estado atual (antes do Desafio 1)
 - O Seu Casco come alface no quintal da vó. Nenhum desafio jogado.
 - **Desafio 1 escolhido (12/11/2026):** Ideia A, "As lesmas da horta" (`d01-ideia.md`).
+
+## Conta Tú Decides (Espanha)
+- **2026-11-12:** Reto 1 · Convocatoria em espanhol (Don Caparazón contra 10.000 babosas), narração do ElevenLabs (voz Jaime, 75,2 s). Vídeo final (76,5 s, −14 LUFS), capa e legenda em `entregas/2026-11-12_doncaparazon-d01-convocatoria/`. A contagem para a Batalla é só dos comentários da conta Tú Decides.
