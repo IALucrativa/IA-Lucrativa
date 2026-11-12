@@ -129,3 +129,5 @@ Sempre no mesmo lugar da tela:
 - **2026-11-12:** a pessoa aprovou a proposta ("pode começar"): nomes, perfil Você Decide Aí, meta de +100, roteiro do Ep. 1 "Fumaça" e o teaser (Ep. 0).
 - **Estilo:** A · Cartoon com contorno (prancha 1, escolhido em 2026-11-12), o mesmo do Bilhete na Porta. A prancha é rascunho: o rosto e o corpo do Kaique ainda serão refinados.
 - **Preço do jogo:** a confirmar.
+- **Ep. 1 "Fumaça":** narração do ElevenLabs (voz Leo Antonio, 73 s) recebida em 2026-11-12. Vídeo final (75,6 s, −14 LUFS), capa e legenda em `entregas/2026-11-13_corre-pro-gta-6-ep01/`. Postagem: sex 13/11, 12h.
+- **Visual aprovado do elenco (código em `projeto/src/gta/Kaique.tsx`):** Kaique (jaqueta verde-limão com faixa refletiva, calça azul-marinho, tênis branco com cadarço laranja num pé e azul no outro, chaveiro de controle azul, boné vermelho, cabelo crespo curto); Wesley (camisa roxa, topete, óculos escuros, calça bege); Seu Josué (cabelo branco nas laterais, bigode, óculos de lupa na testa, colete marrom).

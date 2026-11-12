@@ -77,7 +77,8 @@ export const Episodio: React.FC<{
   audio?: string; // arquivo da narração em public/
   efeitos?: [string, number, number, number?][]; // [arquivo, quadro, volume, duração máx.]
   semLegenda?: boolean;
-}> = ({partes, audio, efeitos = [], semLegenda = false}) => {
+  audioUnico?: string; // narração inteira, tocando do quadro 0 (cenas emendadas sem corte no áudio)
+}> = ({partes, audio, efeitos = [], semLegenda = false, audioUnico}) => {
   const {inicios, legendas} = montar(partes);
   return (
     <AbsoluteFill style={{background: '#000'}}>
@@ -88,6 +89,7 @@ export const Episodio: React.FC<{
         </Sequence>
       ))}
       {!semLegenda && <Legenda legendas={legendas} />}
+      {audioUnico && <Audio src={staticFile(audioUnico)} />}
       {audio &&
         partes.map((p, i) =>
           p.fala ? (
