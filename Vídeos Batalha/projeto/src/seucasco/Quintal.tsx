@@ -197,7 +197,7 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
       <Peca forma={{tipo: 'caixa', d: [0.6, 0.85, 0.55]}} pos={[2.15, 0.425, -1.6]} mat={cinza} estilo={estilo} contorno={0.01} />
       <Peca forma={{tipo: 'caixa', d: [0.5, 0.04, 0.45]}} pos={[2.15, 0.84, -1.6]} mat={m('#5d7a98', {brilho: 0.9})} estilo={estilo} contorno={0} />
       <Peca forma={{tipo: 'cilindro', r: 0.015, h: 0.25}} pos={[2.35, 1.0, -1.6]} mat={m('#b8bcc2')} estilo={estilo} contorno={0} />
-      <Peca forma={{tipo: 'esfera', r: 0.05}} pos={[1.9, 1.6, -1.6]} mat={m('#fff0c0', {emissivo: '#ffcc66'})} estilo={estilo} contorno={0} />
+      <Peca forma={{tipo: 'esfera', r: 0.05}} pos={[2.4, 1.3, -1.75]} mat={m('#fff0c0', {emissivo: '#ffcc66'})} estilo={estilo} contorno={0} />
 
       {/* varal com roupa */}
       {[-1.2, 1.2].map((x) => (

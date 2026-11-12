@@ -283,8 +283,8 @@ const quadro = (f: number, c: Ctx): {p: ParamsQuintal; ui: React.ReactNode[]; so
       const pos: Vec = vai < 0.87 ? chao : lerp([1.8, 0, -1.3], TANQUE, salto);
       if (salto > 0) pos[1] += Math.sin(salto * Math.PI) * 0.4;
       const splash = (T - (leg(0) + 0.3 + 1.1)) / 0.9;
-      const cam = camMove({pos: [0.3, 0.4, 1.4], alvo: [0.1, 0.1, 0.3]}, {pos: [0.6, 0.6, 0.9], alvo: [1.9, 0.5, -1.5]}, vai * 1.2, 52);
-      const jabs: JabutiNaCena[] = salto < 1 ? [{tipo: 'PATINETE', pos, giro: Math.atan2(2.1, -1.8)}] : [];
+      const cam = camMove({pos: [0.3, 0.4, 1.4], alvo: [0.1, 0.1, 0.3]}, {pos: [0.05, 0.55, 1.45], alvo: [1.45, 0.45, -1.1]}, vai * 1.2, 56);
+      const jabs: JabutiNaCena[] = salto < 1 ? [{tipo: 'PATINETE', pos, giro: Math.atan2(2.1, -1.8)}] : [{tipo: 'PATINETE', pos: [2.12, 0.8 + Math.sin(T * 3) * 0.008, -1.6], giro: 2.4, escondido: 1}];
       ui.push(<PlacarJabutis key="p" jabutis={1} />);
       ui.push(<Etiqueta key="e" texto="PATINETE" x={540} y={500} linha={110} f={f - 4} tam={46} />);
       som('clique.wav', 4, 0.5);
