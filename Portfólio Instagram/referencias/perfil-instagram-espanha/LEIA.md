@@ -16,8 +16,14 @@ O mesmo balão com "play" da conta brasileira (`../perfil-instagram/foto-perfil-
 Cada imagem tem 1080×1080. O Instagram corta em círculo: tudo o que importa já está no meio.
 Para refazer ou mudar uma cor: abra `fotos-de-perfil-espanha.html` no navegador.
 
-## Sugestão de nome e bio (em espanhol, a confirmar)
+## Bio (escolhida em 2026-11-12, mesmo modelo da conta do Brasil)
+```
+Series cortas en las que TÚ decides el próximo episodio. 🗳️
+```
+Linha extra opcional (cabe nos 150 caracteres):
+```
+Comenta UNA palabra al final. Gana la más comentada. 💬
+```
+
+## Sugestão de nome (a confirmar)
 - Nome do perfil: **Tú Decides · Series**
-- Bio:
-  > Series cortas en las que TÚ decides el próximo episodio. 🗳️
-  > Comenta UNA palabra al final. Gana la más comentada.
