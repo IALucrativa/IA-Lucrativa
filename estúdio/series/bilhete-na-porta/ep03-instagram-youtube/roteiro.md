@@ -1,4 +1,4 @@
-# Ep. 3 (Instagram + YouTube): "Você também recebeu?" (roteiro, aguardando aprovação)
+# Ep. 3 (Instagram + YouTube): "Você também recebeu?" (roteiro aprovado em 2026-11-12)
 
 - **Linha:** IG+YT · voto do Ep. 2: **Bater** (vitória: a Tânia abriu e virou peça nova do mistério).
 - **Noite:** 3 de 30 · **Chaves:** 12 · **Bilhetes do Rodnei:** 3 → 4 · **Duração estimada:** ~66 s (158 palavras).

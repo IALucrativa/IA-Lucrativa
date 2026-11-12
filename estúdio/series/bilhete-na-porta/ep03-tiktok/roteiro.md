@@ -1,4 +1,4 @@
-# Ep. 3 (TikTok): "Vestido de Rodnei" (roteiro, aguardando aprovação)
+# Ep. 3 (TikTok): "Vestido de Rodnei" (roteiro aprovado em 2026-11-12)
 
 - **Linha:** TT · voto do Ep. 2: **Tânia** (vitória: a Tânia tem álibi e dá uma pista nova).
 - **Noite:** 3 de 30 · **Chaves:** 12 · **Bilhetes:** 3 → 4 · **Duração estimada:** ~67 s (161 palavras).
