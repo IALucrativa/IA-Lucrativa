@@ -7,10 +7,9 @@ import {CartaoNome, CartaoVoto, Conta, Contador, Desbloqueados, MetaCartao, Pilu
 import {Camera, Episodio, Parte, Tela, montar, s} from './comum';
 
 // Ep. 1 "Humo" — versão em espanhol (Espanha) do Ep. 1 "Fumaça".
-// Narração em espanhol do ElevenLabs: public/tu-decides-ep01-narracion.mp3 (a pessoa manda o arquivo).
-// ATENÇÃO: os tempos abaixo (CORTES e legendas) ainda são os da versão em português.
-// Quando a narração em espanhol chegar, transcreva o áudio e reajuste CORTES e os tempos de cada legenda.
-// As cenas emendam sem corte no áudio: cada parte cobre o trecho [fala[0], fala[1]] da narração.
+// Narração do ElevenLabs (voz Jaime, public/tu-decides-ep01-narracion.mp3, 68,6 s), recebida em 2026-11-12.
+// Tempos tirados da transcrição do áudio. As cenas emendam sem corte no áudio:
+// cada parte cobre o trecho [fala[0], fala[1]] da narração, e as legendas usam o tempo do áudio.
 
 const CONTADOR = 'QUEDAN 6 DÍAS';
 const lerp = (f: number, a: number, b: number, de: number, para: number) =>
@@ -69,8 +68,8 @@ const Rival: React.FC = () => {
 // 5. Tentativa 1: assoprar.
 const Assoprar: React.FC = () => {
   const f = useCurrentFrame();
-  const sopro = f < s(3.2);
-  const nuvem = lerp(f, s(3.2), s(3.8), 0, 1);
+  const sopro = f < s(2.9);
+  const nuvem = lerp(f, s(2.9), s(3.5), 0, 1);
   return (
     <Tela>
       <Camera x={300} y={600} z={1.45}>
@@ -88,7 +87,7 @@ const Assoprar: React.FC = () => {
           olhar={[-1, 0.3]}
         />
         {nuvem > 0 && (
-          <g opacity={1 - lerp(f, s(4.2), s(5), 0, 1)}>
+          <g opacity={1 - lerp(f, s(3.8), s(4.5), 0, 1)}>
             <circle cx={320} cy={600} r={20 + nuvem * 26} fill={C.fumaca} stroke={C.linha} strokeWidth={2} />
             <circle cx={350} cy={584} r={14 + nuvem * 20} fill={C.fumaca} stroke={C.linha} strokeWidth={2} />
           </g>
@@ -137,11 +136,11 @@ const ContaCena: React.FC = () => {
       <Contador texto={CONTADOR} />
       <Pilulas dinheiro={240} videogame="QUEMADA" />
       <Conta
-        jogoEm={s(4.8)}
+        jogoEm={s(4.5)}
         linhas={[
-          {txt: '240 €', em: s(0.2)},
-          {txt: '− 190 €', cor: C.vermelho, em: s(2.0)},
-          {txt: '50 €', cor: C.acento, em: s(3.1)},
+          {txt: '240 €', em: s(0.4)},
+          {txt: '− 190 €', cor: C.vermelho, em: s(1.9)},
+          {txt: '50 €', cor: C.acento, em: s(3.35)},
         ]}
       />
     </Tela>
@@ -167,13 +166,13 @@ const SegundoGancho: React.FC = () => {
 // 10. A ameaça: a mensagem do primo e a etiqueta "W.".
 const Ameaca: React.FC = () => {
   const f = useCurrentFrame();
-  const letras = Math.floor(lerp(f, s(0.2), s(2.9), 0, 60));
+  const letras = Math.floor(lerp(f, s(0.2), s(2.4), 0, 60));
   return (
     <Tela>
-      {f < s(3.55) ? (
+      {f < s(2.95) ? (
         <Celular frame={f} tipo="mensagem" letras={letras} fundo={<Assistencia frame={f} segurando="videogame" />} />
       ) : (
-        <EtiquetaB frame={f} zoom={lerp(f, s(3.55), s(6.6), 1, 1.25)} />
+        <EtiquetaB frame={f} zoom={lerp(f, s(2.95), s(6.35), 1, 1.25)} />
       )}
       <Contador texto={CONTADOR} />
     </Tela>
@@ -247,7 +246,7 @@ const Emenda: React.FC = () => {
 };
 
 // Cortes de cena no tempo da narração (s).
-const CORTES = [0, 6.3, 10.45, 16.25, 21.2, 26.2, 33.5, 39.5, 46.7, 49.7, 56.3, 65.2, 73.6];
+const CORTES = [0, 5.8, 9.95, 15.55, 19.6, 24.1, 30.2, 35.65, 42.0, 44.65, 51.0, 60.5, 68.9];
 const parte = (i: number, nome: string, Cena: React.FC, legendas: [number, number, string][]): Parte => ({
   nome,
   Cena,
@@ -257,18 +256,18 @@ const parte = (i: number, nome: string, Cena: React.FC, legendas: [number, numbe
 });
 
 export const partesEp01: Parte[] = [
-  parte(0, 'impacto', Impacto, [[0, 2.6, 'Quedan seis días para el GTA 6...'], [2.94, 5.9, 'y la consola de Kike acaba de salir ardiendo.']]),
-  parte(1, 'quem', QuemE, [[6.46, 8.2, 'Kike es repartidor'], [8.2, 10.2, 'y lleva trece años esperando este juego.']]),
-  parte(2, 'aposta', Aposta, [[10.62, 11.8, 'Se apostó con su primo:'], [12.22, 15.95, 'el que juegue primero, a medianoche del día 19, gana.']]),
-  parte(3, 'rival', Rival, [[16.44, 19.05, 'Su primo Borja ya ha subido la reserva.'], [19.36, 20.9, 'Y ya va de ganador.']]),
-  parte(4, 'assoprar', Assoprar, [[21.4, 24.45, 'Kike probó el arreglo universal: soplar.'], [25.0, 25.9, 'No funcionó.']]),
-  parte(5, 'moto', DeMoto, [[26.42, 28.7, 'Fue en moto hasta el taller de Paco.'], [29.16, 29.7, 'Despacito:'], [30.2, 33.2, 'conduce como si llevara una tarta de boda detrás.']]),
-  parte(6, 'preco', Preco, [[33.8, 36.9, 'Paco la miró, la olió y le dio el precio:'], [37.34, 39.3, 'ciento noventa euros.']]),
-  parte(7, 'conta', ContaCena, [[39.74, 41.2, 'Tiene doscientos cuarenta.'], [41.54, 43.9, 'Si la arregla, le quedan cincuenta.'], [44.3, 46.4, 'Y el juego cuesta bastante más.']]),
-  parte(8, 'gancho', SegundoGancho, [[46.96, 49.3, 'Pero lo peor todavía no había llegado.']]),
-  parte(9, 'ameaca', Ameaca, [[49.94, 52.7, '«Primo, mañana paso a por MI consola.»'], [53.28, 54.6, 'La consola que se ha quemado...'], [54.88, 56.0, 'nunca fue suya.']]),
-  parte(10, 'meta', Meta, [[56.58, 57.7, 'Ahora os toca a vosotros.'], [57.98, 61.5, 'Si este perfil gana cien seguidores antes de mañana a mediodía,'], [61.7, 63.5, 'el arreglo baja a ciento veinte.'], [63.72, 64.9, 'Síguenos para desbloquearlo.']]),
-  parte(11, 'voto', Voto, [[65.38, 68.8, 'Y Kike... ¿la arregla a escondidas antes de que llegue su primo,'], [69.12, 70.15, 'o le cuenta la verdad?'], [70.58, 73.3, 'Comenta: ARREGLAR o CONTAR.']]),
+  parte(0, 'impacto', Impacto, [[0.00, 2.16, 'Quedan seis días para el GTA 6...'], [2.54, 5.24, 'y la consola de Kike acaba de salir ardiendo.']]),
+  parte(1, 'quem', QuemE, [[5.94, 7.12, 'Kike es repartidor'], [7.12, 9.58, 'y lleva trece años esperando este juego.']]),
+  parte(2, 'aposta', Aposta, [[10.10, 11.16, 'Se apostó con su primo:'], [11.68, 15.14, 'el que juegue primero, a medianoche del día 19, gana.']]),
+  parte(3, 'rival', Rival, [[15.70, 17.84, 'Su primo Borja ya ha subido la reserva.'], [17.84, 19.20, 'Y ya va de ganador.']]),
+  parte(4, 'assoprar', Assoprar, [[19.74, 22.46, 'Kike probó el arreglo universal: soplar.'], [23.00, 23.84, 'No funcionó.']]),
+  parte(5, 'moto', DeMoto, [[24.28, 26.10, 'Fue en moto hasta el taller de Paco.'], [26.56, 27.20, 'Despacito:'], [27.20, 30.18, 'conduce como si llevara una tarta de boda detrás.']]),
+  parte(6, 'preco', Preco, [[30.34, 33.48, 'Paco la miró, la olió y le dio el precio:'], [34.04, 35.24, 'ciento noventa euros.']]),
+  parte(7, 'conta', ContaCena, [[35.80, 36.68, 'Tiene doscientos cuarenta.'], [37.58, 39.32, 'Si la arregla, le quedan cincuenta.'], [39.94, 41.64, 'Y el juego cuesta bastante más.']]),
+  parte(8, 'gancho', SegundoGancho, [[42.18, 44.34, 'Pero lo peor todavía no había llegado.']]),
+  parte(9, 'ameaca', Ameaca, [[44.82, 47.12, '«Primo, mañana paso a por MI consola.»'], [47.70, 49.12, 'La consola que se ha quemado...'], [49.52, 50.62, 'nunca fue suya.']]),
+  parte(10, 'meta', Meta, [[51.16, 52.52, 'Ahora os toca a vosotros.'], [52.98, 56.30, 'Si este perfil gana cien seguidores antes de mañana a mediodía,'], [56.30, 58.10, 'el arreglo baja a ciento veinte.'], [58.64, 60.16, 'Síguenos para desbloquearlo.']]),
+  parte(11, 'voto', Voto, [[60.68, 64.24, 'Y Kike... ¿la arregla a escondidas antes de que llegue su primo,'], [64.24, 65.56, 'o le cuenta la verdad?'], [66.06, 68.12, 'Comenta: ARREGLAR o CONTAR.']]),
   {nome: 'emenda', Cena: Emenda, dur: s(2), legendas: []},
 ];
 
@@ -278,21 +277,21 @@ export const DURACAO_EP01 = montar(partesEp01).duracao;
 const efeitosEp01: [string, number, number, number?][] = [
   ['impacto', 0, 0.55, s(2)],
   ['luz_piscando', s(0.2), 0.35, s(1.7)],
-  ['uuush', s(10.35), 0.5, s(0.8)],
-  ['uuush', s(16.15), 0.4, s(0.8)],
-  ['bip', s(16.6), 0.6, s(0.2)],
-  ['uuush', s(24.4), 0.6, s(0.8)],
-  ['clique', s(39.7), 0.5, s(0.6)],
-  ['clique', s(41.5), 0.5, s(0.6)],
-  ['clique', s(42.6), 0.5, s(0.6)],
-  ['batida', s(44.3), 0.55, s(1)],
-  ['suspense', s(46.7), 0.3, s(3)],
-  ['bip', s(49.75), 0.7, s(0.2)],
-  ['bip', s(50.0), 0.7, s(0.2)],
-  ['impacto', s(53.25), 0.6, s(2)],
-  ['clique', s(56.5), 0.5, s(0.6)],
-  ['batida', s(65.3), 0.4, s(1)],
-  ['impacto', s(73.6), 0.4, s(2)],
+  ['uuush', s(9.85), 0.5, s(0.8)],
+  ['uuush', s(15.45), 0.4, s(0.8)],
+  ['bip', s(15.9), 0.6, s(0.2)],
+  ['uuush', s(22.5), 0.6, s(0.8)],
+  ['clique', s(36.05), 0.5, s(0.6)],
+  ['clique', s(37.55), 0.5, s(0.6)],
+  ['clique', s(39.0), 0.5, s(0.6)],
+  ['batida', s(40.15), 0.55, s(1)],
+  ['suspense', s(42.0), 0.3, s(3)],
+  ['bip', s(44.7), 0.7, s(0.2)],
+  ['bip', s(44.95), 0.7, s(0.2)],
+  ['impacto', s(47.6), 0.6, s(2)],
+  ['clique', s(51.2), 0.5, s(0.6)],
+  ['batida', s(60.4), 0.4, s(1)],
+  ['impacto', s(68.9), 0.4, s(2)],
 ];
 
 // semNarracao: para a prévia, enquanto a narração em espanhol não chega.

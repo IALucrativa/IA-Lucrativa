@@ -118,4 +118,4 @@ No placar da tela (abreviado): PIEZA · LIBRE · WI-FI · MANDO · TELE · PIZZA
 
 ## Decisões de produção
 - **2026-11-12:** pasta criada a partir de "Vídeos GTA 6". Nomes adaptados para a Espanha (Kike, Borja, Paco, abuela Maruja, Abel, Ramón), dinheiro em euros, textos da tela traduzidos. **A confirmar com a pessoa:** os nomes, o nome da série ("A por el GTA 6") e o preço do jogo na Espanha.
-- **Ep. 1 "Humo":** roteiro e texto do ElevenLabs em espanhol prontos (`ep01/`). Falta a narração em espanhol para reajustar os tempos e renderizar.
+- **Ep. 1 "Humo":** narração do ElevenLabs (voz Jaime, 68,6 s) recebida em 2026-11-12; tempos ajustados pela transcrição. Vídeo final (71 s, −14 LUFS), capa e legenda em `entregas/2026-11-13_a-por-el-gta-6-ep01/`. Postagem: vie 13/11, 12:00 (8h em Brasília).

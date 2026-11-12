@@ -10,7 +10,7 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition id="CapaGta" component={Capa} defaultProps={capaEp01} durationInFrames={1} fps={30} width={1080} height={1920} />
-      <Composition id="GtaEp01" component={Ep01} defaultProps={{semLegenda: false, semNarracao: true}} durationInFrames={DURACAO_EP01} fps={30} width={1080} height={1920} />
+      <Composition id="GtaEp01" component={Ep01} defaultProps={{semLegenda: false, semNarracao: false}} durationInFrames={DURACAO_EP01} fps={30} width={1080} height={1920} />
       <Composition id="RigTeste" component={RigTeste} durationInFrames={30} fps={30} width={1080} height={1920} />
       <Composition id="Ola" component={Ola} durationInFrames={150} fps={30} width={1080} height={1920} />
     </>
