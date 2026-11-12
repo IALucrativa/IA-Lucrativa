@@ -309,8 +309,8 @@ const quadro = (f: number, c: Ctx): {p: ParamsQuintal; ui: React.ReactNode[]; so
     }
     case 'lesmas': {
       // close na lesma; depois ela passa o Seu Casco
-      const passa = clamp01((T - leg(Math.min(2, bloco.legendas.length - 1))) / 1.6);
-      const close = T < leg(1);
+      const passa = clamp01((T - leg(3)) / 1.5);
+      const close = T < leg(2);
       const cam = close
         ? camMove({pos: [0.9, 0.17, 0.2], alvo: [0.55, 0.04, -0.45]}, {pos: [0.95, 0.19, 0.3], alvo: [0.55, 0.04, -0.45]}, k * 2, 40)
         : {pos: [0.85, 0.28, 1.35] as Vec, alvo: [0.3, 0.05, 0.6] as Vec, fov: 46};
