@@ -1,0 +1,57 @@
+SEU CASCO · DESAFIO 1 · CONVOCAÇÃO
+Narração para o ElevenLabs (uma voz só: o narrador)
+
+COMO GERAR
+- Voz: Leo Antonio - Welcoming, Serene (a mesma do Bisnaga).
+- Modelo: Eleven Multilingual v2 (fala português do Brasil).
+- Ajustes: Estabilidade 50 · Similaridade 75 · Estilo 0 · Velocidade 0,95.
+- Gere um bloco por vez. Copie só o texto entre aspas (sem as aspas).
+- Baixe em MP3 e salve com o nome indicado em: series/seucasco/d01/convocacao/audios/
+- As reticências (...) são pausas. Os nomes dos tipos estão em minúsculas de propósito:
+  em maiúsculas, a voz pode soletrar letra por letra.
+- Se uma palavra sair estranha, gere de novo só aquele bloco.
+- Mais fácil: gere tudo de uma vez com o texto de narracao-tudo-junto.txt.
+
+------------------------------------------------------------
+
+01-abertura.mp3
+"Dez mil lesmas... estão marchando para a horta."
+
+02-partiu.mp3
+"E só um soldado está no caminho. Ele já partiu."
+
+03-seu-casco.mp3
+"Esse é o Seu Casco. Oitenta anos. O jabuti mais lento do bairro. E o exército dele... quem monta é você."
+
+04-regra.mp3
+"Cada comentário... é um jabuti a mais."
+
+05-academia.mp3
+"Se comentar academia, vem o casco mais duro do bairro. Derruba qualquer coisa... mas, se capotar, fica de patinha pro ar."
+
+06-croche.mp3
+"Crochê vem blindado. Nada atravessa... mas os fiozinhos enroscam em tudo."
+
+07-patinete.mp3
+"Patinete é o único jabuti rápido do mundo... só não sabe frear."
+
+08-obra.mp3
+"E obra cava uma trincheira em segundos... no lugar errado."
+
+09-lesmas.mp3
+"As lesmas: um milímetro por segundo. Parece pouco. É mais rápido que o Seu Casco."
+
+10-meta.mp3
+"Se passar de quinhentos comentários... o chão vai tremer. E não vai ser trovão."
+
+11-prazo.mp3
+"Vocês têm vinte e quatro horas. Amanhã, ao meio-dia, a gente conta comentário por comentário. Cada comentário vira um jabuti. Nem um a mais, nem um a menos."
+
+12-ameaca.mp3
+"Por enquanto, o exército do Seu Casco... é o Seu Casco. Ele já andou um palmo. E as lesmas já chegaram na alface."
+
+13-pergunta.mp3
+"Quem você convoca?"
+
+------------------------------------------------------------
+13 arquivos. Quando todos estiverem na pasta audios/, me avise.

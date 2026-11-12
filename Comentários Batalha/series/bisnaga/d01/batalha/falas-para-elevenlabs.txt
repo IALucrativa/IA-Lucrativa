@@ -1,0 +1,55 @@
+BISNAGA · DESAFIO 1 · BATALHA (as três plataformas)
+Narração para o ElevenLabs, um bloco por cena
+
+COMO GERAR
+- Voz: Leo Antonio - Welcoming, Serene (a mesma da Convocação).
+- Modelo: Eleven Multilingual v2. Ajustes: Estabilidade 50 · Similaridade 75 · Estilo 0 · Velocidade 0,95.
+- Gere um bloco por vez. Copie só o texto entre aspas (sem as aspas).
+- Baixe em MP3 e salve com o nome indicado em: series/bisnaga/d01/batalha/audios/
+- As reticências (...) são pausas. Os nomes dos tipos estão em minúsculas de propósito:
+  em maiúsculas, a voz pode soletrar letra por letra.
+- Se uma palavra sair estranha, gere de novo só aquele bloco.
+
+------------------------------------------------------------
+
+01-chamado.mp3
+"Duzentos gatos atenderam o chamado."
+
+02-contagem.mp3
+"Quarenta comuns... e cento e sessenta do comércio. Nem um a mais, nem um a menos."
+
+03-frente.mp3
+"Na frente, o mais pedido: açougue. Cinquenta gatos. A maior força que esse bairro já viu."
+
+04-barriga.mp3
+"Eles avançam... e param. Ninguém luta de barriga vazia."
+
+05-pinguins.mp3
+"Os pinguins não esperam. Mil, escorregando de barriga pelo chão encerado."
+
+06-feirantes.mp3
+"Quarenta feirantes gritam ao mesmo tempo. A cozinha inteira trava... até as vozes acabarem."
+
+07-lotericas.mp3
+"Quarenta lotéricas miram com cuidado... e erram todas. Desistem. Viram de costas... e tropeçam. Quarenta tropeços. Todas as prateleiras no chão."
+
+08-saloes.mp3
+"Trinta salões desfilam em formação pelo chão encerado... até cair farinha no primeiro topete."
+
+09-comuns.mp3
+"Os quarenta comuns fazem o que gato faz de melhor: deitam na porta. Ninguém passa."
+
+10-patadas.mp3
+"E o açougue? Terminou de comer. Cinquenta patadas. Cinquenta filas no chão."
+
+11-recuam.mp3
+"Pela primeira vez... os pinguins recuam. Um. Depois cem. Depois todos, de volta para dentro da geladeira."
+
+12-bisnaga.mp3
+"E o Bisnaga? Acordou agora. Olhou a cozinha vazia... e voltou a dormir."
+
+13-vitoria.mp3
+"Vitória. A cozinha é dos gatos. Vocês mandaram duzentos soldados. Com quinhentos... o bairro inteiro vai ouvir a musiquinha."
+
+14-gancho.mp3
+"Mas lá fora, na porta de aço... tem alguma coisa roendo."

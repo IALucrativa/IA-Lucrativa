@@ -1,6 +1,6 @@
 # Bíblia: 1 Bisnaga contra 10.000
 
-> Atualize este arquivo depois de cada Batalha publicada: a contagem de cada plataforma, o resultado e o estado do Bisnaga.
+> Atualize este arquivo depois de cada Batalha publicada: a contagem somada das três plataformas, o resultado e o estado do Bisnaga.
 
 ## Premissa
 "O Bisnaga só queria dormir no balcão da padaria. Mas toda semana chega um exército de 10.000, e o exército dele é feito por quem comenta."
@@ -66,8 +66,8 @@ Cada tipo tem um acessório que o identifica de longe (a definir na prancha: ex.
 
 ## Três plataformas
 - A Convocação é o mesmo vídeo nas três.
-- A Batalha usa a contagem de cada plataforma. Contagens em faixas diferentes = Batalhas diferentes.
-- Cada plataforma tem o seu placar e o seu histórico abaixo.
+- A Batalha também é uma só: a contagem **soma os comentários do Instagram, do TikTok e do YouTube** (o total e cada tipo), e o mesmo vídeo sai nas três. Decidido em 11/11/2026.
+- Um placar e um histórico só, abaixo, sempre com a soma.
 
 ## Calendário
 - **2 desafios por semana** (4 vídeos).
@@ -83,19 +83,19 @@ Cada tipo tem um acessório que o identifica de longe (a definir na prancha: ex.
 - **Narrador:** **Leo Antonio - Welcoming, Serene** (ElevenLabs), escolhida em 09/11/2026. Ajustes: estabilidade 50, similaridade 75. Nunca trocar sem pedido.
 
 ## Placar
-| | Instagram | TikTok | YouTube |
-|---|---|---|---|
-| Desafios jogados | 0 | 0 | 0 |
-| Vitórias épicas | 0 | 0 | 0 |
-| Vitórias | 0 | 0 | 0 |
-| Empates | 0 | 0 | 0 |
-| Recuos com honra | 0 | 0 | 0 |
-| Meta bônus atual | 500 | 500 | 500 |
+| | Total (3 plataformas) |
+|---|---|
+| Desafios jogados | 0 |
+| Vitórias épicas | 0 |
+| Vitórias | 0 |
+| Empates | 0 |
+| Recuos com honra | 0 |
+| Meta bônus atual | 500 |
 
 ## Histórico de contagens
-| Desafio | Inimigo | Plataforma | Comentários | Mais pedido | Resultado |
-|---|---|---|---|---|---|
-| (vazio) | | | | | |
+| Desafio | Inimigo | Comentários (soma) | Mais pedido | Resultado |
+|---|---|---|---|---|
+| (vazio) | | | | |
 
 ## Estado atual (antes do Desafio 1)
 - O Bisnaga dorme no balcão da padaria. Nenhum desafio jogado.
