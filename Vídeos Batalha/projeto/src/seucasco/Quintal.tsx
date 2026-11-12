@@ -218,8 +218,8 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
         </group>
       ))}
       {/* um vaso de planta e um balde no meio do caminho */}
-      <Peca forma={{tipo: 'cilindro', r: 0.11, r2: 0.14, h: 0.22}} pos={[1.1, 0.11, -0.6]} mat={m('#c0603a')} estilo={estilo} />
-      <Peca forma={{tipo: 'esfera', r: 0.15}} pos={[1.1, 0.32, -0.6]} mat={verdeEscuro} estilo={estilo} contorno={0.02} />
+      <Peca forma={{tipo: 'cilindro', r: 0.11, r2: 0.14, h: 0.22}} pos={[-1.5, 0.11, -0.5]} mat={m('#c0603a')} estilo={estilo} />
+      <Peca forma={{tipo: 'esfera', r: 0.15}} pos={[-1.5, 0.32, -0.5]} mat={verdeEscuro} estilo={estilo} contorno={0.02} />
       <Peca forma={{tipo: 'cilindro', r: 0.13, r2: 0.11, h: 0.24}} pos={[-1.6, 0.12, -2.4]} mat={m('#2f8fd0')} estilo={estilo} />
 
       {/* as lesmas, com o rastro de gosma */}
