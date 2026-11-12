@@ -99,6 +99,15 @@
 - **Visual do Rodnei:** igual ao início (macacão azul, chaves na cintura). Segura o bilhete.
 - **O público não sabe:** qual é o segredo (a chave mestra).
 
+## Estado após o Ep. 3 — linha IG+YT (Instagram e YouTube) (noite 3)
+- **Noite:** 3 de 30 (faltam 27). **Chaves:** 12 + a mestra (secreta). **Bilhetes do Rodnei:** 4.
+  4. "Agora vocês são dois. Devolve o que é meu até a noite sete." (na porta dele, quando desceu do 5º, por volta de 00h20)
+- **PRAZO do autor: noite 7.**
+- **Tânia:** abriu a porta à meia-noite (de moletom vinho). Também recebe bilhetes; o dela: "Fique longe do térreo." O papel no capacho (Ep. 2) era o bilhete dela; a placa entortou quando ela bateu a porta. Pediu pra ele confiar nela.
+- **Marlene:** continua sem saber dos bilhetes.
+- **Perguntas na lista:** ☐ Quem escreve? ☐ O que é "meu"? ☐ Por que a Tânia?
+- **Voto do Ep. 3:** Confiar · Desconfiar (a confirmar).
+
 ## Estado após o Ep. 2 — linha TT (TikTok) (noite 2)
 - **Noite:** 2 de 30 (faltam 28). **Chaves:** 12 + a mestra (secreta). **Bilhetes:** 3.
   3. "Você contou pra ela. Agora eu também vou contar." (chegou às 23h, com a porta trancada e a luz acesa)
@@ -135,6 +144,7 @@
 | 1 | Contar · Esconder | Esconder | Contar | Esconder |
 | 2 (IG+YT) | Bater · Vigiar | Bater | — | Bater |
 | 2 (TT) | Marlene · Tânia | — | Tânia | — |
+| 3 (IG+YT) | Confiar · Desconfiar | a confirmar | — | a confirmar |
 
 ## Calendário interno
 - Episódio N = noite N. A mudança acontece na noite 30.
