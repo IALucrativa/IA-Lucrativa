@@ -3,6 +3,7 @@ import {AbsoluteFill} from 'remotion';
 import {C, F, T, Tf} from './cores';
 import {Kaique} from './Kaique';
 import {Quarto} from './cenarios';
+import {Corredor} from './cenarios2';
 
 // Capa padrão dos episódios (1080×1920), mesma estrutura da capa do Bilhete na Porta.
 // Tudo o que importa fica no meio (y 120–840 no desenho), que é o recorte 3:4 da grade do perfil.
@@ -15,6 +16,9 @@ export type CapaProps = {
   cartaoTexto: string[]; // a mensagem (a ameaça)
   cartaoRotulo: string[]; // rótulo vermelho do cartão
   etiqueta: string; // etiqueta do personagem
+  fundo?: 'quarto' | 'corredor';
+  pose?: 'abanando' | 'correndo';
+  avatar?: string; // cor do avatar de quem mandou a mensagem
 };
 
 export const capaEp01: CapaProps = {
@@ -28,10 +32,24 @@ export const capaEp01: CapaProps = {
   etiqueta: 'ENTREGADOR · ESPERA DESDE 2013',
 };
 
+export const capaEp02: CapaProps = {
+  serie: 'CORRE PRO GTA 6',
+  episodio: 2,
+  faixa: 'FALTAM 6 DIAS',
+  gancho: 'O PRIMO BATEU NA PORTA',
+  cartaoRemetente: 'Rui (chefe)',
+  cartaoTexto: ['Kaique, dia 19', 'você pega das', '18h à 1h.'],
+  cartaoRotulo: ['BEM NA', 'MEIA-NOITE!'],
+  etiqueta: 'ENTREGADOR · ESPERA DESDE 2013',
+  fundo: 'corredor',
+  pose: 'correndo',
+  avatar: '#f08a24',
+};
+
 export const Capa: React.FC<CapaProps> = (p) => (
   <AbsoluteFill style={{background: '#000'}}>
     <svg viewBox="0 0 540 960" width={1080} height={1920}>
-      <Quarto frame={40} fumaca={1.1} brilho={0.5} />
+      {p.fundo === 'corredor' ? <Corredor frame={0} portaAberta /> : <Quarto frame={40} fumaca={1.1} brilho={0.5} />}
       <rect x={0} y={0} width={540} height={960} fill="#0d0b14" opacity={0.3} />
 
       {/* nome da série */}
@@ -66,7 +84,13 @@ export const Capa: React.FC<CapaProps> = (p) => (
       </g>
 
       {/* o Kaique no centro, abanando a fumaça com o boné */}
-      <Kaique x={175} y={835} escala={1.08} frame={20} bracoD={{ombro: -140, cotovelo: 30}} maoD="bone" boca="o" susto suor olhar={[1, 0]} />
+      {p.pose === 'correndo' ? (
+        <g transform="rotate(6 175 835)">
+          <Kaique x={175} y={835} escala={1.08} frame={20} capacete boca="o" suor olhar={[1, 0]} bracoE={{ombro: 0, cotovelo: -40}} bracoD={{ombro: 0, cotovelo: 40}} maoE="bau" />
+        </g>
+      ) : (
+        <Kaique x={175} y={835} escala={1.08} frame={20} bracoD={{ombro: -140, cotovelo: 30}} maoD="bone" boca="o" susto suor olhar={[1, 0]} />
+      )}
 
       {/* etiqueta do personagem */}
       <g fontFamily={F} transform="rotate(-2 120 380)">
@@ -81,7 +105,7 @@ export const Capa: React.FC<CapaProps> = (p) => (
         <rect x={336} y={404} width={170} height={190} rx={6} fill="#000" opacity={0.35} transform="translate(5,6)" />
         <rect x={336} y={404} width={170} height={190} rx={6} fill="#ece5dd" {...T} />
         <rect x={336} y={404} width={170} height={30} rx={6} fill="#2f6d5e" />
-        <circle cx={354} cy={419} r={9} fill={WESLEY_PELE} {...Tf} />
+        <circle cx={354} cy={419} r={9} fill={p.avatar ?? WESLEY_PELE} {...Tf} />
         <text x={368} y={424} fontSize={12} fontWeight="bold" fill="#fff">
           {p.cartaoRemetente}
         </text>

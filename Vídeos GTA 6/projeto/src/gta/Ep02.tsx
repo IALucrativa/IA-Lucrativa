@@ -307,7 +307,7 @@ const Emenda: React.FC = () => {
 // META_INI/META_FIM = onde ele começa e termina no áudio final; DESLOC = quanto o resto andou.
 const META_INI = 51.2;
 const META_FIM = 60.9;
-const DESLOC = 0;
+const DESLOC = 3.92; // o trecho novo da meta é 3,9 s mais longo que o antigo
 const d = (t: number) => t + DESLOC;
 
 const CORTES = [0, 4.45, 13.0, 19.75, 22.4, 28.9, 36.4, 39.9, 42.5, META_INI, d(META_FIM), d(69.5)];
@@ -320,10 +320,12 @@ const parte = (i: number, nome: string, Cena: React.FC, legendas: [number, numbe
 });
 
 const LEGENDAS_META: [number, number, string][] = [
-  [51.44, 53.6, 'A peça de brinde ainda não foi desbloqueada.'],
-  [53.88, 57.4, 'Se esse perfil ganhar cem seguidores até amanhã ao meio-dia,'],
-  [57.76, 59.0, 'o conserto cai pra trezentos.'],
-  [59.58, 60.7, 'Segue pra desbloquear.'],
+  [51.42, 53.95, 'Vocês trouxeram 53 seguidores.'],
+  [54.48, 56.4, 'A peça de brinde está quase saindo:'],
+  [56.84, 57.95, 'faltam só 47.'],
+  [58.66, 61.2, 'Se o perfil chegar lá até amanhã ao meio-dia,'],
+  [61.5, 62.85, 'o conserto cai pra trezentos.'],
+  [63.6, 64.7, 'Segue pra desbloquear.'],
 ];
 
 export const partesEp02: Parte[] = [
