@@ -1,4 +1,4 @@
-# Ep. 2: "Tô numa entrega" (roteiro PARA APROVAÇÃO, 2026-11-13)
+# Ep. 2: "Tô numa entrega" (roteiro aprovado em 2026-11-13)
 
 - **Linha única** (Instagram, TikTok e YouTube) · voto do Ep. 1: **CONSERTAR** nas três (vitória: esconder o conserto dá certo).
 - **Postagem:** sex 13/11 · **Contador:** FALTAM 6 DIAS

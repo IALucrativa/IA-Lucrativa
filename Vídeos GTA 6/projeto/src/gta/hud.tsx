@@ -219,3 +219,107 @@ export const Velocimetro: React.FC<{kmh: number}> = ({kmh}) => (
     </text>
   </g>
 );
+
+// "Vocês escolheram: X" (sem porcentagem).
+export const Escolheram: React.FC<{opcao: string; y?: number}> = ({opcao, y = 720}) => {
+  const {fps} = useVideoConfig();
+  const f = useCurrentFrame();
+  const e = spring({frame: f - 2, fps, config: {damping: 12}});
+  return (
+    <g transform={`translate(270,${y + 60}) scale(${e}) translate(-270,${-y - 60})`} fontFamily={F}>
+      <rect x={70} y={y} width={400} height={124} rx={20} fill={C.hud} opacity={0.94} stroke={C.acento} strokeWidth={3} />
+      <text x={270} y={y + 42} fontSize={22} fontWeight="900" textAnchor="middle" fill="#fff">
+        VOCÊS ESCOLHERAM:
+      </text>
+      <text x={270} y={y + 100} fontSize={48} fontWeight="900" textAnchor="middle" fill={C.acento}>
+        {opcao}
+      </text>
+    </g>
+  );
+};
+
+// Carimbo de vitória do voto.
+export const Carimbo: React.FC<{texto: string; de?: number; y?: number}> = ({texto, de = 0, y = 250}) => {
+  const {fps} = useVideoConfig();
+  const f = useCurrentFrame();
+  const e = spring({frame: f - de, fps, config: {damping: 9}});
+  if (f < de) return null;
+  return (
+    <g transform={`translate(270,${y}) rotate(-8) scale(${2 - e})`} opacity={Math.min(1, e * 1.4)} fontFamily={F}>
+      <rect x={-200} y={-42} width={400} height={84} rx={12} fill="#fff" fillOpacity={0.9} stroke={C.verde} strokeWidth={7} />
+      <text x={0} y={14} textAnchor="middle" fontSize={34} fontWeight="900" fill="#1f8a45">
+        {texto}
+      </text>
+    </g>
+  );
+};
+
+// Meta com barra de progresso (quando a meta anterior não foi batida).
+export const MetaProgresso: React.FC<{atual: number; total: number; item: string; efeito: string; de?: number}> = ({
+  atual,
+  total,
+  item,
+  efeito,
+  de = 6,
+}) => {
+  const {fps} = useVideoConfig();
+  const f = useCurrentFrame();
+  const e = spring({frame: f - de, fps, config: {damping: 12}});
+  const enche = interpolate(f, [de + 10, de + 40], [0, atual / total], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const pulso = f > de + 60 ? 1 + Math.max(0, Math.sin((f - de) / 5)) * 0.06 : 1;
+  return (
+    <g fontFamily={F} transform={`translate(270,470) scale(${e}) translate(-270,-470)`}>
+      <rect x={40} y={290} width={460} height={360} rx={24} fill={C.hud} opacity={0.95} stroke={C.acento} strokeWidth={4} />
+      <text x={270} y={334} textAnchor="middle" fontSize={22} fontWeight="900" fill={C.acento}>
+        META DOS SEGUIDORES
+      </text>
+      <text x={270} y={384} textAnchor="middle" fontSize={40} fontWeight="900" fill="#fff">
+        {atual} DE {total}
+      </text>
+      <rect x={70} y={402} width={400} height={30} rx={15} fill="#3a3a4a" />
+      <rect x={70} y={402} width={400 * enche} height={30} rx={15} fill={C.verde} />
+      <text x={270} y={466} textAnchor="middle" fontSize={24} fontWeight="900" fill={C.acento}>
+        FALTAM SÓ {total - atual}
+      </text>
+      <g transform="translate(118,526)">
+        <rect x={-34} y={-30} width={68} height={60} rx={10} fill="#3a3a4a" />
+        <path d="M-18,-12 L18,-12 L18,12 L-18,12 Z" fill="#9aa0aa" />
+        <Cadeado x={20} y={20} s={1.2} cor={C.acento} />
+      </g>
+      <text x={168} y={520} fontSize={22} fontWeight="900" fill="#fff">
+        {item}
+      </text>
+      <text x={168} y={548} fontSize={17} fontWeight="bold" fill={C.verde}>
+        {efeito}
+      </text>
+      <g transform={`translate(270,604) scale(${pulso})`}>
+        <rect x={-170} y={-28} width={340} height={56} rx={28} fill={C.acento} />
+        <text x={0} y={10} textAnchor="middle" fontSize={24} fontWeight="900" fill={C.hud}>
+          SEGUE PRA DESBLOQUEAR
+        </text>
+      </g>
+    </g>
+  );
+};
+
+// Balão de fala.
+export const Balao: React.FC<{x: number; y: number; linhas: string[]; de?: number}> = ({x, y, linhas, de = 0}) => {
+  const {fps} = useVideoConfig();
+  const f = useCurrentFrame();
+  const e = spring({frame: f - de, fps, config: {damping: 11}});
+  if (f < de) return null;
+  const w = Math.max(...linhas.map((l) => l.length)) * 13 + 40;
+  const h = linhas.length * 30 + 26;
+  return (
+    <g transform={`translate(${x},${y}) scale(${e})`} fontFamily={F}>
+      <rect x={-w / 2} y={-h} width={w} height={h} rx={18} fill="#fff" stroke={C.linha} strokeWidth={3} />
+      <path d={`M-10,-2 L10,-2 L-6,24 Z`} fill="#fff" stroke={C.linha} strokeWidth={3} strokeLinejoin="round" />
+      <rect x={-12} y={-6} width={24} height={6} fill="#fff" />
+      {linhas.map((l, i) => (
+        <text key={i} x={0} y={-h + 36 + i * 30} textAnchor="middle" fontSize={24} fontWeight="900" fill={C.hud}>
+          {l}
+        </text>
+      ))}
+    </g>
+  );
+};

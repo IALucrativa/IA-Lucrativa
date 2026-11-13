@@ -485,13 +485,28 @@ export const Flashback: React.FC<{frame: number; aperto?: number}> = ({frame, ap
 );
 
 // ---------- tela do celular ----------
-export const Celular: React.FC<{frame: number; tipo: 'story' | 'mensagem'; letras?: number; fundo?: React.ReactNode}> = ({
+export const Celular: React.FC<{
+  frame: number;
+  tipo: 'story' | 'mensagem';
+  letras?: number;
+  fundo?: React.ReactNode;
+  remetente?: string;
+  mensagem?: string;
+  hora?: string;
+  avatar?: string;
+  dataPedido?: string; // semente: data do pedido no print do Wesley
+}> = ({
   frame,
   tipo,
   letras = 999,
   fundo,
+  remetente = 'Wesley (primo)',
+  mensagem = 'Primo, amanhã eu passo aí pra buscar o MEU videogame.',
+  hora = '23:47',
+  avatar = '#c98a5e',
+  dataPedido,
 }) => {
-  const msg = 'Primo, amanhã eu passo aí pra buscar o MEU videogame.';
+  const msg = mensagem;
   const vis = msg.slice(0, letras);
   const vibra = tipo === 'mensagem' && frame < 20 ? Math.sin(frame * 3) * 4 : 0;
   return (
@@ -522,14 +537,19 @@ export const Celular: React.FC<{frame: number; tipo: 'story' | 'mensagem'; letra
               <text x={270} y={320} textAnchor="middle" fontFamily={F} fontWeight="900" fontSize={22} fill="#3ccf6e">
                 GARANTIDA ✓
               </text>
+              {dataPedido && (
+                <text x={270} y={338} textAnchor="middle" fontFamily={F} fontSize={11} fill="#666">
+                  pedido em {dataPedido}
+                </text>
+              )}
             </g>
           </g>
         ) : (
           <g>
             <rect x={134} y={160} width={272} height={64} rx={24} fill="#2f6d5e" />
-            <circle cx={170} cy={192} r={18} fill="#c98a5e" {...Tf} />
+            <circle cx={170} cy={192} r={18} fill={avatar} {...Tf} />
             <text x={198} y={200} fontFamily={F} fontWeight="bold" fontSize={20} fill="#fff">
-              Wesley (primo)
+              {remetente}
             </text>
             <g>
               <rect x={150} y={250} width={236} height={150} rx={14} fill="#fff" {...Tf} />
@@ -539,7 +559,7 @@ export const Celular: React.FC<{frame: number; tipo: 'story' | 'mensagem'; letra
                 </text>
               ))}
               <text x={372} y={392} textAnchor="end" fontFamily={F} fontSize={12} fill="#888">
-                23:47
+                {hora}
               </text>
             </g>
           </g>

@@ -6,7 +6,7 @@ import {C, F, T, Tf} from './cores';
 // Origem (0,0) = entre os pés, no chão. Mesmas medidas da prancha 1.
 
 export type Braco = {ombro: number; cotovelo: number};
-export type MaoObjeto = 'nada' | 'bone' | 'celular' | 'videogame';
+export type MaoObjeto = 'nada' | 'bone' | 'celular' | 'videogame' | 'bau';
 
 export type Visual = {
   pele: string;
@@ -73,6 +73,35 @@ export const WESLEY: Visual = {
 
 export const WESLEY_2018: Visual = {...WESLEY, roupa: '#2f8fd6', roupaSomb: '#2273b0', gola: false, oculosEscuros: false};
 
+// Rui, o chefe da central de entregas: camisa polo laranja, cabelo grisalho.
+export const RUI: Visual = {
+  pele: '#e0a77f',
+  peleSomb: '#c98d66',
+  cabelo: '#9a9aa2',
+  cabeloTipo: 'topete',
+  roupa: '#f08a24',
+  roupaSomb: '#c96d12',
+  faixa: false,
+  gola: true,
+  nome: 'RUI',
+  calca: '#3a3a44',
+  calcaSomb: '#2a2a33',
+  tenis: '#2a2a2a',
+  oculosEscuros: false,
+  chaveiro: false,
+};
+
+// Tião, outro entregador (mesma jaqueta da central).
+export const TIAO: Visual = {
+  ...KAIQUE,
+  pele: '#7a4a2c',
+  peleSomb: '#613820',
+  cabeloTipo: 'topete',
+  cabelo: '#2a1a12',
+  nome: 'TIÃO',
+  chaveiro: false,
+};
+
 export type BonecoProps = {
   x: number;
   y: number;
@@ -122,6 +151,16 @@ const posMao = (o: [number, number], b: Braco): [number, number] => {
   const t = b.ombro + b.cotovelo;
   return [ex - (ANTEBRACO + 2) * Math.sin(rad(t)), ey + (ANTEBRACO + 2) * Math.cos(rad(t))];
 };
+
+const BauNaMao: React.FC<{x: number; y: number}> = ({x, y}) => (
+  <g transform={`translate(${x + 4},${y - 10})`}>
+    <rect x={-40} y={-34} width={80} height={70} rx={8} fill={C.bau} {...T} />
+    <rect x={-40} y={-34} width={80} height={16} rx={6} fill={C.bauDet} {...Tf} />
+    <text x={0} y={14} textAnchor="middle" fontFamily={F} fontWeight="bold" fontSize={10} fill="#fff">
+      ENTREGAS
+    </text>
+  </g>
+);
 
 const VideogameNaMao: React.FC<{x: number; y: number}> = ({x, y}) => (
   <g transform={`translate(${x + 4},${y - 6})`}>
@@ -327,6 +366,7 @@ export const Boneco: React.FC<BonecoProps> = ({
         <BracoSvg ombro={[-38, -228]} b={bracoE} cor={v.roupa} pele={v.pele} objeto={maoE} />
         <BracoSvg ombro={[36, -228]} b={bracoD} cor={v.roupa} pele={v.pele} objeto={maoD} />
         {maoE === 'videogame' && <VideogameNaMao x={posMao([-38, -228], bracoE)[0]} y={posMao([-38, -228], bracoE)[1]} />}
+        {maoE === 'bau' && <BauNaMao x={posMao([-38, -228], bracoE)[0]} y={posMao([-38, -228], bracoE)[1]} />}
         {maoD === 'videogame' && <VideogameNaMao x={posMao([36, -228], bracoD)[0] - 44} y={posMao([36, -228], bracoD)[1]} />}
       </g>
     </g>
