@@ -102,7 +102,7 @@ Sempre no mesmo lugar da tela:
 ## Estado após o Ep. 1 (linha única: Instagram, TikTok e YouTube)
 - **Postado:** 12/11 (um dia antes do previsto). O Ep. 2 sai em 13/11, então o contador continua em FALTAM 6 DIAS.
 - **Voto:** CONSERTAR nas três plataformas. As três seguem juntas (mesmo vídeo).
-- **Meta:** não batida. A peça de brinde continua trancada; a meta volta no Ep. 2.
+- **Meta:** não batida (53 seguidores novos de 100). A peça de brinde continua trancada; no Ep. 2 a meta é "faltam só 47".
 - **Dinheiro:** R$ 620. **Videogame:** QUEIMADO, com o Seu Josué. Conserto: R$ 480 (R$ 300 se a peça for desbloqueada).
 - **Segredo 1 revelado:** o videogame é do Wesley, e ele avisou que vem buscar.
 - **Desbloqueados:** 0 de 6.
@@ -132,8 +132,8 @@ Sempre no mesmo lugar da tela:
 ## Histórico das metas
 | Ep. | Meta | Seguidores novos (soma) | Resultado |
 |---|---|---|---|
-| 1 | +100 → peça de brinde | abaixo de 100 (número a confirmar) | não batida: acumula pro Ep. 2 |
-| 2 | +100 → peça de brinde (acumulada) | | |
+| 1 | +100 → peça de brinde | 53 | não batida: acumula pro Ep. 2 (53 de 100) |
+| 2 | faltam 47 (53 de 100) → peça de brinde | | |
 
 ## Decisões de produção
 - **2026-11-12:** a pessoa aprovou a proposta ("pode começar"): nomes, perfil Você Decide Aí, meta de +100, roteiro do Ep. 1 "Fumaça" e o teaser (Ep. 0).

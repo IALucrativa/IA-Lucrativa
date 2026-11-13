@@ -3,7 +3,7 @@
 - **Linha única** (Instagram, TikTok e YouTube) · voto do Ep. 1: **CONSERTAR** nas três (vitória: esconder o conserto dá certo).
 - **Postagem:** sex 13/11 · **Contador:** FALTAM 6 DIAS
 - **Dinheiro:** R$ 620 (conserto de R$ 480 pago na retirada) · **Videogame:** QUEIMADO → NO CONSERTO · **Desbloqueados:** 0 de 6
-- **Meta do Ep. 1:** não batida → a peça de brinde volta como meta.
+- **Meta do Ep. 1:** não batida (53 de 100) → a peça de brinde volta como meta: **faltam só 47**.
 - **Duração estimada:** ~70 s (cerca de 170 palavras).
 - **Começo impactante:** abre no olho mágico, com o Wesley de óculos escuros do outro lado da porta.
 - **Segundo gancho:** "Mas tinha um detalhe que ele esqueceu." (~35 s)
@@ -20,7 +20,7 @@
 | 7. A conta | 31–34 s | Placar: 💰 R$ 620 · 🎮 NO CONSERTO · "a pagar: R$ 480". | "O Kaique ainda tem seiscentos e vinte. Por enquanto." |
 | 8. Segundo gancho | 34–37 s | O Kaique sorrindo, aliviado, na moto. O celular vibra no bolso. | "Mas tinha um detalhe que ele esqueceu." |
 | 9. A ameaça | 37–47 s | Close do celular: mensagem do **Rui (chefe)**: "Kaique, escala da semana: dia 19 você pega das 18h à 1h." O sorriso some. | "Mensagem do chefe:" (lendo) "'Kaique, dia dezenove você pega das seis da tarde à uma da manhã.'" ... "Bem na meia-noite do lançamento." |
-| 10. Meta | 47–56 s | Placar completo + cartão da meta: **+100 SEGUIDORES → PEÇA DE BRINDE (conserto cai pra R$ 300)**, com o aviso "AINDA NÃO DESBLOQUEADO". | "A peça de brinde ainda não foi desbloqueada. Se esse perfil ganhar cem seguidores até amanhã ao meio-dia, o conserto cai pra trezentos. Segue pra desbloquear." |
+| 10. Meta | 47–58 s | Placar completo + cartão da meta com barra de progresso: **53 DE 100** (a barra enche até a metade). Embaixo: **FALTAM SÓ 47 → PEÇA DE BRINDE (conserto cai pra R$ 300)**. | "Vocês trouxeram cinquenta e três seguidores. A peça de brinde está quase saindo: faltam só quarenta e sete. Se o perfil chegar lá até amanhã ao meio-dia, o conserto cai pra trezentos. Segue pra desbloquear." |
 | 11. Voto | 56–66 s | Tela dividida: à esquerda, o Kaique na frente do Rui, de mãos juntas (PEDIR); à direita, o Kaique no grupo dos entregadores, oferecendo troca (TROCAR). | "E agora: o Kaique pede folga pro chefe... ou troca o turno com outro entregador? Comente: pedir ou trocar." |
 | 12. Emenda | 66–68 s | Volta para o olho mágico: agora o corredor está vazio. | (só o barulho da campainha, longe) |
 
@@ -35,7 +35,7 @@
 > Mas tinha um detalhe que ele esqueceu.
 > Mensagem do chefe: "Kaique, dia dezenove você pega das seis da tarde à uma da manhã."
 > Bem na meia-noite do lançamento.
-> A peça de brinde ainda não foi desbloqueada. Se esse perfil ganhar cem seguidores até amanhã ao meio-dia, o conserto cai pra trezentos. Segue pra desbloquear.
+> Vocês trouxeram cinquenta e três seguidores. A peça de brinde está quase saindo: faltam só quarenta e sete. Se o perfil chegar lá até amanhã ao meio-dia, o conserto cai pra trezentos. Segue pra desbloquear.
 > E agora: o Kaique pede folga pro chefe... ou troca o turno com outro entregador? Comente: pedir ou trocar.
 
 ## Os dois caminhos do voto (os dois são vitória)
@@ -50,7 +50,7 @@ Só que o chefe escalou o Kaique pra trabalhar na noite do lançamento 👀
 
 🗳️ VOCÊ DECIDE: ele pede folga pro chefe ou troca o turno com outro entregador?
 Comente PEDIR ou TROCAR.
-🎮 META: +100 seguidores até amanhã, 12h = o conserto cai pra R$ 300.
+🎮 META: vocês trouxeram 53! Faltam só 47 seguidores até amanhã, 12h, e o conserto cai pra R$ 300.
 Faltam 6 dias pro GTA 6. Próximo episódio amanhã, 12h.
 
 #vocedecideai #correprogta6 #gta6 #gtavi #serieanimada
@@ -72,4 +72,4 @@ Faltam 6 dias pro GTA 6. Próximo episódio amanhã, 12h.
 - Personagem novo: o **Rui**, chefe da central de entregas (só aparece por mensagem neste episódio).
 - Semente plantada: o print da "pré-venda" do Wesley com a data **31/11** (não existe). Colher no Ep. 5 ou 6.
 - Pôster da contagem: mais um dia riscado.
-- A meta acumulou: a peça de brinde continua trancada.
+- A meta acumulou: 53 de 100. A peça de brinde continua trancada; faltam 47.
