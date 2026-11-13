@@ -15,7 +15,7 @@
 <script>
 /* ================= CONFIG ================= */
 const WORD   = "RIQUEZA";                       // palavra secreta (1 letra por rodada)
-const BRAND  = "IA LUCRATIVA";                  // marca d'agua no rodape
+const BRAND  = "@vocedecideai.br";                  // marca d'agua no rodape
 const FPS    = 30;
 const APPROACH = [48, 57, 42, 63, 51, 39, 60];  // frames de descida de cada rodada
 const BREAK  = 22;                              // frames da quebra
@@ -353,7 +353,7 @@ function render(frame){
   }
   text('COFRINHOS', 360, 1150, 14, 'rgba(136,153,187,0.8)', 800);
   // marca
-  text(BRAND, 360, 1215, 18, 'rgba(232,240,254,0.35)', 800);
+  text(BRAND, 360, 1215, 18, 'rgba(232,240,254,0.4)', 800);
 
   if (frame>=OUTRO_START) outro(frame-OUTRO_START);
 }
