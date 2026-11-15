@@ -373,22 +373,39 @@ function xrayMeter(frame){
 function renderCover(){
   ctx.setTransform(S,0,0,S,0,0);
   background();
+  // alerta vermelho por cima
+  const r=ctx.createRadialGradient(360,560,40,360,560,760); r.addColorStop(0,'rgba(255,40,70,0.38)'); r.addColorStop(1,'rgba(40,0,10,0.55)');
+  ctx.fillStyle=r; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(0,0,0,0.12)'; for(let y=0;y<H;y+=6) ctx.fillRect(0,y,W,2);
+  // cena (portas + pistas + cofrinho), um pouco menor e mais baixa
+  ctx.save(); ctx.translate(50,182); ctx.scale(0.86,0.86);
   spotlight(1, 1);
   for (let i=0;i<3;i++) door(i, 200, i===1);
   for (let i=0;i<3;i++) hintBadge(i, 200);
   LOOK=0; ctx.save(); ctx.translate(336, 1032 - TABLE_Y*0.8); ctx.scale(0.8,0.8); pig(0,false,'',1,0.3); ctx.restore();
-  ctx.save(); ctx.translate(360,96); rr(-180,-30,360,60,30); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.restore();
+  // placas de perigo
+  for (const x of [62,658]){ ctx.save(); ctx.translate(x, 320);
+    ctx.fillStyle=C.gold; ctx.beginPath(); ctx.moveTo(0,-30); ctx.lineTo(28,22); ctx.lineTo(-28,22); ctx.closePath(); ctx.fill();
+    text('!', 0, 5, 34, '#120306', 900); ctx.restore(); }
+  // logo
+  ctx.save(); ctx.translate(360,192); rr(-180,-30,360,60,30); ctx.fillStyle='#fff'; ctx.fill();
   ctx.fillStyle='#f5c842'; ctx.beginPath(); ctx.arc(-148,0,20,0,7); ctx.fill();
   ctx.fillStyle='#04070f'; ctx.beginPath(); ctx.moveTo(-154,-9); ctx.lineTo(-154,9); ctx.lineTo(-139,0); ctx.fill();
   text(T.logo, -118, 1, 34, '#04070f', 900, 'left');
   rr(118,-18,50,36,10); ctx.fillStyle=C.red; ctx.fill(); text(T.ep, 143, 1, 15, '#fff', 900); ctx.restore();
-  ctx.save(); ctx.shadowColor='rgba(245,200,66,0.6)'; ctx.shadowBlur=30;
-  fitText(T.c2, 360, 178, 660, 70, C.gold, 900); ctx.restore();
-  xrayMeter(SPOILER_FRAME-1);
-  ctx.save(); ctx.translate(360,1060); rr(-290,-34,580,68,34); ctx.fillStyle='rgba(11,12,32,0.95)'; ctx.fill(); ctx.strokeStyle=C.gold; ctx.lineWidth=3; ctx.stroke();
-  fitText(T.c4, 0, 2, 540, 28, C.gold, 900); ctx.restore();
-  rr(130,1132,460,84,42); ctx.fillStyle=C.green; ctx.fill();
-  text(T.c3, 360, 1175, 32, '#04130d', 900);
+  // gancho
+  fitText(T.hook1, 360, 262, 560, 50, '#ffffff', 900);
+  ctx.save(); ctx.translate(360,326); ctx.rotate(-0.03);
+  ctx.shadowColor='rgba(255,77,94,0.7)'; ctx.shadowBlur=30;
+  rr(-280,-38,560,76,16); ctx.fillStyle=C.red; ctx.fill(); ctx.shadowBlur=0;
+  fitText(T.hook2, 0, 2, 530, 50, '#ffffff', 900); ctx.restore();
+  // medidor quase cheio
+  ctx.save(); ctx.translate(0,154); xrayMeter(SPOILER_FRAME-1); ctx.restore();
+  // chamada
+  rr(110,1138,500,84,42); ctx.fillStyle=C.green; ctx.fill();
+  text(T.c3, 360, 1181, 34, '#04130d', 900);
+  text(T.c4, 360, 1246, 20, C.gold, 900);
   return cv.toDataURL('image/png');
 }
 
