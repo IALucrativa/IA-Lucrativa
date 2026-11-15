@@ -1,0 +1,381 @@
+<title>Caos no Círculo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: palco 9:16 à esquerda, painel de controle estreito à direita; empilha no celular */
+:root {
+  --ink: #0b0a10;
+  --panel: #14121c;
+  --line: #2a2636;
+  --text: #ece9f5;
+  --muted: #8d87a3;
+  --hot: #ff4d5e;
+  --font-display: 'Archivo', 'Arial Black', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--ink); color: var(--text);
+  font-family: var(--font-display); margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.app { display: flex; gap: 24px; align-items: flex-start; justify-content: center; padding-block: 16px; flex-wrap: wrap; }
+.stage { flex: 0 1 auto; height: calc(100vh - 32px); max-height: 960px; aspect-ratio: 9 / 16; max-width: 100%; }
+.stage canvas { width: 100%; height: 100%; display: block; border-radius: 14px; border: 1px solid var(--line); background: #08070c; }
+.panel { flex: 0 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.panel h1 { font-size: 1.35rem; font-weight: 900; margin: 0; letter-spacing: 0.01em; text-wrap: balance; }
+.panel p { margin: 0; color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+input, select { background: var(--ink); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font: 500 0.95rem var(--font-mono); text-transform: none; letter-spacing: 0; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--hot); outline-offset: 2px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+button { flex: 1 1 120px; border: 1px solid var(--line); background: var(--ink); color: var(--text); border-radius: 999px; padding: 11px 14px; font: 700 0.85rem var(--font-display); cursor: pointer; letter-spacing: 0.03em; }
+button.primary { background: var(--text); color: var(--ink); border-color: var(--text); }
+button.rec { border-color: var(--hot); color: var(--hot); }
+button.rec[aria-pressed="true"] { background: var(--hot); color: var(--ink); }
+.status { font: 500 0.78rem var(--font-mono); color: var(--muted); min-height: 1.2em; }
+.rule { font-size: 0.8rem; color: var(--text); background: var(--ink); border: 1px dashed var(--line); border-radius: 8px; padding: 10px; line-height: 1.5; }
+@media (max-width: 720px) { .stage { height: auto; width: 100%; } }
+</style>
+
+<div class="app">
+  <div class="stage"><canvas id="cv" width="1080" height="1920" aria-label="Simulação de bolinhas"></canvas></div>
+  <aside class="panel" id="panel">
+    <h1>Caos no Círculo</h1>
+    <p>Gerador de vídeos verticais de física satisfatória. Escolha a regra, aperte Gravar e poste o resultado.</p>
+    <label for="mode">Regra
+      <select id="mode">
+        <option value="relogio">Relógio · multiplica vs destrói</option>
+        <option value="buraco">Buraco negro · parede duplica</option>
+        <option value="helice">Hélice · 2 lâminas</option>
+      </select>
+    </label>
+    <div class="rule" id="ruleText"></div>
+    <label for="title">Título no vídeo<input id="title" maxlength="24"></label>
+    <label for="handle">Seu @<input id="handle" value="@seuperfil" maxlength="30"></label>
+    <label for="seed">Semente (muda o desfecho)<input id="seed" type="number" value="3" min="1" max="99999"></label>
+    <div class="row">
+      <button class="primary" id="restart">Reiniciar</button>
+      <button id="sound" aria-pressed="false">Som: desligado</button>
+    </div>
+    <div class="row"><button class="rec" id="rec" aria-pressed="false">Gravar vídeo</button></div>
+    <div class="status" id="status" role="status"></div>
+  </aside>
+</div>
+
+<script>
+'use strict';
+// ───────────────────────── Engine ─────────────────────────
+const W = 1080, H = 1920, CX = 540, CY = 900, R = 430, BR = 7;
+const PALETTE = ['#ff3b3b','#ff9b2f','#ffe03a','#9dff3a','#2dff9a','#2de6ff','#2d7bff','#5b3dff','#b23dff','#ff3dd2','#ff3d7a'];
+const MODES = {
+  relogio: { title: 'RELÓGIO', rule: 'Ponteiro branco duplica cada bolinha que corta. Ponteiro vermelho destrói. Quem vence?',
+             gravity: 1100, hands: [ { len: R - 12, omega: 3.9, kind: 'split', w: 7 }, { len: R * 0.8, omega: -1.25, kind: 'kill', w: 12, a0: 2.2 } ], cap: 3000 },
+  buraco:  { title: 'BURACO NEGRO', rule: 'Cada batida na parede duplica a bolinha. O buraco no centro engole e cresce. Quem vence?',
+             gravity: 0, hands: [], hole: true, cap: 3000, wallSplit: true, pull: 0, pullK: 1.2e4, friction: 0, hole0: 16, holeGrow: 22, bounce: 1.0, splitCool: 0.9 },
+  helice:  { title: 'HÉLICE', rule: 'Duas lâminas giram. Toda bolinha cortada vira duas e muda de cor. Até onde o círculo aguenta?',
+             gravity: 1100, hands: [0,1].map(i => ({ len: R - 12, omega: 1.9, kind: 'split', w: 6, a0: i * Math.PI })), cap: 3000 },
+};
+
+function rng(seed) { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
+
+function createSim(modeKey, seed) {
+  const M = MODES[modeKey], rand = rng(seed * 2654435761);
+  const CAP = 7000;
+  const x = new Float32Array(CAP), y = new Float32Array(CAP), vx = new Float32Array(CAP), vy = new Float32Array(CAP);
+  const gen = new Uint8Array(CAP), cool = new Float32Array(CAP);
+  let n = 0, t = 0, broken = false, brokeAt = -1, eaten = 0, hole = M.hole0 || 30, ended = false, winner = null;
+  const hands = M.hands.map(h => ({ ...h, a: h.a0 ?? -Math.PI / 2, prev: [] }));
+  const sparks = [];
+  const events = { split: 0, kill: 0, maxGen: 0, eat: 0, brk: 0 };
+  function add(px, py, pvx, pvy, g) { if (n >= CAP) return -1; x[n] = px; y[n] = py; vx[n] = pvx; vy[n] = pvy; gen[n] = g; cool[n] = 0.3; return n++; }
+  function remove(i) { n--; x[i] = x[n]; y[i] = y[n]; vx[i] = vx[n]; vy[i] = vy[n]; gen[i] = gen[n]; cool[i] = cool[n]; }
+  function split(i) {
+    const sc = M.splitCool ?? 0.35; const g = (gen[i] + 1) % 250; gen[i] = g; cool[i] = sc;
+    const a = rand() * Math.PI * 2, s = 60 + rand() * 120;
+    const j = add(x[i] + Math.cos(a) * 2, y[i] + Math.sin(a) * 2, vx[i] + Math.cos(a) * s, vy[i] + Math.sin(a) * s, g);
+    if (j >= 0) cool[j] = sc;
+    events.split++; if (g > events.maxGen) events.maxGen = g;
+  }
+  // first ball
+  const a0 = rand() * Math.PI * 2;
+  add(CX + Math.cos(a0) * 180, CY + Math.sin(a0) * 120 - 60, (rand() - 0.5) * 900, -300 - rand() * 300, 0);
+
+  // spatial grid
+  const CELL = BR * 2, GX = Math.ceil(W / CELL) + 2, GY = Math.ceil(H / CELL) + 2;
+  const head = new Int32Array(GX * GY), next = new Int32Array(CAP);
+
+  function collideBalls() {
+    head.fill(-1);
+    for (let i = 0; i < n; i++) {
+      const cx = Math.min(GX - 1, Math.max(0, (x[i] / CELL | 0) + 1)), cy = Math.min(GY - 1, Math.max(0, (y[i] / CELL | 0) + 1));
+      const c = cy * GX + cx; next[i] = head[c]; head[c] = i;
+    }
+    const D = BR * 2, D2 = D * D;
+    for (let i = 0; i < n; i++) {
+      const cx = Math.min(GX - 1, Math.max(0, (x[i] / CELL | 0) + 1)), cy = Math.min(GY - 1, Math.max(0, (y[i] / CELL | 0) + 1));
+      for (let oy = -1; oy <= 1; oy++) { const yy = cy + oy; if (yy < 0 || yy >= GY) continue;
+        for (let ox = -1; ox <= 1; ox++) { const xx = cx + ox; if (xx < 0 || xx >= GX) continue;
+          for (let j = head[yy * GX + xx]; j !== -1; j = next[j]) {
+            if (j <= i) continue;
+            const dx = x[j] - x[i], dy = y[j] - y[i], d2 = dx * dx + dy * dy;
+            if (d2 >= D2 || d2 < 1e-6) continue;
+            const d = Math.sqrt(d2), nx = dx / d, ny = dy / d, p = (D - d) * 0.5;
+            x[i] -= nx * p; y[i] -= ny * p; x[j] += nx * p; y[j] += ny * p;
+            const rv = (vx[j] - vx[i]) * nx + (vy[j] - vy[i]) * ny;
+            if (rv < 0) { const k = -rv * (M.bounce ?? 0.55); vx[i] -= nx * k; vy[i] -= ny * k; vx[j] += nx * k; vy[j] += ny * k; }
+          }
+        }
+      }
+    }
+  }
+
+  function substep(dt) {
+    t += dt;
+    for (const h of hands) h.a += h.omega * dt;
+    const grav = broken ? 240 : M.gravity;
+    for (let i = n - 1; i >= 0; i--) {
+      vy[i] += grav * dt;
+      if (M.hole && !broken) {
+        const dx = CX - x[i], dy = CY - y[i], d = Math.hypot(dx, dy) + 1e-3;
+        const acc = M.pull + M.pullK / (d + 30) * (hole / 30);
+        vx[i] += dx / d * acc * dt; vy[i] += dy / d * acc * dt;
+        if (d < hole + BR) { remove(i); eaten++; events.eat++; hole = Math.sqrt(M.hole0 * M.hole0 + eaten * M.holeGrow); continue; }
+      }
+      x[i] += vx[i] * dt; y[i] += vy[i] * dt; cool[i] -= dt;
+      if (broken && (y[i] > H + 40 || x[i] < -60 || x[i] > W + 60 || y[i] < -400)) remove(i);
+    }
+    if (!broken) {
+      for (let i = 0; i < n; i++) {
+        const dx = x[i] - CX, dy = y[i] - CY, d = Math.hypot(dx, dy), lim = R - BR;
+        if (d > lim) {
+          const nx = dx / d, ny = dy / d; x[i] = CX + nx * lim; y[i] = CY + ny * lim;
+          const vn = vx[i] * nx + vy[i] * ny;
+          if (vn > 0) {
+            const e = M.wallSplit ? 1.0 : 0.82;
+            vx[i] -= (1 + e) * vn * nx; vy[i] -= (1 + e) * vn * ny;
+            if (M.wallSplit && cool[i] <= 0 && vn > 140) split(i);
+          }
+          if (M.wallSplit) { // atrito: impede as bolinhas de ficarem girando grudadas na parede
+            const vt = -vx[i] * ny + vy[i] * nx; vx[i] += vt * M.friction * ny; vy[i] -= vt * M.friction * nx;
+          }
+        }
+      }
+      // hands
+      for (const h of hands) {
+        const dxh = Math.cos(h.a), dyh = Math.sin(h.a), rad = BR + h.w * 0.5;
+        for (let i = n - 1; i >= 0; i--) {
+          const px = x[i] - CX, py = y[i] - CY;
+          let s = px * dxh + py * dyh; if (s < 0 || s > h.len + BR) continue; s = Math.min(s, h.len);
+          const qx = dxh * s, qy = dyh * s; let nx = px - qx, ny = py - qy; const d = Math.hypot(nx, ny);
+          if (d >= rad) continue;
+          if (h.kind === 'kill') {
+            if (cool[i] > 0.25) continue; // recém-nascidas têm um respiro
+            for (let k = 0; k < 3; k++) sparks.push({ x: x[i], y: y[i], vx: (rand() - .5) * 500, vy: (rand() - .5) * 500, life: 0.35, c: '#ff3b3b' });
+            remove(i); events.kill++; continue;
+          }
+          // a lâmina atravessa: só corta (duplica) e dá um empurrão na direção do giro
+          if (cool[i] > 0) continue;
+          const svx = -h.omega * qy, svy = h.omega * qx;
+          const k0 = M.kick ?? 0.35;
+          vx[i] += svx * k0 + (rand() - .5) * 120; vy[i] += svy * k0 - rand() * 160;
+          split(i);
+        }
+      }
+    }
+    collideBalls();
+    // pressão: se já passou do limite, o anel estoura
+    if (!broken && n >= M.cap) breakRing();
+    if (M.hole && !broken && n === 0 && !ended) { ended = true; winner = 'hole'; }
+    if (M.hole && !broken && hole > R * 0.92 && !ended) { ended = true; winner = 'hole'; }
+    if (M.hands.some(h => h.kind === 'kill') && !broken && n === 0 && !ended) { ended = true; winner = 'kill'; }
+    for (let k = sparks.length - 1; k >= 0; k--) { const s = sparks[k]; s.x += s.vx * dt; s.y += s.vy * dt; s.life -= dt; if (s.life <= 0) sparks.splice(k, 1); }
+  }
+  function breakRing() {
+    broken = true; brokeAt = t; events.brk++; winner = 'chaos';
+    for (let i = 0; i < n; i++) {
+      const dx = x[i] - CX, dy = y[i] - CY, d = Math.hypot(dx, dy) + 1;
+      const s = 180 + rand() * 520 * (d / R);
+      vx[i] = vx[i] * 0.3 + dx / d * s; vy[i] = vy[i] * 0.3 + dy / d * s - 200;
+    }
+  }
+  function step(frameDt) {
+    events.split = events.kill = events.eat = events.brk = 0; events.maxGen = 0;
+    const SUB = 3; for (let k = 0; k < SUB; k++) substep(frameDt / SUB);
+    for (const h of hands) { h.prev.unshift(h.a); if (h.prev.length > 7) h.prev.pop(); }
+    return events;
+  }
+  return { step, get n() { return n; }, get t() { return t; }, get broken() { return broken; }, get brokeAt() { return brokeAt; },
+           get hole() { return hole; }, get ended() { return ended; }, get winner() { return winner; },
+           x, y, gen, hands, sparks, M };
+}
+
+// ───────────────────────── Render ─────────────────────────
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+let total = 1; // maior número de bolinhas já visto
+function fmt(v) { return v.toLocaleString('pt-BR'); }
+function draw(sim, opts) {
+  const { M } = sim;
+  ctx.fillStyle = '#08070c'; ctx.fillRect(0, 0, W, H);
+  const g = ctx.createRadialGradient(CX, CY, 40, CX, CY, R * 1.25);
+  g.addColorStop(0, 'rgba(70,14,22,0.55)'); g.addColorStop(1, 'rgba(8,7,12,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // tremida antes de estourar
+  const shake = !sim.broken && sim.n > M.cap * 0.85 ? (sim.n / M.cap - 0.85) * 40 : 0;
+  ctx.save(); if (shake) ctx.translate((Math.random() - .5) * shake, (Math.random() - .5) * shake);
+
+  // título
+  ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff';
+  ctx.font = '900 84px Archivo, "Arial Black", sans-serif';
+  ctx.fillText(opts.title, W / 2, 250);
+
+  // anel
+  if (!sim.broken) {
+    ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(255,255,255,0.88)';
+    ctx.beginPath(); ctx.arc(CX, CY, R + 3, 0, Math.PI * 2); ctx.stroke();
+    if (M.hands.some(h => h.kind === 'kill')) { // marcas de hora
+      ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; ctx.beginPath(); ctx.moveTo(CX + Math.cos(a) * (R - 22), CY + Math.sin(a) * (R - 22)); ctx.lineTo(CX + Math.cos(a) * (R - 6), CY + Math.sin(a) * (R - 6)); ctx.stroke(); }
+    }
+  } else {
+    const k = Math.min(1, (sim.t - sim.brokeAt) / 0.6);
+    ctx.lineWidth = 5; ctx.strokeStyle = `rgba(255,255,255,${0.88 * (1 - k)})`;
+    for (let s = 0; s < 14; s++) { const a = s * Math.PI / 7, o = k * 260; ctx.beginPath(); ctx.arc(CX + Math.cos(a + .22) * o, CY + Math.sin(a + .22) * o, R + 3, a, a + Math.PI / 7 - 0.04); ctx.stroke(); }
+  }
+
+  // buraco negro
+  if (M.hole) {
+    const hr = sim.hole;
+    const hg = ctx.createRadialGradient(CX, CY, hr * 0.6, CX, CY, hr * 1.9);
+    hg.addColorStop(0, 'rgba(255,120,40,0.55)'); hg.addColorStop(1, 'rgba(255,60,20,0)');
+    ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(CX, CY, hr * 1.9, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(CX, CY, hr, 0, Math.PI * 2); ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,170,90,0.9)'; ctx.stroke();
+  }
+
+  // bolinhas agrupadas por cor
+  const byColor = PALETTE.map(() => []);
+  for (let i = 0; i < sim.n; i++) byColor[sim.gen[i] % PALETTE.length].push(i);
+  for (let c = 0; c < PALETTE.length; c++) {
+    const list = byColor[c]; if (!list.length) continue;
+    ctx.fillStyle = PALETTE[c]; ctx.beginPath();
+    for (const i of list) { ctx.moveTo(sim.x[i] + BR, sim.y[i]); ctx.arc(sim.x[i], sim.y[i], BR - 0.5, 0, Math.PI * 2); }
+    ctx.fill();
+  }
+  for (const s of sim.sparks) { ctx.globalAlpha = Math.max(0, s.life / 0.35); ctx.fillStyle = s.c; ctx.fillRect(s.x - 3, s.y - 3, 6, 6); }
+  ctx.globalAlpha = 1;
+
+  // ponteiros / lâminas com rastro
+  for (const h of sim.hands) {
+    const col = h.kind === 'kill' ? [255, 59, 59] : [255, 255, 255];
+    h.prev.forEach((a, k) => {
+      if (k === 0) return;
+      ctx.strokeStyle = `rgba(${col},${0.16 * (1 - k / h.prev.length)})`; ctx.lineWidth = h.w;
+      ctx.beginPath(); ctx.moveTo(CX + Math.cos(a) * 30, CY + Math.sin(a) * 30); ctx.lineTo(CX + Math.cos(a) * h.len, CY + Math.sin(a) * h.len); ctx.stroke();
+    });
+    ctx.strokeStyle = `rgb(${col})`; ctx.lineWidth = h.w; ctx.lineCap = 'round';
+    ctx.shadowColor = `rgba(${col},0.9)`; ctx.shadowBlur = 18;
+    ctx.beginPath(); ctx.moveTo(CX + Math.cos(h.a) * 22, CY + Math.sin(h.a) * 22); ctx.lineTo(CX + Math.cos(h.a) * h.len, CY + Math.sin(h.a) * h.len); ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+  if (sim.hands.length) { ctx.fillStyle = '#ff3b3b'; ctx.beginPath(); ctx.arc(CX, CY, 16, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#08070c'; ctx.beginPath(); ctx.arc(CX, CY, 6, 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+
+  // contador
+  total = Math.max(total, sim.n);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#ffffff'; ctx.font = '700 92px "JetBrains Mono", monospace';
+  ctx.fillText(fmt(sim.broken ? total : sim.n), W / 2, CY + R + 150);
+  ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.font = '700 30px Archivo, sans-serif';
+  let sub = 'BOLINHAS';
+  if (sim.winner === 'chaos') sub = 'O CÍRCULO NÃO AGUENTOU';
+  else if (sim.winner === 'hole') sub = 'O BURACO ENGOLIU TUDO';
+  else if (sim.winner === 'kill') sub = 'O PONTEIRO VERMELHO VENCEU';
+  ctx.fillText(sub, W / 2, CY + R + 200);
+  ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '600 28px Archivo, sans-serif';
+  ctx.fillText(opts.handle, W / 2, H - 260);
+}
+
+// ───────────────────────── Som ─────────────────────────
+const SCALE = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26, 28];
+let ac = null, master = null, lastPing = 0;
+function ensureAudio() {
+  if (ac) return; ac = new (window.AudioContext || window.webkitAudioContext)();
+  master = ac.createGain(); master.gain.value = 0.6; master.connect(ac.destination);
+}
+function ping(genIdx, count, type) {
+  if (!ac || !soundOn) return; const now = ac.currentTime; if (now - lastPing < 0.045) return; lastPing = now;
+  const o = ac.createOscillator(), g = ac.createGain();
+  if (type === 'kill') { o.type = 'square'; o.frequency.setValueAtTime(140, now); o.frequency.exponentialRampToValueAtTime(60, now + 0.12); }
+  else if (type === 'brk') { o.type = 'sawtooth'; o.frequency.setValueAtTime(90, now); o.frequency.exponentialRampToValueAtTime(30, now + 0.8); }
+  else { o.type = 'triangle'; o.frequency.value = 523.25 * Math.pow(2, SCALE[genIdx % SCALE.length] / 12); }
+  const vol = Math.min(0.35, 0.12 + Math.log2(count + 1) * 0.04), dur = type === 'brk' ? 0.9 : 0.18;
+  g.gain.setValueAtTime(vol, now); g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+  o.connect(g); g.connect(master); if (recDest) g.connect(recDest);
+  o.start(now); o.stop(now + dur + 0.02);
+}
+
+// ───────────────────────── App ─────────────────────────
+const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+let sim, soundOn = false, recDest = null, recorder = null, chunks = [];
+function opts() { return { title: ($('title').value || MODES[$('mode').value].title).toUpperCase(), handle: $('handle').value }; }
+function restart() { total = 1; sim = createSim($('mode').value, +$('seed').value || 1); $('ruleText').textContent = MODES[$('mode').value].rule; }
+$('mode').addEventListener('change', () => { $('title').value = MODES[$('mode').value].title; restart(); });
+$('seed').addEventListener('change', restart);
+$('restart').addEventListener('click', restart);
+$('sound').addEventListener('click', () => { ensureAudio(); ac.resume(); soundOn = !soundOn; $('sound').textContent = 'Som: ' + (soundOn ? 'ligado' : 'desligado'); $('sound').setAttribute('aria-pressed', soundOn); });
+$('rec').addEventListener('click', () => {
+  if (recorder) { recorder.stop(); return; }
+  try {
+    ensureAudio(); ac.resume(); soundOn = true; $('sound').textContent = 'Som: ligado'; $('sound').setAttribute('aria-pressed', 'true');
+    recDest = ac.createMediaStreamDestination();
+    const stream = new MediaStream([...cv.captureStream(60).getVideoTracks(), ...recDest.stream.getAudioTracks()]);
+    const types = ['video/mp4;codecs=avc1,mp4a', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm'];
+    const mime = types.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || '';
+    recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 12e6 });
+    chunks = []; recorder.ondataavailable = e => e.data.size && chunks.push(e.data);
+    recorder.onstop = () => {
+      const blob = new Blob(chunks, { type: recorder.mimeType }); const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'caos-no-circulo.' + (recorder.mimeType.includes('mp4') ? 'mp4' : 'webm'); a.click();
+      $('status').textContent = 'Vídeo gerado. Se o download não começou, abra esta página fora do visualizador.';
+      recorder = null; recDest = null; $('rec').textContent = 'Gravar vídeo'; $('rec').setAttribute('aria-pressed', 'false');
+    };
+    restart(); recorder.start(); $('rec').textContent = 'Parar e baixar'; $('rec').setAttribute('aria-pressed', 'true');
+    $('status').textContent = 'Gravando… pare quando o círculo estourar.';
+  } catch (err) { $('status').textContent = 'Este navegador não deixa gravar aqui. Abra a página direto no Chrome.'; recorder = null; }
+});
+
+function soundFor(ev) {
+  if (ev.brk) ping(0, 1, 'brk'); else if (ev.kill) ping(0, ev.kill, 'kill'); else if (ev.split || ev.eat) ping(ev.maxGen, ev.split + ev.eat, 'split');
+}
+
+$('mode').value = params.get('mode') || 'relogio';
+$('title').value = params.get('title') || MODES[$('mode').value].title;
+if (params.get('handle')) $('handle').value = params.get('handle');
+if (params.get('seed')) $('seed').value = params.get('seed');
+restart();
+
+if (params.has('render')) {
+  // modo de renderização quadro a quadro (usado para exportar MP4)
+  document.body.style.padding = '0'; $('panel').hidden = true;
+  window.renderStep = () => { const out = []; for (let k = 0; k < 2; k++) { const e = sim.step(1 / 60); out.push({ ...e }); } draw(sim, opts()); return { ev: out, n: sim.n, t: sim.t, broken: sim.broken, brokeAt: sim.brokeAt, ended: sim.ended }; };
+  window.frameJpeg = () => cv.toDataURL('image/jpeg', 0.9);
+  window.simReady = document.fonts.ready.then(() => true);
+} else {
+  let acc = 0, last = performance.now();
+  (function loop(now) {
+    acc += Math.min(0.1, (now - last) / 1000); last = now;
+    while (acc >= 1 / 60) { soundFor(sim.step(1 / 60)); acc -= 1 / 60; }
+    draw(sim, opts());
+    if (sim.broken && sim.t - sim.brokeAt > 4 && !recorder) restart();
+    if (sim.ended && !recorder) { sim.endT = sim.endT ?? sim.t; if (sim.t - sim.endT > 3) restart(); }
+    requestAnimationFrame(loop);
+  })(last);
+}
+</script>
