@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Batalha de Cores</title>
+<style>
+  :root { --bg:#000; --fg:#f2f2f2; --muted:#8a8a8a; --btn:#1b1b1b; --line:#333; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { background:var(--bg); color:var(--fg); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  body { min-height:100vh; display:flex; flex-direction:column; align-items:center; gap:14px; padding:16px; }
+  #stage { width:min(100%, calc((100vh - 120px) * 9 / 16)); aspect-ratio:9/16; background:#000; border:1px solid var(--line); border-radius:12px; display:block; }
+  .ui { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; max-width:720px; }
+  .ui button, .ui input { background:var(--btn); color:var(--fg); border:1px solid var(--line); border-radius:8px; padding:9px 14px; font:inherit; font-size:14px; cursor:pointer; }
+  .ui input { width:110px; cursor:text; }
+  .ui button.rec { border-color:#ff3b3b; color:#ff6b6b; }
+  .hint { color:var(--muted); font-size:13px; text-align:center; max-width:560px; }
+  body.render { padding:0; gap:0; }
+  body.render .ui, body.render .hint { display:none; }
+  body.render #stage { width:720px; height:1280px; border:0; border-radius:0; }
+</style>
+</head>
+<body>
+<canvas id="stage" width="720" height="1280"></canvas>
+<div class="ui">
+  <button id="play">Reiniciar</button>
+  <label class="hint">seed <input id="seed" value="7"></label>
+  <button id="rand">Seed aleatória</button>
+  <button id="sound">Som: ligado</button>
+  <button id="rec" class="rec">● Gravar vídeo (45s)</button>
+</div>
+<p class="hint">Cada batida na engrenagem duplica a bolinha. Quando duas cores se chocam, uma pode converter a outra. Quando o círculo lota, ele estoura. Grave e poste com um áudio em alta.</p>
+
+<script>
+(() => {
+const W = 720, H = 1280;
+const CX = 360, CY = 660, R = 300;           // arena
+const BR = 7;                                  // raio da bolinha
+const MAXN = 1500;
+const DT = 1 / 60;
+const BURST_AT = 39, FULL_HOLD = 5, END_AT = 45;
+
+const TEAMS = [
+  { name: 'AZUL',     c: '#2f6bff' },
+  { name: 'VERMELHO', c: '#ff2d3a' },
+  { name: 'VERDE',    c: '#35e04c' },
+  { name: 'AMARELO',  c: '#ffd21a' },
+  { name: 'ROXO',     c: '#a83dff' },
+];
+const T = TEAMS.length;
+
+const cv = document.getElementById('stage');
+const ctx = cv.getContext('2d');
+const params = new URLSearchParams(location.search);
+const RENDER = params.has('render');
+if (RENDER) document.body.classList.add('render');
+
+// ---------- RNG determinístico ----------
+let rs = 1;
+function seedRng(s) { rs = (Number(s) >>> 0) || 1; }
+function rnd() { rs ^= rs << 13; rs >>>= 0; rs ^= rs >> 17; rs ^= rs << 5; rs >>>= 0; return rs / 4294967296; }
+
+// ---------- sprites ----------
+const sprites = TEAMS.map(t => {
+  const s = document.createElement('canvas'); const d = BR * 2 + 2; s.width = s.height = d;
+  const g = s.getContext('2d');
+  const grad = g.createRadialGradient(d * 0.36, d * 0.32, 0.5, d / 2, d / 2, BR);
+  grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.22, t.c); grad.addColorStop(1, shade(t.c, -0.55));
+  g.fillStyle = grad; g.beginPath(); g.arc(d / 2, d / 2, BR, 0, Math.PI * 2); g.fill();
+  return s;
+});
+function shade(hex, k) {
+  const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  const f = v => Math.max(0, Math.min(255, Math.round(k < 0 ? v * (1 + k) : v + (255 - v) * k)));
+  return `rgb(${f(r)},${f(g)},${f(b)})`;
+}
+
+// ---------- estado ----------
+const X = new Float32Array(MAXN), Y = new Float32Array(MAXN), VX = new Float32Array(MAXN), VY = new Float32Array(MAXN);
+const TM = new Uint8Array(MAXN), CD = new Float32Array(MAXN), BORN = new Float32Array(MAXN);
+const events = [];
+let fullAt, n, t, rotA, rotW, burst, shards, counts, flashes, winner, hitSounds;
+
+const GS = BR * 2, GW = Math.ceil(W / GS) + 2, GH = Math.ceil(H / GS) + 2;
+const head = new Int32Array(GW * GH), next = new Int32Array(MAXN);
+
+// rotor: dois arcos semicirculares presos na engrenagem (formato "ω")
+const ARC_R = 70, ARC_TH = 6, SEG = 18;
+const arcLocal = []; // segmentos em coordenadas locais
+for (const side of [-1, 1]) {
+  const ax = side * ARC_R, pts = [];
+  for (let i = 0; i <= SEG; i++) {
+    const a = Math.PI + (side < 0 ? 0 : -Math.PI) + (i / SEG) * Math.PI; // meia volta
+    pts.push([ax + Math.cos(a) * ARC_R, Math.sin(a) * ARC_R * -1]);
+  }
+  for (let i = 0; i < SEG; i++) arcLocal.push([pts[i], pts[i + 1]]);
+}
+let arcWorld = [];
+
+function reset(seed) {
+  seedRng(seed);
+  fullAt = -1; n = 0; t = 0; rotA = rnd() * 6.28; rotW = 1.7; burst = null; shards = []; flashes = []; winner = -1; hitSounds = 0;
+  counts = new Array(T).fill(0);
+  for (let k = 0; k < T; k++) {
+    const a = k / T * Math.PI * 2 + 0.3, d = R * 0.72;
+    const va = a + Math.PI + (rnd() - 0.5) * 0.8; spawn(k, CX + Math.cos(a) * d, CY + Math.sin(a) * d, Math.cos(va) * 4.5, Math.sin(va) * 4.5);
+  }
+}
+function spawn(team, x, y, vx, vy) {
+  if (n >= MAXN) return -1;
+  X[n] = x; Y[n] = y; VX[n] = vx; VY[n] = vy; TM[n] = team; CD[n] = 0.6; BORN[n] = t; counts[team]++;
+  return n++;
+}
+
+// ---------- som (ASMR pops) ----------
+let actx = null, soundOn = true, dest = null;
+function ensureAudio() {
+  if (RENDER || actx) return;
+  actx = new (window.AudioContext || window.webkitAudioContext)();
+  dest = actx.createMediaStreamDestination();
+}
+const NOTES = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5];
+function pop(team, vol) {
+  if (!actx || !soundOn || hitSounds > 6) return; hitSounds++;
+  const now = actx.currentTime, o = actx.createOscillator(), g = actx.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(NOTES[(team + Math.floor(rnd() * 3)) % NOTES.length] * (n > 600 ? 2 : 1), now);
+  o.frequency.exponentialRampToValueAtTime(o.frequency.value * 0.6, now + 0.12);
+  g.gain.setValueAtTime(0.0001, now); g.gain.exponentialRampToValueAtTime(0.08 * vol, now + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+  o.connect(g); g.connect(actx.destination); g.connect(dest); o.start(now); o.stop(now + 0.16);
+}
+function boom() {
+  if (!actx || !soundOn) return;
+  const now = actx.currentTime, len = actx.sampleRate * 1.2, buf = actx.createBuffer(1, len, actx.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+  const s = actx.createBufferSource(), f = actx.createBiquadFilter(), g = actx.createGain();
+  s.buffer = buf; f.type = 'lowpass'; f.frequency.value = 900; g.gain.value = 0.7;
+  s.connect(f); f.connect(g); g.connect(actx.destination); g.connect(dest); s.start(now);
+}
+
+// ---------- física ----------
+function step() {
+  t += DT; hitSounds = 0;
+  // rotor
+  if (!burst) { if (Math.floor((t + DT) / 6) !== Math.floor(t / 6)) rotW = -Math.sign(rotW) * (1.5 + rnd() * 1.2); }
+  else rotW += Math.sign(rotW) * 0.15;
+  rotA += rotW * DT;
+  const ca = Math.cos(rotA), sa = Math.sin(rotA);
+  arcWorld = arcLocal.map(([p, q]) => [CX + p[0] * ca - p[1] * sa, CY + p[0] * sa + p[1] * ca, CX + q[0] * ca - q[1] * sa, CY + q[0] * sa + q[1] * ca]);
+
+  const grav = burst ? 0.22 : 0;
+  const mult = t < 14 ? 1 : t < 26 ? 2 : 3;
+
+  for (let i = 0; i < n; i++) {
+    VY[i] += grav; X[i] += VX[i]; Y[i] += VY[i]; if (CD[i] > 0) CD[i] -= DT;
+    const sp = Math.hypot(VX[i], VY[i]);
+    const maxS = burst ? 22 : 7;
+    if (sp > maxS) { VX[i] *= maxS / sp; VY[i] *= maxS / sp; }
+    else if (!burst && sp < 1.2) { const a = rnd() * 6.283; VX[i] += Math.cos(a) * 0.4; VY[i] += Math.sin(a) * 0.4; }
+  }
+
+  // grade espacial
+  head.fill(-1);
+  for (let i = 0; i < n; i++) {
+    const gx = Math.min(GW - 1, Math.max(0, (X[i] / GS | 0) + 1)), gy = Math.min(GH - 1, Math.max(0, (Y[i] / GS | 0) + 1));
+    const c = gy * GW + gx; next[i] = head[c]; head[c] = i;
+  }
+  const D = BR * 2, D2 = D * D, conv = burst ? 0 : (fullAt >= 0 ? 0.06 : 0.035);
+  for (let i = 0; i < n; i++) {
+    const gx = Math.min(GW - 1, Math.max(0, (X[i] / GS | 0) + 1)), gy = Math.min(GH - 1, Math.max(0, (Y[i] / GS | 0) + 1));
+    for (let oy = -1; oy <= 1; oy++) for (let ox = -1; ox <= 1; ox++) {
+      const xx = gx + ox, yy = gy + oy; if (xx < 0 || yy < 0 || xx >= GW || yy >= GH) continue;
+      for (let j = head[yy * GW + xx]; j !== -1; j = next[j]) {
+        if (j <= i) continue;
+        let dx = X[j] - X[i], dy = Y[j] - Y[i]; const d2 = dx * dx + dy * dy;
+        if (d2 >= D2 || d2 === 0) continue;
+        const d = Math.sqrt(d2), nx = dx / d, ny = dy / d, ov = (D - d) * 0.5;
+        X[i] -= nx * ov; Y[i] -= ny * ov; X[j] += nx * ov; Y[j] += ny * ov;
+        const rv = (VX[j] - VX[i]) * nx + (VY[j] - VY[i]) * ny;
+        if (rv < 0) { const im = -rv * 0.95; VX[i] -= nx * im; VY[i] -= ny * im; VX[j] += nx * im; VY[j] += ny * im; }
+        if (TM[i] !== TM[j] && rnd() < conv) {
+          if (rnd() < 0.5) { counts[TM[i]]--; TM[i] = TM[j]; counts[TM[i]]++; }
+          else { counts[TM[j]]--; TM[j] = TM[i]; counts[TM[j]]++; }
+        }
+      }
+    }
+  }
+
+  // rotor: colisão + duplicação
+  const reach = ARC_R * 2 + BR + ARC_TH + 4;
+  for (let i = 0, nn = n; i < nn; i++) {
+    const rx = X[i] - CX, ry = Y[i] - CY;
+    if (rx * rx + ry * ry > reach * reach) continue;
+    for (const s of arcWorld) {
+      const sx = s[2] - s[0], sy = s[3] - s[1];
+      let u = ((X[i] - s[0]) * sx + (Y[i] - s[1]) * sy) / (sx * sx + sy * sy); u = u < 0 ? 0 : u > 1 ? 1 : u;
+      const px = s[0] + sx * u, py = s[1] + sy * u; let dx = X[i] - px, dy = Y[i] - py; const d = Math.hypot(dx, dy);
+      const lim = BR + ARC_TH; if (d >= lim || d === 0) continue;
+      const nx = dx / d, ny = dy / d; X[i] = px + nx * lim; Y[i] = py + ny * lim;
+      const svx = -rotW * (py - CY) * DT, svy = rotW * (px - CX) * DT; // velocidade da superfície
+      const rvx = VX[i] - svx, rvy = VY[i] - svy, vn = rvx * nx + rvy * ny;
+      if (vn < 0) { VX[i] -= 1.9 * vn * nx; VY[i] -= 1.9 * vn * ny; }
+      VX[i] += nx * 1.2; VY[i] += ny * 1.2;
+      if (!burst && CD[i] <= 0) {
+        CD[i] = 0.9;
+        for (let m = 0; m < mult; m++) {
+          const a = Math.atan2(ny, nx) + (rnd() - 0.5) * 1.6, v = 3 + rnd() * 2;
+          const k = spawn(TM[i], X[i] + Math.cos(a) * D, Y[i] + Math.sin(a) * D, Math.cos(a) * v, Math.sin(a) * v);
+          if (k < 0) break;
+        }
+        if (flashes.length < 40) flashes.push({ x: X[i], y: Y[i], t, c: TEAMS[TM[i]].c });
+        pop(TM[i], 1); if (RENDER) events.push([t, 0, TM[i], n]);
+      }
+      break;
+    }
+  }
+
+  // parede do círculo
+  if (!burst) {
+    const lim = R - BR;
+    for (let i = 0; i < n; i++) {
+      const dx = X[i] - CX, dy = Y[i] - CY, d = Math.hypot(dx, dy);
+      if (d > lim) {
+        const nx = dx / d, ny = dy / d; X[i] = CX + nx * lim; Y[i] = CY + ny * lim;
+        const vn = VX[i] * nx + VY[i] * ny; if (vn > 0) { VX[i] -= 2 * vn * nx; VY[i] -= 2 * vn * ny; const j = (rnd() - 0.5) * 0.5, c = Math.cos(j), s2 = Math.sin(j), vx = VX[i]; VX[i] = vx * c - VY[i] * s2; VY[i] = vx * s2 + VY[i] * c; }
+      }
+    }
+    if (fullAt < 0 && n >= MAXN - 5) fullAt = t;
+    if ((fullAt >= 0 && t - fullAt >= FULL_HOLD) || t >= BURST_AT) startBurst();
+  } else {
+    for (const s of shards) { s.vy += 0.3; s.x += s.vx; s.y += s.vy; s.a += s.va; }
+  }
+}
+
+function startBurst() {
+  burst = { t };
+  let best = 0; for (let k = 1; k < T; k++) if (counts[k] > counts[best]) best = k; winner = best;
+  for (let i = 0; i < n; i++) {
+    const dx = X[i] - CX, dy = Y[i] - CY, d = Math.hypot(dx, dy) || 1, f = 4 + rnd() * 10 * (d / R);
+    VX[i] += dx / d * f; VY[i] += dy / d * f - 3;
+  }
+  for (let k = 0; k < 48; k++) {
+    const a = k / 48 * Math.PI * 2;
+    shards.push({ x: CX + Math.cos(a) * R, y: CY + Math.sin(a) * R, a0: a, a: 0, va: (rnd() - 0.5) * 0.3, vx: Math.cos(a) * (6 + rnd() * 8), vy: Math.sin(a) * (6 + rnd() * 8) - 4 });
+  }
+  boom(); if (RENDER) events.push([t, 1, winner, n]);
+}
+
+// ---------- desenho ----------
+function draw() {
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+
+  // tremor da explosão
+  ctx.save();
+  if (burst && t - burst.t < 0.5) { const k = (0.5 - (t - burst.t)) * 24; ctx.translate((rnd() - 0.5) * k, (rnd() - 0.5) * k); }
+
+  // arena
+  if (!burst) {
+    const fill = n / MAXN;
+    ctx.lineWidth = 3; ctx.strokeStyle = fill > 0.85 ? `rgba(255,255,255,${0.75 + 0.25 * Math.sin(t * 30)})` : '#fff';
+    ctx.beginPath(); ctx.arc(CX, CY, R + 1.5, 0, Math.PI * 2); ctx.stroke();
+  } else {
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+    for (const s of shards) { ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.a0 + Math.PI / 2 + s.a); ctx.beginPath(); ctx.moveTo(-20, 0); ctx.lineTo(20, 0); ctx.stroke(); ctx.restore(); }
+  }
+
+  // flashes de duplicação
+  for (let k = flashes.length - 1; k >= 0; k--) {
+    const f = flashes[k], age = t - f.t; if (age > 0.35) { flashes.splice(k, 1); continue; }
+    ctx.globalAlpha = 1 - age / 0.35; ctx.strokeStyle = f.c; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(f.x, f.y, BR + age * 70, 0, Math.PI * 2); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  // bolinhas
+  for (let i = 0; i < n; i++) {
+    if (Y[i] > H + 20) continue;
+    const age = t - BORN[i];
+    if (age < 0.15) { const s = 0.4 + age / 0.15 * 0.6, d = (BR * 2 + 2) * s; ctx.drawImage(sprites[TM[i]], X[i] - d / 2, Y[i] - d / 2, d, d); }
+    else ctx.drawImage(sprites[TM[i]], X[i] - BR - 1, Y[i] - BR - 1);
+  }
+
+  drawRotor();
+  ctx.restore();
+  drawHud();
+}
+
+function drawRotor() {
+  ctx.save(); ctx.translate(CX, CY); ctx.rotate(rotA);
+  for (const side of [-1, 1]) {
+    const ax = side * ARC_R, a0 = side < 0 ? 0 : -Math.PI;
+    // arco: de a0 a a0+π, espelhado em y (combina com a física)
+    ctx.save(); ctx.scale(1, -1);
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#5d6168'; ctx.lineWidth = ARC_TH * 2 + 3; ctx.beginPath(); ctx.arc(ax, 0, ARC_R, Math.PI + a0, Math.PI + a0 + Math.PI); ctx.stroke();
+    ctx.strokeStyle = '#a4a8ae'; ctx.lineWidth = ARC_TH * 2 - 1; ctx.beginPath(); ctx.arc(ax, 0, ARC_R, Math.PI + a0, Math.PI + a0 + Math.PI); ctx.stroke();
+    ctx.fillStyle = '#6b6f75';
+    for (let k = 1; k < 10; k++) { const a = Math.PI + a0 + k / 10 * Math.PI; ctx.beginPath(); ctx.arc(ax + Math.cos(a) * ARC_R, Math.sin(a) * ARC_R, 1.4, 0, 6.3); ctx.fill(); }
+    ctx.restore();
+    // marca d'água no arco
+    const label = 'IA LUCRATIVA';
+    ctx.fillStyle = '#4a4e54'; ctx.font = 'bold 9px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const mid = side < 0 ? Math.PI / 2 : -Math.PI / 2; const span = 0.075;
+    for (let c = 0; c < label.length; c++) {
+      const a = mid + (side < 0 ? -1 : 1) * (c - (label.length - 1) / 2) * span;
+      ctx.save(); ctx.translate(ax + Math.cos(a) * ARC_R, Math.sin(a) * ARC_R); ctx.rotate(a + Math.PI / 2 + (side < 0 ? Math.PI : 0)); ctx.fillText(label[c], 0, 0); ctx.restore();
+    }
+  }
+  ctx.restore();
+  // engrenagem
+  ctx.save(); ctx.translate(CX, CY); ctx.rotate(rotA * 2.2);
+  ctx.fillStyle = '#d9dbde'; ctx.beginPath();
+  const teeth = 12, ro = 22, ri = 17;
+  for (let k = 0; k < teeth * 2; k++) {
+    const r = k % 2 ? ri : ro, a1 = k / (teeth * 2) * Math.PI * 2, a2 = (k + 1) / (teeth * 2) * Math.PI * 2;
+    ctx.lineTo(Math.cos(a1) * r, Math.sin(a1) * r); ctx.lineTo(Math.cos(a2) * r, Math.sin(a2) * r);
+  }
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#8d9096'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, 6.3); ctx.fill();
+  ctx.fillStyle = '#6f7277'; for (let k = 0; k < 6; k++) { const a = k / 6 * 6.283; ctx.beginPath(); ctx.arc(Math.cos(a) * 12, Math.sin(a) * 12, 2.3, 0, 6.3); ctx.fill(); }
+  ctx.fillStyle = '#3c3f43'; ctx.beginPath(); ctx.arc(0, 0, 3, 0, 6.3); ctx.fill();
+  ctx.restore();
+}
+
+function drawHud() {
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  // gancho
+  if (!burst || t - burst.t < 1.2) {
+    ctx.fillStyle = '#fff'; ctx.font = '900 46px system-ui, -apple-system, sans-serif';
+    ctx.fillText('QUAL COR VAI', W / 2, 140); ctx.fillText('VENCER?', W / 2, 192);
+    ctx.font = '600 22px system-ui, sans-serif'; ctx.fillStyle = '#9a9a9a';
+    ctx.fillText('cada batida na engrenagem = +1 bolinha', W / 2, 232);
+  }
+  // barra de domínio
+  const bx = 60, by = 1020, bw = W - 120, bh = 16; let acc = 0; const tot = Math.max(1, n);
+  ctx.fillStyle = '#151515'; roundRect(bx, by, bw, bh, 8); ctx.fill();
+  ctx.save(); roundRect(bx, by, bw, bh, 8); ctx.clip();
+  for (let k = 0; k < T; k++) { const w = counts[k] / tot * bw; ctx.fillStyle = TEAMS[k].c; ctx.fillRect(bx + acc, by, w + 0.5, bh); acc += w; }
+  ctx.restore();
+  // placar
+  ctx.font = '700 20px system-ui, sans-serif';
+  const colW = bw / T;
+  for (let k = 0; k < T; k++) {
+    const x = bx + colW * k + colW / 2;
+    ctx.fillStyle = TEAMS[k].c; ctx.beginPath(); ctx.arc(x - 26, by + 52, 8, 0, 6.3); ctx.fill();
+    ctx.fillStyle = '#eaeaea'; ctx.textAlign = 'left'; ctx.fillText(String(counts[k]), x - 13, by + 59);
+  }
+  ctx.textAlign = 'center';
+  // aviso de lotação
+  if (!burst && n / MAXN > 0.8) {
+    ctx.globalAlpha = 0.5 + 0.5 * Math.sin(t * 14);
+    ctx.fillStyle = '#ff3b3b'; ctx.font = '800 26px system-ui, sans-serif'; ctx.fillText('VAI ESTOURAR...', W / 2, 300);
+    ctx.globalAlpha = 1;
+  }
+  // vencedor
+  if (burst && t - burst.t > 1.0) {
+    const k = Math.min(1, (t - burst.t - 1.0) / 0.4), s = 0.6 + 0.4 * easeOutBack(k);
+    ctx.save(); ctx.globalAlpha = k; ctx.translate(W / 2, 600); ctx.scale(s, s);
+    ctx.fillStyle = 'rgba(0,0,0,0.72)'; roundRect(-300, -150, 600, 300, 28); ctx.fill();
+    ctx.strokeStyle = TEAMS[winner].c; ctx.lineWidth = 4; roundRect(-300, -150, 600, 300, 28); ctx.stroke();
+    ctx.fillStyle = TEAMS[winner].c; ctx.font = '900 76px system-ui, sans-serif'; ctx.fillText(TEAMS[winner].name, 0, -20);
+    ctx.fillStyle = '#fff'; ctx.font = '900 56px system-ui, sans-serif'; ctx.fillText('VENCEU!', 0, 52);
+    ctx.fillStyle = '#bbb'; ctx.font = '600 24px system-ui, sans-serif'; ctx.fillText('você acertou? comenta aí', 0, 108);
+    ctx.restore();
+  }
+}
+function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function easeOutBack(x) { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); }
+
+// ---------- modo render (para gerar MP4 quadro a quadro) ----------
+window.__render = {
+  init(seed) { reset(seed); draw(); },
+  events() { return events; },
+  frame(stepsPerFrame = 2) { for (let k = 0; k < stepsPerFrame; k++) step(); draw(); return { t, n, counts: counts.slice(), winner }; },
+};
+
+// ---------- modo ao vivo ----------
+const seedEl = document.getElementById('seed');
+let last = 0, accT = 0, running = false, recorder = null;
+function loop(ts) {
+  if (!running) return;
+  const dt = Math.min(0.1, (ts - (last || ts)) / 1000); last = ts; accT += dt;
+  while (accT >= DT) { step(); accT -= DT; }
+  draw();
+  if (t >= END_AT) { running = false; if (recorder && recorder.state === 'recording') recorder.stop(); return; }
+  requestAnimationFrame(loop);
+}
+function start() { reset(seedEl.value); last = 0; accT = 0; if (!running) { running = true; requestAnimationFrame(loop); } }
+
+if (!RENDER) {
+  document.getElementById('play').onclick = () => { ensureAudio(); start(); };
+  document.getElementById('rand').onclick = () => { seedEl.value = Math.floor(Math.random() * 99999); ensureAudio(); start(); };
+  document.getElementById('sound').onclick = e => { soundOn = !soundOn; e.target.textContent = 'Som: ' + (soundOn ? 'ligado' : 'desligado'); };
+  document.getElementById('rec').onclick = () => {
+    ensureAudio();
+    const stream = cv.captureStream(30);
+    dest.stream.getAudioTracks().forEach(tr => stream.addTrack(tr));
+    const mime = ['video/mp4;codecs=avc1', 'video/webm;codecs=vp9,opus', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
+    recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 8e6 });
+    const chunks = []; recorder.ondataavailable = e => chunks.push(e.data);
+    recorder.onstop = () => {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(chunks, { type: mime }));
+      a.download = `batalha-de-cores-seed${seedEl.value}.${mime.includes('mp4') ? 'mp4' : 'webm'}`; a.click();
+    };
+    recorder.start(); start();
+  };
+  reset(seedEl.value); draw();
+}
+})();
+</script>
+</body>
+</html>
