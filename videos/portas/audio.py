@@ -9,10 +9,15 @@ def env(n, d): return np.exp(-np.arange(n) / SR / d)
 def tone(f, d, v, dec):
     n = int(d * SR); t = np.arange(n) / SR; return np.sin(2 * np.pi * f * t) * np.exp(-t / dec) * v
 lp = lambda x, k: np.convolve(x, np.ones(k) / k, 'same')
-# abertura: whoosh + impacto
-n = int(0.6 * SR); t = np.arange(n) / SR
-add(lp(rng.standard_normal(n), 25) * (t / 0.6) ** 2 * 0.5, -0.0)
-add(tone(55, 0.6, 0.8, 0.2) + lp(rng.standard_normal(n), 4) * env(n, 0.04) * 0.4, 0.45)
+# gancho: impacto + sirene de alarme + whoosh de transicao
+hk = meta['hook'] / FPS; n = int(0.8 * SR)
+add(tone(45, 0.8, 1.0, 0.3) + lp(rng.standard_normal(n), 4) * env(n, 0.06) * 0.5, 0)
+n = int(hk * SR); t = np.arange(n) / SR
+sir = np.sin(2 * np.pi * np.cumsum(620 + 260 * np.sign(np.sin(2 * np.pi * 3.2 * t))) / SR)
+add(sir * 0.12, 0)
+n = int(0.4 * SR); t = np.arange(n) / SR
+add(lp(rng.standard_normal(n), 20) * (t / 0.4) ** 2 * 0.6, hk - 0.4)
+add(tone(60, 0.5, 0.7, 0.15), hk)
 # portas subindo: baque grave
 for f in M['doors']: add(tone(70, 0.4, 0.7, 0.12) + lp(rng.standard_normal(int(0.4 * SR)), 8) * env(int(0.4 * SR), 0.05) * 0.3, (f + 12) / FPS)
 # passinhos
@@ -33,8 +38,9 @@ for s in meta['spot']: add(tone(1800, 0.05, 0.12, 0.01), s['f'] / FPS)
 n = int((vote - cyc) * SR); tt = np.arange(n) / SR; p = tt / (vote - cyc)
 add((np.sin(2 * np.pi * (110 + 40 * p) * tt) + np.sin(2 * np.pi * (110.7 + 40 * p) * tt)) * 0.04 * (0.4 + p), cyc)
 # bipes do medidor: a cada 10% ate 90, depois a cada 1%
-m = meta['meter']; last = -1
-for f, pc in enumerate(m[:-1]):
+m = meta['meter']; last = -1; H0 = meta['hook']
+for f0, pc in enumerate(m[:-1]):
+    f = f0 + H0
     step = pc // 10 if pc < 90 else 9 + (pc - 89)
     if step != last and pc > 0:
         add(tone(700 + pc * 9, 0.08, 0.16 if pc < 90 else 0.22, 0.025), f / FPS); last = step

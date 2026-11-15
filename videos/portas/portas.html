@@ -31,10 +31,12 @@ const T = {
   voteTitle:['VOCÊ DECIDE:','COMENTA O NÚMERO'],
   vote1:'VOCÊ DECIDE!', vote2:'COMENTA 1, 2 OU 3', vote3:'A MAIS COMENTADA ABRE NO EP. 2 · ME SEGUE',
   follow:'NÃO VIU O RAIO-X? ASSISTE DE NOVO E PAUSA NO 100%',
+  hook1:'UMA DESSAS PORTAS', hook2:'É UMA ARMADILHA', hook3:'E SÓ 1 FRAME REVELA QUAL',
+  ready:'PREPARA PRA PAUSAR!', bigDoor:'PORTA 1', bigTrap:'= ARMADILHA!', bigItem:'BIGORNA DE 1000 KG',
   c1:'VOCÊ DECIDE', c2:'QUAL PORTA ELE ABRE?', c4:'PAUSE NO 100% E VEJA O RAIO-X', c3:'COMENTA 1, 2 OU 3'
 };
 const DOOR_COL = ['#f5c842','#ff4d5e','#b48cff'];
-const F_DOORS = -14, F_PIG = -10, F_HINTS = 6, F_CYCLE = 75, F_VOTE = 360, TOTAL_FRAMES = 480;
+const F_DOORS = -14, F_PIG = -10, F_HINTS = 6, F_CYCLE = 75, F_VOTE = 360, MAIN_FRAMES = 480, HOOK = 40, TOTAL_FRAMES = HOOK + MAIN_FRAMES;
 
 /* ================= HELPERS ================= */
 const W = 720, H = 1280;
@@ -205,15 +207,17 @@ function drawPig(frame, worry, look){
   ctx.restore();
 }
 
-function goldAnvil(cx, cy){
-  ctx.save(); ctx.translate(cx,cy);
-  const g=ctx.createLinearGradient(-60,0,60,0); g.addColorStop(0,'#9c6c00'); g.addColorStop(.5,'#ffe27a'); g.addColorStop(1,'#8a5f00');
+function goldAnvil(cx, cy, sc=1, dark=false){
+  ctx.save(); ctx.translate(cx,cy); ctx.scale(sc,sc);
+  const g=ctx.createLinearGradient(-60,0,60,0);
+  if (dark){ g.addColorStop(0,'#1d2431'); g.addColorStop(.5,'#5d6b82'); g.addColorStop(1,'#151a24'); }
+  else { g.addColorStop(0,'#9c6c00'); g.addColorStop(.5,'#ffe27a'); g.addColorStop(1,'#8a5f00'); }
   ctx.fillStyle=g; ctx.beginPath();
   ctx.moveTo(-70,-40); ctx.quadraticCurveTo(-55,-46,-36,-46); ctx.lineTo(56,-46); ctx.lineTo(56,-24); ctx.lineTo(32,-24);
   ctx.quadraticCurveTo(22,-14,24,4); ctx.lineTo(50,12); ctx.lineTo(50,40); ctx.lineTo(-50,40); ctx.lineTo(-50,12); ctx.lineTo(-24,4);
   ctx.quadraticCurveTo(-22,-14,-36,-24); ctx.quadraticCurveTo(-56,-26,-70,-40); ctx.closePath(); ctx.fill();
   ctx.strokeStyle='rgba(0,0,0,0.5)'; ctx.lineWidth=2; ctx.stroke();
-  text('1000 KG', 0, 28, 11, '#5a3d00', 900);
+  text('1000 KG', 0, 28, 11, dark?'rgba(232,240,254,0.7)':'#5a3d00', 900);
   ctx.restore();
 }
 
@@ -221,12 +225,21 @@ function xray(frame){
   // tinge a tela toda e "atravessa" a porta revelada
   ctx.fillStyle='rgba(0,255,214,0.16)'; ctx.fillRect(0,0,W,H);
   ctx.fillStyle='rgba(0,0,0,0.12)'; for(let y=0;y<H;y+=6) ctx.fillRect(0,y,W,2);
-  const i=SPOILER_DOOR, cx=DX[i];
-  ctx.fillStyle='rgba(0,30,30,0.85)'; rr(cx-DW/2, DTOP, DW, DBOT-DTOP, 6); ctx.fill();
-  ctx.strokeStyle='#00ffd6'; ctx.lineWidth=3; ctx.setLineDash([10,6]); rr(cx-DW/2, DTOP, DW, DBOT-DTOP, 6); ctx.stroke(); ctx.setLineDash([]);
-  goldAnvil(cx, 700);
-  ctx.fillStyle='#ff4d5e'; rr(cx-70, 580, 140, 34, 8); ctx.fill(); text(T.xrayItem, cx, 598, 18, '#fff', 900);
-  rr(cx-48, DTOP+110, 96, 28, 8); ctx.fillStyle='#00ffd6'; ctx.fill(); text(T.xray, cx, DTOP+125, 15, '#002b26', 900);
+  // painel gigante no centro
+  ctx.save(); ctx.shadowColor='#00ffd6'; ctx.shadowBlur=50;
+  rr(44, 318, 632, 600, 28); ctx.fillStyle='rgba(0,22,20,0.97)'; ctx.fill(); ctx.restore();
+  rr(44, 318, 632, 600, 28); ctx.strokeStyle='#00ffd6'; ctx.lineWidth=5; ctx.stroke();
+  ctx.fillStyle='rgba(0,255,214,0.06)'; for(let y=330;y<910;y+=8) ctx.fillRect(56,y,608,3);
+  rr(250, 340, 220, 48, 14); ctx.fillStyle='#00ffd6'; ctx.fill(); text(T.xray, 360, 365, 28, '#002b26', 900);
+  // porta "transparente" com a bigorna dentro
+  ctx.strokeStyle='#00ffd6'; ctx.lineWidth=4; ctx.setLineDash([14,8]); rr(110, 420, 220, 340, 10); ctx.stroke(); ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(220, 470, 36, 0, 7); ctx.strokeStyle=C.gold; ctx.lineWidth=4; ctx.stroke(); text('1', 220, 472, 44, C.gold, 900);
+  goldAnvil(220, 640, 1.55);
+  text(T.bigDoor, 500, 520, 64, '#ffffff', 900);
+  ctx.save(); ctx.translate(500, 600); ctx.rotate(-0.05);
+  rr(-150, -36, 300, 72, 14); ctx.fillStyle=C.red; ctx.fill(); fitText(T.bigTrap, 0, 2, 280, 40, '#ffffff', 900); ctx.restore();
+  text(T.bigItem, 500, 680, 22, C.gold, 900);
+  fitText(T.xrayItem.replace('!','') + ' DOURADA: NÃO CAIA NESSA', 360, 860, 580, 26, '#00ffd6', 900);
   // tarja no topo
   rr(80, 1078, 560, 70, 18); ctx.fillStyle='rgba(0,20,18,0.97)'; ctx.fill(); ctx.strokeStyle='#00ffd6'; ctx.lineWidth=3; ctx.stroke();
   fitText(T.xrayTitle, 360, 1114, 520, 32, '#00ffd6', 900);
@@ -251,7 +264,7 @@ function voteCard(f){
 }
 
 /* ================= FRAME ================= */
-function render(frame){
+function renderMain(frame){
   ctx.setTransform(S,0,0,S,0,0);
   const voting = frame >= F_VOTE;
   background();
@@ -275,8 +288,59 @@ function render(frame){
     fitText(before ? T.pauseAt : T.missed, 0, 2, 540, 28, col, 900); ctx.restore();
   }
   if (voting) voteCard(frame-F_VOTE);
-  if (frame === SPOILER_FRAME) xray(frame);
+  if (frame === SPOILER_FRAME) xray(frame); else if (!voting) countdown(frame);
   if (!voting) text(BRAND, 360, 1222, 18, 'rgba(232,240,254,0.4)', 800);
+}
+
+/* ================= CONTAGEM ANTES DO 100% ================= */
+function countdown(frame){
+  const start = SPOILER_FRAME - 27; if (frame < start || frame >= SPOILER_FRAME) return;
+  const k = frame - start, n = 3 - Math.floor(k/9), local = (k%9)/9;
+  const sc = 1.35 - 0.35*easeOut(local*2);
+  ctx.save(); ctx.globalAlpha = 0.9;
+  ctx.fillStyle='rgba(4,7,15,0.55)'; ctx.fillRect(0,300,W,620);
+  ctx.globalAlpha=1;
+  text(T.ready, 360, 440, 40, C.gold, 900);
+  ctx.translate(360, 640); ctx.scale(sc, sc);
+  ctx.fillStyle='rgba(11,12,32,0.95)'; ctx.beginPath(); ctx.arc(0,0,130,0,7); ctx.fill();
+  ctx.strokeStyle=C.gold; ctx.lineWidth=8; ctx.beginPath(); ctx.arc(0,0,130,-Math.PI/2,-Math.PI/2+Math.PI*2*(1-local)); ctx.stroke();
+  text(String(n), 0, 8, 190, '#ffffff', 900);
+  ctx.restore();
+}
+
+/* ================= GANCHO INICIAL ================= */
+function hook(f){
+  const t = f/FPS, pulse = 0.5+0.5*Math.sin(f*0.9);
+  ctx.fillStyle='#120306'; ctx.fillRect(0,0,W,H);
+  const r=ctx.createRadialGradient(360,700,40,360,700,700); r.addColorStop(0,`rgba(255,40,70,${0.35+0.25*pulse})`); r.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=r; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(0,0,0,0.18)'; for(let y=0;y<H;y+=6) ctx.fillRect(0,y,W,2);
+  const sh = (f%4<2?1:-1)*3;
+  ctx.save(); ctx.translate(sh,0);
+  // sombra da bigorna crescendo sobre o cofrinho
+  const grow = easeOut(f/34);
+  ctx.fillStyle=`rgba(0,0,0,${0.35+0.35*grow})`; ctx.beginPath(); ctx.ellipse(360, 1035, 120+120*grow, 18+10*grow, 0, 0, 7); ctx.fill();
+  goldAnvil(360, lerp(470, 690, grow), 1.9, true);
+  LOOK = 0; ctx.save(); ctx.translate(320, 1040 - TABLE_Y*1.05); ctx.scale(1.05,1.05); pig(0,false,'',1,t); ctx.restore();
+  ctx.restore();
+  // placa de perigo
+  for (const x of [70,650]){ ctx.save(); ctx.translate(x, 380); ctx.scale(0.9+0.1*pulse,0.9+0.1*pulse);
+    ctx.fillStyle=C.gold; ctx.beginPath(); ctx.moveTo(0,-34); ctx.lineTo(32,24); ctx.lineTo(-32,24); ctx.closePath(); ctx.fill();
+    text('!', 0, 6, 38, '#120306', 900); ctx.restore(); }
+  // textos
+  const p1 = back((f+6)/8), p2 = back((f+4)/8), p3 = back((f-8)/8);
+  ctx.save(); ctx.translate(360,170); ctx.scale(p1,p1); fitText(T.hook1, 0, 0, 660, 54, '#ffffff', 900); ctx.restore();
+  if (p2>0){ ctx.save(); ctx.translate(360,240); ctx.scale(p2,p2); ctx.rotate(-0.03);
+    rr(-310,-40,620,80,16); ctx.fillStyle=C.red; ctx.fill(); fitText(T.hook2, 0, 2, 590, 52, '#ffffff', 900); ctx.restore(); }
+  if (p3>0){ ctx.save(); ctx.translate(360,316); ctx.scale(p3,p3); fitText(T.hook3, 0, 0, 640, 30, C.gold, 900); ctx.restore(); }
+  // flash de transicao
+  if (f >= HOOK-4){ ctx.fillStyle=`rgba(255,255,255,${(f-(HOOK-4)+1)/4*0.9})`; ctx.fillRect(0,0,W,H); }
+}
+
+function render(frame){
+  if (frame < HOOK){ ctx.setTransform(S,0,0,S,0,0); hook(frame); return; }
+  renderMain(frame - HOOK);
+  if (frame - HOOK < 4){ ctx.fillStyle=`rgba(255,255,255,${0.6*(1-(frame-HOOK)/4)})`; ctx.fillRect(0,0,W,H); }
 }
 
 /* ================= MEDIDOR DO RAIO-X ================= */
@@ -329,7 +393,9 @@ function renderCover(){
 }
 
 window.TOTAL_FRAMES = TOTAL_FRAMES; window.SPOILER_FRAME = SPOILER_FRAME; window.SPOT = SPOT;
-window.METER = [...Array(SPOILER_FRAME+1).keys()].map(meterPct);
+window.META = { total: TOTAL_FRAMES, hook: HOOK, spoiler: HOOK+SPOILER_FRAME, spot: SPOT.map(x=>({f:x.f+HOOK, door:x.door})),
+  meter: [...Array(SPOILER_FRAME+1).keys()].map(meterPct),
+  marks: { doors:[0,1,2].map(i=>HOOK+F_DOORS+i*6), hints:[0,1,2].map(i=>HOOK+F_HINTS+i*8), cycle:HOOK+F_CYCLE, vote:HOOK+F_VOTE, pig:HOOK+F_PIG } };
 window.MARKS = { doors:[0,1,2].map(i=>F_DOORS+i*6), hints:[0,1,2].map(i=>F_HINTS+i*14), cycle:F_CYCLE, vote:F_VOTE, pig:F_PIG };
 window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
 window.renderCover = renderCover;
