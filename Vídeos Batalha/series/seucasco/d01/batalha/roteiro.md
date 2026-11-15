@@ -1,6 +1,6 @@
 # Desafio 1 · Batalha: "As lesmas da horta"
 
-> **Rascunho para aprovação (15/11/2026).** Uma Batalha só, a mesma nas três plataformas (contagem somada).
+> **Aprovado (15/11/2026): a narração gravada veio deste texto.** Mudança na produção: na cena 11 o Seu Casco come uma folha de alface caída no chão (no canteiro, a borda escondia o rosto dele). Uma Batalha só, a mesma nas três plataformas (contagem somada).
 
 - **Contagem real (Instagram + YouTube; o TikTok não teve comentários):** 209 soldados (99 comuns, 57 ACADEMIA, 53 PATINETE, 0 CROCHÊ, 0 OBRA). Placar: **JABUTIS 210 × 10.000 LESMAS** (209 + o Seu Casco).
 - **Faixa:** 200 ou mais, **vitória**: as lesmas fogem. Meta bônus (500) não batida: o chão não treme, e a Kombi de mudança passa vazia lá fora.

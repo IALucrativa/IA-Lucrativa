@@ -519,3 +519,17 @@ export const BatalhaSeuCasco: React.FC<{cfg: ConfigBatalhaSC}> = ({cfg}) => {
 };
 
 export const DURACAO_BAT_SC = Math.round(BATALHA_SC_D01.duracao * FPS);
+
+// Capa da Batalha: o quintal de manhã, no tempo T, com a câmera escolhida (sem placar nem legenda).
+export const cenaCapaBatalhaSC = (T: number, cam: ParamsQuintal['cam']): ParamsQuintal => {
+  const anda = clamp01((T - 69.5) / 2.7);
+  return {
+    t: T,
+    avanco: avancoLesmas(T),
+    heroi: T >= 69 ? {pos: lerp([0.66, 0, 1.02], [0.3, 0, 0.66], suave(anda)), giro: -2.34, mastiga: 0} : null,
+    jabutis: exercito(T),
+    mexeLesma: mexeLesma(T),
+    amanhecer: clamp01((T - 62) / 7) * 0.75 + clamp01((T - 69) / 8) * 0.25,
+    cam,
+  };
+};
