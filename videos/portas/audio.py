@@ -32,8 +32,15 @@ for s in meta['spot']: add(tone(1800, 0.05, 0.12, 0.01), s['f'] / FPS)
 # drone de tensao
 n = int((vote - cyc) * SR); tt = np.arange(n) / SR; p = tt / (vote - cyc)
 add((np.sin(2 * np.pi * (110 + 40 * p) * tt) + np.sin(2 * np.pi * (110.7 + 40 * p) * tt)) * 0.04 * (0.4 + p), cyc)
-# chiado sutil no raio-X
-n = int(0.04 * SR); add(rng.standard_normal(n) * 0.12, meta['spoiler'] / FPS)
+# bipes do medidor: a cada 10% ate 90, depois a cada 1%
+m = meta['meter']; last = -1
+for f, pc in enumerate(m[:-1]):
+    step = pc // 10 if pc < 90 else 9 + (pc - 89)
+    if step != last and pc > 0:
+        add(tone(700 + pc * 9, 0.08, 0.16 if pc < 90 else 0.22, 0.025), f / FPS); last = step
+# zap do raio-X no frame 100%
+tz = meta['spoiler'] / FPS; n = int(0.25 * SR); tt = np.arange(n) / SR
+add(np.sin(2 * np.pi * (2400 - 6000 * tt) * tt) * np.exp(-tt / 0.08) * 0.35 + rng.standard_normal(n) * np.exp(-tt / 0.03) * 0.15, tz)
 # acorde da votacao + pad
 for fq in (261.6, 329.6, 392.0, 523.3): add(tone(fq, 1.6, 0.16, 0.5), vote)
 n = int((meta['total'] / FPS - vote) * SR); tt = np.arange(n) / SR

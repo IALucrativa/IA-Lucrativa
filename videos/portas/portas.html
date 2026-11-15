@@ -23,16 +23,18 @@ const T = {
   logo:'VOCÊ DECIDE', ep:`EP. ${EP}`,
   title:['O COFRINHO PRECISA','ESCOLHER UMA PORTA'],
   sub:'ATENÇÃO: 1 FRAME ESCONDE UMA PISTA',
+  meter:'RAIO-X', charging:'CARREGANDO… PAUSE NO 100%', fired:'ATIVADO! VOCÊ PAUSOU?', used:'USADO · ASSISTA DE NOVO',
+  pauseAt:'PAUSE QUANDO CHEGAR EM 100%', missed:'PERDEU? VOLTA E PAUSA NO 100%',
   hints:['BRILHA DOURADO','FAZ TIC-TAC','SILÊNCIO TOTAL'],
   ask:'QUAL PORTA ELE ABRE?',
   xray:'RAIO-X', xrayTitle:'PISTA SECRETA: PORTA 1', xrayItem:'ARMADILHA!',
   voteTitle:['VOCÊ DECIDE:','COMENTA O NÚMERO'],
-  vote1:'VOCÊ DECIDE!', vote2:'COMENTA 1, 2 OU 3', vote3:'A MAIS COMENTADA ABRE NO EP. 2',
-  follow:'me segue pra ver o que acontece',
-  c1:'VOCÊ DECIDE', c2:'QUAL PORTA ELE ABRE?', c3:'COMENTA 1, 2 OU 3'
+  vote1:'VOCÊ DECIDE!', vote2:'COMENTA 1, 2 OU 3', vote3:'A MAIS COMENTADA ABRE NO EP. 2 · ME SEGUE',
+  follow:'NÃO VIU O RAIO-X? ASSISTE DE NOVO E PAUSA NO 100%',
+  c1:'VOCÊ DECIDE', c2:'QUAL PORTA ELE ABRE?', c4:'PAUSE NO 100% E VEJA O RAIO-X', c3:'COMENTA 1, 2 OU 3'
 };
 const DOOR_COL = ['#f5c842','#ff4d5e','#b48cff'];
-const F_DOORS = 18, F_PIG = 30, F_HINTS = 60, F_CYCLE = 150, F_VOTE = 360, TOTAL_FRAMES = 480;
+const F_DOORS = -14, F_PIG = -10, F_HINTS = 6, F_CYCLE = 75, F_VOTE = 360, TOTAL_FRAMES = 480;
 
 /* ================= HELPERS ================= */
 const W = 720, H = 1280;
@@ -127,8 +129,7 @@ function background(){
 }
 
 function header(frame, voting){
-  const a = easeOut(frame/10);
-  ctx.save(); ctx.globalAlpha=a; ctx.translate(360,104); ctx.scale(back(frame/12),back(frame/12));
+  ctx.save(); ctx.translate(360,96);
   ctx.font='900 34px Inter'; const lw=ctx.measureText(T.logo).width;
   const pw=lw+130;
   rr(-pw/2,-30,pw,60,30); ctx.fillStyle='#ffffff'; ctx.fill();
@@ -138,10 +139,9 @@ function header(frame, voting){
   text(T.logo, -pw/2+62, 1, 34, '#04070f', 900, 'left');
   rr(pw/2-62,-18,50,36,10); ctx.fillStyle=C.red; ctx.fill(); text(T.ep, pw/2-37, 1, 15, '#fff', 900);
   ctx.restore();
-  const b = easeOut((frame-6)/10); ctx.globalAlpha=b;
   const tl = voting?T.voteTitle:T.title;
-  fitText(tl[0], 360, 176, 660, 44, '#ffffff', 900); fitText(tl[1], 360, 224, 660, 44, voting?C.gold:'#ffffff', 900);
-  text(T.sub, 360, 270, 18, C.gold, 800);
+  fitText(tl[0], 360, 160, 660, 42, '#ffffff', 900); fitText(tl[1], 360, 204, 660, 42, voting?C.gold:'#ffffff', 900);
+  xrayMeter(frame);
   ctx.globalAlpha=1;
 }
 
@@ -178,7 +178,7 @@ function door(i, frame, lit){
 }
 
 function hintBadge(i, frame){
-  const p = back((frame - F_HINTS - i*14)/10); if (p<=0) return;
+  const p = back((frame - F_HINTS - i*8)/10); if (p<=0) return;
   ctx.save(); ctx.translate(DX[i], 336); ctx.scale(p,p);
   ctx.font='900 17px Inter'; const w=Math.min(206, ctx.measureText(T.hints[i]).width+24);
   rr(-w/2,-21,w,42,21); ctx.fillStyle='rgba(11,12,32,0.95)'; ctx.fill(); ctx.strokeStyle=DOOR_COL[i]; ctx.lineWidth=2.5; ctx.stroke();
@@ -247,7 +247,7 @@ function voteCard(f){
   text(T.vote3, 0, 22, 19, '#ffffff', 800);
   ctx.restore();
   const b = clamp((f-18)/8,0,1); ctx.globalAlpha=b;
-  text(T.follow, 360, 1254, 19, C.text, 700); ctx.globalAlpha=1;
+  fitText(T.follow, 360, 1252, 640, 19, C.gold, 900); ctx.globalAlpha=1;
 }
 
 /* ================= FRAME ================= */
@@ -264,15 +264,45 @@ function render(frame){
   const look = sp ? (sp.door-1)*4 : 0;
   drawPig(frame, worry, look);
   header(frame, voting);
-  if (!voting && frame>=F_CYCLE){
-    const p = back((frame-F_CYCLE)/10);
-    ctx.save(); ctx.translate(360,1113); ctx.scale(p,p);
-    rr(-230,-38,460,76,38); ctx.fillStyle='rgba(11,12,32,0.95)'; ctx.fill(); ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=2; ctx.stroke();
-    text(T.ask, 0, 2, 30, '#ffffff', 900); ctx.restore();
+  if (!voting && frame!==SPOILER_FRAME){
+    const before = frame < SPOILER_FRAME, pc = meterPct(frame);
+    const hot = before && pc>=90, blink = hot && Math.floor(frame/3)%2===0;
+    const col = before ? (hot ? C.gold : '#ffffff') : C.red;
+    const pulse = 1 + (hot ? 0.05*Math.sin(frame*1.2) : 0);
+    ctx.save(); ctx.translate(360,1113); ctx.scale(pulse,pulse);
+    rr(-290,-38,580,76,38); ctx.fillStyle= blink ? 'rgba(245,200,66,0.18)' : 'rgba(11,12,32,0.95)'; ctx.fill();
+    ctx.strokeStyle=col; ctx.lineWidth=hot||!before?3:2; ctx.stroke();
+    fitText(before ? T.pauseAt : T.missed, 0, 2, 540, 28, col, 900); ctx.restore();
   }
   if (voting) voteCard(frame-F_VOTE);
   if (frame === SPOILER_FRAME) xray(frame);
   if (!voting) text(BRAND, 360, 1222, 18, 'rgba(232,240,254,0.4)', 800);
+}
+
+/* ================= MEDIDOR DO RAIO-X ================= */
+function meterPct(frame){
+  if (frame >= SPOILER_FRAME) return frame===SPOILER_FRAME ? 100 : 0;
+  const p = clamp(frame/SPOILER_FRAME, 0, 1);
+  return Math.min(99, Math.floor(100*(1-Math.pow(1-p,1.7))));   // anda devagar perto do fim
+}
+function xrayMeter(frame){
+  const x=70, y=230, w=580, h=66, pc=meterPct(frame);
+  const st = frame<SPOILER_FRAME ? 0 : frame===SPOILER_FRAME ? 1 : 2;
+  const col = st===1 ? '#00ffd6' : st===2 ? C.red : pc>=90 ? C.gold : '#00ffd6';
+  ctx.save(); ctx.shadowColor=col; ctx.shadowBlur = st===1 ? 40 : pc>=90&&st===0 ? 14+10*Math.sin(frame*1.1) : 8;
+  rr(x,y,w,h,18); ctx.fillStyle='rgba(6,14,22,0.96)'; ctx.fill(); ctx.restore();
+  rr(x,y,w,h,18); ctx.strokeStyle=col; ctx.lineWidth=2.5; ctx.stroke();
+  // chip RAIO-X
+  rr(x+12,y+13,96,40,12); ctx.fillStyle=col; ctx.fill(); text(T.meter, x+60, y+34, 18, '#021512', 900);
+  // rotulo + barra
+  text(st===0?T.charging:st===1?T.fired:T.used, x+124, y+21, 15, st===2?C.red:'#cfe9ff', 800, 'left');
+  const bx=x+124, by=y+38, bw=w-124-104, bh=14;
+  rr(bx,by,bw,bh,7); ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fill();
+  if (pc>0){ const g=ctx.createLinearGradient(bx,0,bx+bw,0); g.addColorStop(0,'#00ffd6'); g.addColorStop(.85,'#00c6ff'); g.addColorStop(1,C.gold);
+    rr(bx,by,Math.max(14,bw*pc/100),bh,7); ctx.fillStyle=g; ctx.fill(); }
+  // scan brilhando
+  if (st===0){ const sx=bx+((frame*9)%bw); ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.fillRect(sx,by,4,bh); }
+  text(st===2?'0%':pc+'%', x+w-18, y+34, 32, col, 900, 'right');
 }
 
 /* ================= CAPA ================= */
@@ -283,20 +313,23 @@ function renderCover(){
   for (let i=0;i<3;i++) door(i, 200, i===1);
   for (let i=0;i<3;i++) hintBadge(i, 200);
   LOOK=0; ctx.save(); ctx.translate(336, 1032 - TABLE_Y*0.8); ctx.scale(0.8,0.8); pig(0,false,'',1,0.3); ctx.restore();
-  ctx.save(); ctx.translate(360,104); rr(-180,-30,360,60,30); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.save(); ctx.translate(360,96); rr(-180,-30,360,60,30); ctx.fillStyle='#fff'; ctx.fill();
   ctx.fillStyle='#f5c842'; ctx.beginPath(); ctx.arc(-148,0,20,0,7); ctx.fill();
   ctx.fillStyle='#04070f'; ctx.beginPath(); ctx.moveTo(-154,-9); ctx.lineTo(-154,9); ctx.lineTo(-139,0); ctx.fill();
   text(T.logo, -118, 1, 34, '#04070f', 900, 'left');
   rr(118,-18,50,36,10); ctx.fillStyle=C.red; ctx.fill(); text(T.ep, 143, 1, 15, '#fff', 900); ctx.restore();
   ctx.save(); ctx.shadowColor='rgba(245,200,66,0.6)'; ctx.shadowBlur=30;
-  fitText(T.c2, 360, 210, 660, 74, C.gold, 900); ctx.restore();
-  text('TEM 1 FRAME QUE TE AJUDA', 360, 268, 22, '#ffffff', 800);
-  rr(130,1110,460,84,42); ctx.fillStyle=C.green; ctx.fill();
-  text(T.c3, 360, 1153, 32, '#04130d', 900);
+  fitText(T.c2, 360, 178, 660, 70, C.gold, 900); ctx.restore();
+  xrayMeter(SPOILER_FRAME-1);
+  ctx.save(); ctx.translate(360,1060); rr(-290,-34,580,68,34); ctx.fillStyle='rgba(11,12,32,0.95)'; ctx.fill(); ctx.strokeStyle=C.gold; ctx.lineWidth=3; ctx.stroke();
+  fitText(T.c4, 0, 2, 540, 28, C.gold, 900); ctx.restore();
+  rr(130,1132,460,84,42); ctx.fillStyle=C.green; ctx.fill();
+  text(T.c3, 360, 1175, 32, '#04130d', 900);
   return cv.toDataURL('image/png');
 }
 
 window.TOTAL_FRAMES = TOTAL_FRAMES; window.SPOILER_FRAME = SPOILER_FRAME; window.SPOT = SPOT;
+window.METER = [...Array(SPOILER_FRAME+1).keys()].map(meterPct);
 window.MARKS = { doors:[0,1,2].map(i=>F_DOORS+i*6), hints:[0,1,2].map(i=>F_HINTS+i*14), cycle:F_CYCLE, vote:F_VOTE, pig:F_PIG };
 window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
 window.renderCover = renderCover;
