@@ -206,7 +206,7 @@ export const useMatsLesma = (estilo: Estilo) => {
       }),
     [],
   );
-  return {corpo: m('#ffffff', {mapa: pintas, brilho: 0.8}), pe: m('#c9b48e', {brilho: 0.8}), olho: m('#2a2018'), gosma: m('#c4705e', {brilho: 1})};
+  return {corpo: m('#ffffff', {mapa: pintas, brilho: 0.8}), pe: m('#c9b48e', {brilho: 0.8}), olho: m('#2a2018'), gosma: m('#b5644f', {brilho: 0.35})};
 };
 export type MatsLesma = ReturnType<typeof useMatsLesma>;
 

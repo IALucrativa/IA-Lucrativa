@@ -120,7 +120,7 @@ const Buraco: React.FC<{pos: Vec; k: number}> = ({pos, k}) => {
   );
 };
 
-const Respingos: React.FC<{pos: Vec; k: number}> = ({pos, k}) => {
+export const Respingos: React.FC<{pos: Vec; k: number}> = ({pos, k}) => {
   const m = useMaterial(ESTILO);
   if (k <= 0 || k >= 1) return null;
   return (
@@ -137,7 +137,7 @@ const Respingos: React.FC<{pos: Vec; k: number}> = ({pos, k}) => {
   );
 };
 
-const LesmasExtra: React.FC<{lista: {pos: Vec; giro: number; esc: number}[]; t: number}> = ({lista, t}) => {
+export const LesmasExtra: React.FC<{lista: {pos: Vec; giro: number; esc: number}[]; t: number}> = ({lista, t}) => {
   const ml = useMatsLesma(ESTILO);
   return (
     <>
@@ -368,7 +368,7 @@ const quadro = (f: number, c: Ctx): {p: ParamsQuintal; ui: React.ReactNode[]; so
   }
 };
 
-const FolhaManga: React.FC<{pos: Vec}> = ({pos}) => {
+export const FolhaManga: React.FC<{pos: Vec}> = ({pos}) => {
   const m = useMaterial(ESTILO);
   return <Peca forma={{tipo: 'esfera', r: 1}} esc={[0.03, 0.006, 0.07]} pos={pos} rot={[0.3, 0.6, 0.2]} mat={m('#3c8a2a')} estilo={ESTILO} contorno={0.15} />;
 };

@@ -275,7 +275,7 @@ const Titulo: React.FC<{f: number; gatos: number}> = ({f, gatos}) => {
   );
 };
 
-const Selo: React.FC<{texto: string; f: number; top: number; amarelo?: boolean; tam?: number}> = ({texto, f, top, amarelo, tam = 54}) => {
+export const Selo: React.FC<{texto: string; f: number; top: number; amarelo?: boolean; tam?: number}> = ({texto, f, top, amarelo, tam = 54}) => {
   const k = interpolate(f, [0, 6], [1.5, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const o = interpolate(f, [0, 3], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (

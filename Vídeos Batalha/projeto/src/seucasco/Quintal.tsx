@@ -31,7 +31,14 @@ export type ParamsQuintal = {
   treme?: number; // 0..1: o chão tremendo (meta bônus)
   kombi?: number; // 0..1: o farol da Kombi no portão
   extras?: React.ReactNode;
+  // Batalha: muda cada lesma (posição, giro, rolando); null = some
+  mexeLesma?: (l: {x: number; z: number; giro: number}, i: number) => {x: number; z: number; giro: number; rola?: number; y?: number} | null;
+  amanhecer?: number; // 0..1: o céu clareando
+  portao?: number; // 0..1: o portão correndo para o lado
 };
+
+const CEU_NOITE = new THREE.Color('#141b33');
+const CEU_DIA = new THREE.Color('#d99a86');
 
 export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
   estilo,
@@ -44,6 +51,9 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
   treme = 0,
   kombi = 0,
   extras = null,
+  mexeLesma,
+  amanhecer = 0,
+  portao = 0,
 }) => {
   const m = useMaterial(estilo);
   const mj = useMatsJabuti(estilo);
@@ -69,7 +79,7 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
           c.lineWidth = 3;
           c.strokeRect(0, 0, 256, 256);
         },
-        [4, 6],
+        [4, 7.33],
       ),
     [],
   );
@@ -124,6 +134,7 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
     return l;
   }, []);
 
+  const ceu = '#' + CEU_NOITE.clone().lerp(CEU_DIA, Math.min(1, amanhecer)).getHexString();
   const tremor = treme > 0 ? Math.sin(t * 60) * 0.004 * treme : 0;
   const verde = m('#5fb83a');
   const verdeEscuro = m('#3c8a2a');
@@ -136,9 +147,9 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
   return (
     <>
       <Camera pos={[cam.pos[0] + tremor, cam.pos[1] + tremor * 0.6, cam.pos[2]]} alvo={cam.alvo} fov={cam.fov} />
-      <color attach="background" args={['#141b33']} />
-      <fog attach="fog" args={['#141b33', 3.5, 9]} />
-      <ambientLight intensity={1.0} color="#9fb3ff" />
+      <color attach="background" args={[ceu]} />
+      <fog attach="fog" args={[ceu, 3.5 + amanhecer * 2, 9 + amanhecer * 4]} />
+      <ambientLight intensity={1.0 + amanhecer * 0.6} color="#9fb3ff" />
       {/* luz amarela da janela da cozinha */}
       <pointLight position={[-1.9, 1.3, 0.2]} intensity={5} distance={5.5} decay={1.4} color="#ffcf7a" castShadow shadow-bias={-0.003} shadow-mapSize={[2048, 2048]} />
       {/* luar */}
@@ -148,8 +159,8 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
       {kombi > 0 && <pointLight position={[0.4, 0.5, -5.8]} intensity={kombi * 6} distance={4} decay={1.4} color="#fff2c0" />}
 
       {/* chão de cimento queimado vermelho, molhado */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -2.4]} material={m('#ffffff', {mapa: cimento})} receiveShadow>
-        <planeGeometry args={[6, 9]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -1.4]} material={m('#ffffff', {mapa: cimento})} receiveShadow>
+        <planeGeometry args={[6, 11]} />
       </mesh>
       {pocas.map((p, i) => (
         <mesh key={i} rotation={[-Math.PI / 2, 0, p.g]} position={[p.x, 0.003, p.z]} scale={[p.s, p.s * 0.55, 1]} material={m('#6e2a26', {brilho: 1})}>
@@ -174,12 +185,15 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
       <Peca forma={{tipo: 'caixa', d: [0.45, 0.14, 1.0]}} pos={[-2.15, 0.07, -1.2]} mat={cinza} estilo={estilo} contorno={0.008} />
 
       {/* o muro do fundo, com caco de vidro em cima */}
-      <Peca forma={{tipo: 'caixa', d: [6, 1.5, 0.15]}} pos={[0, 0.75, -6.6]} mat={m('#ffffff', {mapa: reboco})} estilo={estilo} contorno={0.01} />
+      {/* o muro tem o vão do portão (x de -0.15 a 0.95) */}
+      <Peca forma={{tipo: 'caixa', d: [2.85, 1.5, 0.15]}} pos={[-1.575, 0.75, -6.6]} mat={m('#ffffff', {mapa: reboco})} estilo={estilo} contorno={0.01} />
+      <Peca forma={{tipo: 'caixa', d: [2.05, 1.5, 0.15]}} pos={[1.975, 0.75, -6.6]} mat={m('#ffffff', {mapa: reboco})} estilo={estilo} contorno={0.01} />
+      <Peca forma={{tipo: 'caixa', d: [1.1, 0.1, 0.15]}} pos={[0.4, 1.45, -6.6]} mat={m('#ffffff', {mapa: reboco})} estilo={estilo} contorno={0.01} />
       {Array.from({length: 26}, (_, i) => (
         <Peca key={i} forma={{tipo: 'cone', r: 0.03, h: 0.09}} pos={[-2.9 + i * 0.23, 1.54, -6.6]} rot={[0, 0, (i % 3) * 0.2 - 0.2]} mat={m(['#3fae5a', '#7a4a1a', '#e9f2f0'][i % 3], {brilho: 0.9})} estilo={estilo} contorno={0} />
       ))}
       {/* portão de ferro no muro, por onde a Kombi aparece */}
-      <Peca forma={{tipo: 'caixa', d: [1.1, 1.4, 0.04]}} pos={[0.4, 0.7, -6.5]} mat={m('#2d3a4a')} estilo={estilo} contorno={0.008} />
+      <Peca forma={{tipo: 'caixa', d: [1.1, 1.4, 0.04]}} pos={[0.4 + Math.min(1, portao) * 1.1, 0.7, -6.48]} mat={m('#2d3a4a')} estilo={estilo} contorno={0.008} />
       {kombi > 0 && (
         <mesh position={[0.4, 0.5, -6.47]}>
           <circleGeometry args={[0.09 + kombi * 0.05, 20]} />
@@ -225,10 +239,22 @@ export const Quintal: React.FC<{estilo: Estilo} & ParamsQuintal> = ({
       {/* as lesmas, com o rastro de gosma */}
       {lesmas.slice(0, nLesmas).map((l, i) => {
         const z = Math.min(l.z + avanco, -0.25);
+        const mx = mexeLesma ? mexeLesma({x: l.x, z, giro: l.giro}, i) : null;
+        if (mexeLesma && !mx) return <Gosma key={i} mats={ml} pos={[l.x, 0, z - 0.18]} giro={l.giro - Math.PI} comp={0.28} />;
+        if (!mx)
+          return (
+            <group key={i}>
+              <Gosma mats={ml} pos={[l.x, 0, z - 0.18]} giro={l.giro - Math.PI} comp={0.28} />
+              <Lesma estilo={estilo} mats={ml} pos={[l.x, 0, z]} giro={l.giro} esc={l.esc} t={t} fase={l.fase} contorno={z > -3} />
+            </group>
+          );
+        const rola = mx.rola ?? 0;
         return (
           <group key={i}>
             <Gosma mats={ml} pos={[l.x, 0, z - 0.18]} giro={l.giro - Math.PI} comp={0.28} />
-            <Lesma estilo={estilo} mats={ml} pos={[l.x, 0, z]} giro={l.giro} esc={l.esc} t={t} fase={l.fase} contorno={z > -3} />
+            <group position={[mx.x, (mx.y ?? 0) + (rola ? 0.03 * l.esc : 0), mx.z]} rotation={[rola, 0, rola * 0.3]}>
+              <Lesma estilo={estilo} mats={ml} pos={[0, rola ? -0.03 * l.esc : 0, 0]} giro={mx.giro} esc={l.esc} t={t} fase={l.fase} contorno={mx.z > -3} anda={rola ? 0 : 1} />
+            </group>
           </group>
         );
       })}
