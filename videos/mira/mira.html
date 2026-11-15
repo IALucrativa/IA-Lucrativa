@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pause na Mira</title>
+<style>
+  html,body{margin:0;background:#04070f;height:100%;}
+  body{display:flex;align-items:center;justify-content:center;}
+  canvas{height:100vh;max-width:100vw;aspect-ratio:9/16;display:block;}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/* ================= CONFIG / TEXTOS ================= */
+const BRAND = "@vocedecideai.br";
+const FPS = 30;
+const PLAY_FRAMES = 450;        // 15 s de mira
+const PERFECT_FRAME = 284;      // o unico frame com 100
+const OUTRO = 42;
+const T = {
+  title:'PAUSE E VEJA SUA PONTUAÇÃO', sub1:'SÓ 1 FRAME DÁ 100', sub2:' · COMENTA A SUA',
+  yours:'SUA MIRA', pts:'PONTOS',
+  tiers:[ [0,'ERROU O ALVO!','#8899bb'], [1,'PERNA DE PAU','#ff4d5e'], [40,'AMADOR','#ff9f43'], [65,'BOM DE MIRA','#00c6ff'],
+          [85,'SNIPER','#00e5a0'], [95,'LENDÁRIO','#b48cff'], [100,'MOSCA PERFEITA!','#f5c842'] ],
+  legend:[['0-39','PERNA DE PAU'],['40-64','AMADOR'],['65-84','BOM'],['85-94','SNIPER'],['95-99','LENDÁRIO']],
+  gold1:'VOCÊ ACHOU O ÚNICO 100!', gold2:'MANDA O PRINT NOS COMENTÁRIOS',
+  q:'QUAL FOI SUA PONTUAÇÃO?', hint:'SÓ 1 FRAME DO VÍDEO DÁ 100', cta:'COMENTA AQUI', follow:'e marca quem você desafia',
+  c1:'SÓ 1 FRAME', c2:'DÁ 100 PONTOS', c3:'QUAL A SUA PONTUAÇÃO?'
+};
+const TOTAL_FRAMES = PLAY_FRAMES + OUTRO;
+
+/* ================= HELPERS ================= */
+const W = 720, H = 1280;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const S = cv.width / W;
+const C = { surf2:'#101928', cyan:'#00c6ff', gold:'#f5c842', green:'#00e5a0', red:'#ff4d5e', orange:'#ff9f43', text:'#e8f0fe', muted:'#8899bb', purple:'#b48cff' };
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function text(s,x,y,size,color,weight=900,align='center',font='Inter'){
+  ctx.font = `${weight} ${size}px ${font}`; ctx.fillStyle=color; ctx.textAlign=align; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+function fitText(s,x,y,maxW,size,color,weight=900,align='center'){
+  ctx.font = `${weight} ${size}px Inter`; const w = ctx.measureText(s).width;
+  if (w > maxW) size *= maxW / w; text(s,x,y,size,color,weight,align); }
+
+/* ================= MOVIMENTO DA MIRA ================= */
+const TX = 360, TY = 760, TR = 250;
+const PERIOD = 1.35;
+const tau = t => t + 0.035*t*t;                 // tempo acelerando (fica mais rapido)
+const TP = PERFECT_FRAME / FPS;
+function aim(frame){
+  const t = frame / FPS;
+  const ph = 2*Math.PI*(tau(t) - tau(TP)) / PERIOD;                    // vale exato no frame perfeito
+  const floor = frame === PERFECT_FRAME ? 0 : 0.05;
+  const r = TR * (floor + 1.03*(0.5 - 0.5*Math.cos(ph)));
+  const th = 2*Math.PI*0.31*tau(t) + 0.9*Math.sin(1.7*tau(t)) + 0.6;
+  return { x: TX + r*Math.cos(th), y: TY + r*Math.sin(th), r };
+}
+function score(frame){ const r = aim(frame).r; return r > TR ? 0 : Math.round(100*(1 - r/TR)); }
+function tier(s){ let t = T.tiers[0]; for (const x of T.tiers) if (s >= x[0]) t = x; return t; }
+
+/* ================= DRAW ================= */
+function background(perfect){
+  const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0, perfect?'#1c1504':'#0a0f1f'); g.addColorStop(.55,'#04070f'); g.addColorStop(1,'#020409');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(0,198,255,0.045)'; ctx.lineWidth=1;
+  for(let x=0;x<=W;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<=H;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  const r = ctx.createRadialGradient(TX,TY,20,TX,TY,420);
+  r.addColorStop(0, perfect?'rgba(245,200,66,0.35)':'rgba(0,198,255,0.12)'); r.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=r; ctx.fillRect(0,300,W,950);
+}
+
+function header(){
+  fitText(T.title, 360, 150, 650, 40, '#ffffff', 900);
+  ctx.font='800 18px Inter';
+  const w1=ctx.measureText(T.sub1).width, w2=ctx.measureText(T.sub2).width, x0=360-(w1+w2)/2;
+  text(T.sub1, x0, 190, 18, C.gold, 800, 'left'); text(T.sub2, x0+w1, 190, 18, C.cyan, 800, 'left');
+}
+
+function hud(s, frame){
+  const [, label, col] = tier(s), perfect = s===100;
+  const x=92,y=226,w=536,h=150;
+  ctx.save(); ctx.shadowColor=col; ctx.shadowBlur=perfect?40:16; rr(x,y,w,h,20); ctx.fillStyle='rgba(11,17,32,0.94)'; ctx.fill(); ctx.restore();
+  rr(x,y,w,h,20); ctx.strokeStyle=col; ctx.lineWidth=perfect?4:2.5; ctx.stroke();
+  text(T.yours, x+26, y+30, 15, C.muted, 700, 'left', 'DejaVu Sans Mono'); text(T.pts, x+w-26, y+30, 15, C.muted, 700, 'right', 'DejaVu Sans Mono');
+  fitText(label, x+26, y+80, 290, 40, col, 900, 'left');
+  // numero grande
+  text(String(s), x+w-26, y+76, 80, perfect?C.gold:'#ffffff', 900, 'right');
+  // barra
+  const bx=x+26, by=y+124, bw=w-52, bh=8;
+  rr(bx,by,bw,bh,4); ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fill();
+  if (s>0){ const g=ctx.createLinearGradient(bx,0,bx+bw,0); g.addColorStop(0,C.red); g.addColorStop(.4,C.orange); g.addColorStop(.65,C.cyan); g.addColorStop(.9,C.green); g.addColorStop(1,C.gold);
+    rr(bx,by,Math.max(8,bw*s/100),bh,4); ctx.fillStyle=g; ctx.fill(); }
+}
+
+function target(perfect){
+  const rings = [
+    [1.00,'#1b2438'],[0.90,'#222d45'],[0.80,'#0c4a63'],[0.70,'#0e5d7d'],[0.60,'#4a2a7a'],
+    [0.50,'#5b3394'],[0.40,'#8f2236'],[0.30,'#b02a43'],[0.20,'#c9961a'],[0.10,'#f5c842']];
+  ctx.save();
+  ctx.shadowColor= perfect?C.gold:'rgba(0,198,255,0.5)'; ctx.shadowBlur= perfect?60:24;
+  ctx.fillStyle='#10182a'; ctx.beginPath(); ctx.arc(TX,TY,TR+14,0,7); ctx.fill(); ctx.restore();
+  for (const [k,c] of rings){ ctx.fillStyle = perfect ? (k<=0.2?'#fff6c0':'#c9961a') : c; ctx.beginPath(); ctx.arc(TX,TY,TR*k,0,7); ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.18)'; ctx.lineWidth=1.5; ctx.stroke(); }
+  // numeros dos aneis
+  if (!perfect) for (const [k,n] of [[0.95,10],[0.75,30],[0.55,50],[0.35,70],[0.15,90]])
+    text(String(n), TX, TY - TR*k, 13, 'rgba(232,240,254,0.55)', 800);
+  // mosca
+  ctx.fillStyle = perfect ? '#ffffff' : '#fff2b0'; ctx.beginPath(); ctx.arc(TX,TY,7,0,7); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(TX-TR,TY); ctx.lineTo(TX+TR,TY); ctx.moveTo(TX,TY-TR); ctx.lineTo(TX,TY+TR); ctx.stroke();
+}
+
+function crosshair(frame, s){
+  // rastro
+  for (let k=7;k>=1;k--){ if (frame-k<0) continue; const p=aim(frame-k);
+    ctx.fillStyle=`rgba(255,255,255,${0.16*(1-k/8)})`; ctx.beginPath(); ctx.arc(p.x,p.y,16-k,0,7); ctx.fill(); }
+  const {x,y} = aim(frame), col = tier(s)[2];
+  ctx.save(); ctx.shadowColor=col; ctx.shadowBlur=18;
+  ctx.strokeStyle='#ffffff'; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.arc(x,y,30,0,7); ctx.stroke();
+  ctx.lineWidth=3.5; ctx.beginPath();
+  ctx.moveTo(x-46,y); ctx.lineTo(x-14,y); ctx.moveTo(x+14,y); ctx.lineTo(x+46,y);
+  ctx.moveTo(x,y-46); ctx.lineTo(x,y-14); ctx.moveTo(x,y+14); ctx.lineTo(x,y+46); ctx.stroke();
+  ctx.restore();
+  ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y,5,0,7); ctx.fill();
+}
+
+function legend(){
+  const y=1068; let x=56; const gap=8;
+  ctx.font='800 15px Inter';
+  const items = T.legend.map(([a,b],i)=>({a,b,col:[C.red,C.orange,C.cyan,C.green,C.purple][i]}));
+  const widths = items.map(it=>Math.max(ctx.measureText(it.b).width, ctx.measureText(it.a).width)+20);
+  const total = widths.reduce((p,c)=>p+c,0)+gap*(items.length-1); x = 360-total/2;
+  items.forEach((it,i)=>{ rr(x,y-30,widths[i],62,14); ctx.fillStyle='rgba(16,25,40,0.9)'; ctx.fill(); ctx.strokeStyle=it.col; ctx.lineWidth=1.5; ctx.stroke();
+    text(it.a, x+widths[i]/2, y-10, 15, it.col, 800, 'center', 'DejaVu Sans Mono'); text(it.b, x+widths[i]/2, y+14, 14, '#ffffff', 800);
+    x += widths[i]+gap; });
+}
+
+function goldBurst(){
+  // banner + 100 gigante
+  ctx.save(); ctx.shadowColor='rgba(90,60,0,0.9)'; ctx.shadowOffsetY=6;
+  text('100', TX, TY+6, 150, '#ffffff', 900); ctx.restore();
+  ctx.fillStyle='#fff';
+  for (const [dx,dy,s] of [[-290,-200,18],[280,-220,14],[-300,180,12],[300,200,18],[0,-300,12],[-180,280,10],[190,280,12]]){
+    const x=TX+dx,y=TY+dy; ctx.beginPath();
+    ctx.moveTo(x,y-s); ctx.quadraticCurveTo(x,y,x+s,y); ctx.quadraticCurveTo(x,y,x,y+s); ctx.quadraticCurveTo(x,y,x-s,y); ctx.quadraticCurveTo(x,y,x,y-s); ctx.fill(); }
+  const x=40,y=1030,w=640,h=96;
+  ctx.save(); ctx.shadowColor=C.gold; ctx.shadowBlur=30; rr(x,y,w,h,18); ctx.fillStyle='rgba(20,16,4,0.97)'; ctx.fill(); ctx.restore();
+  rr(x,y,w,h,18); ctx.strokeStyle=C.gold; ctx.lineWidth=3; ctx.stroke();
+  fitText(T.gold1, 360, y+34, 590, 30, C.gold, 900); fitText(T.gold2, 360, y+68, 590, 21, '#ffffff', 800);
+}
+
+function outro(f){
+  const k = clamp(f/7,0,1);
+  ctx.fillStyle=`rgba(4,7,15,${0.9*k})`; ctx.fillRect(0,0,W,H);
+  if (k<1) return;
+  const pop = 1 + 0.05*Math.sin(f*0.3);
+  ctx.save(); ctx.translate(360,500); ctx.scale(pop,pop); fitText(T.q, 0, 0, 640, 52, '#ffffff', 900); ctx.restore();
+  text(T.hint, 360, 560, 22, C.gold, 800);
+  // mini ranking
+  const tiers=T.tiers.slice(1); const y0=620;
+  tiers.forEach((t,i)=>{ const d=clamp((f-6-i*2)/5,0,1); ctx.globalAlpha=d;
+    const yy=y0+i*44; rr(170,yy,380,36,10); ctx.fillStyle='rgba(16,25,40,0.95)'; ctx.fill(); ctx.strokeStyle=t[2]; ctx.lineWidth=2; ctx.stroke();
+    const rng = i<tiers.length-1 ? `${t[0]}-${tiers[i+1][0]-1}` : '100';
+    text(rng, 196, yy+18, 15, t[2], 800, 'left', 'DejaVu Sans Mono'); text(t[1], 530, yy+18, 18, '#fff', 900, 'right'); ctx.globalAlpha=1; });
+  const b = clamp((f-20)/6,0,1); ctx.globalAlpha=b;
+  rr(130,920,460,82,41); ctx.fillStyle=C.green; ctx.fill();
+  text(T.cta, 360, 962, 32, '#04130d', 900);
+  text(T.follow, 360, 1040, 24, C.text, 600);
+  ctx.globalAlpha=1;
+}
+
+/* ================= FRAME ================= */
+function render(frame){
+  ctx.setTransform(S,0,0,S,0,0);
+  const pf = Math.min(frame, PLAY_FRAMES-1);
+  const s = score(pf), perfect = s===100;
+  background(perfect); header();
+  target(perfect);
+  if (!perfect) crosshair(pf, s);
+  hud(s, pf);
+  if (perfect) goldBurst(); else legend();
+  text(BRAND, 360, 1215, 18, 'rgba(232,240,254,0.4)', 800);
+  if (frame>=PLAY_FRAMES) outro(frame-PLAY_FRAMES);
+}
+
+/* ================= CAPA ================= */
+function renderCover(){
+  ctx.setTransform(S,0,0,S,0,0);
+  background(false);
+  ctx.save(); ctx.translate(0,40); target(false);
+  // mira quase no centro
+  const x=TX+22, y=TY-16+40; ctx.restore();
+  ctx.save(); ctx.translate(0,40);
+  ctx.strokeStyle='#fff'; ctx.lineWidth=5; ctx.shadowColor=C.gold; ctx.shadowBlur=20;
+  ctx.beginPath(); ctx.arc(TX+22,TY-16,34,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX+22-52,TY-16); ctx.lineTo(TX+22-16,TY-16); ctx.moveTo(TX+22+16,TY-16); ctx.lineTo(TX+22+52,TY-16);
+  ctx.moveTo(TX+22,TY-16-52); ctx.lineTo(TX+22,TY-16-16); ctx.moveTo(TX+22,TY-16+16); ctx.lineTo(TX+22,TY-16+52); ctx.stroke(); ctx.restore();
+  ctx.save(); ctx.translate(360,200); ctx.rotate(-0.04);
+  rr(-150,-26,300,52,26); ctx.fillStyle=C.red; ctx.fill(); text('NÍVEL IMPOSSÍVEL', 0, 1, 24, '#fff', 900); ctx.restore();
+  ctx.save(); ctx.shadowColor='rgba(245,200,66,0.6)'; ctx.shadowBlur=30;
+  fitText(T.c1, 360, 300, 640, 118, C.gold, 900); ctx.restore();
+  fitText(T.c2, 360, 392, 640, 64, '#ffffff', 900);
+  ctx.save(); ctx.translate(560,520); ctx.rotate(0.1);
+  rr(-70,-46,140,92,20); ctx.fillStyle='rgba(11,17,32,0.96)'; ctx.fill(); ctx.strokeStyle=C.green; ctx.lineWidth=3; ctx.stroke();
+  text('97', 0, -6, 46, '#fff', 900); text('LENDÁRIO', 0, 28, 14, C.purple, 900); ctx.restore();
+  rr(110,1120,500,80,40); ctx.fillStyle=C.green; ctx.fill();
+  fitText(T.c3, 360, 1161, 460, 28, '#04130d', 900);
+  return cv.toDataURL('image/png');
+}
+
+/* estatistica e eventos pro audio */
+const SCORES = [...Array(PLAY_FRAMES).keys()].map(score);
+window.TOTAL_FRAMES = TOTAL_FRAMES; window.PLAY_FRAMES = PLAY_FRAMES; window.PERFECT_FRAME = PERFECT_FRAME; window.SCORES = SCORES;
+window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
+window.renderCover = renderCover;
+
+if (!location.search.includes('export')){
+  let f=0, paused=false, last=performance.now(), acc=0;
+  const toggle=()=>paused=!paused; cv.addEventListener('click',toggle);
+  addEventListener('keydown',e=>{ if(e.code==='Space'){toggle();e.preventDefault();}
+    if(paused&&e.code==='ArrowRight'){f=(f+1)%TOTAL_FRAMES;render(f);} if(paused&&e.code==='ArrowLeft'){f=(f-1+TOTAL_FRAMES)%TOTAL_FRAMES;render(f);} });
+  document.fonts.ready.then(()=>{ (function loop(now){ acc+=now-last; last=now;
+    if(!paused){ while(acc>=1000/FPS){ acc-=1000/FPS; f=(f+1)%TOTAL_FRAMES; } render(f);} else acc=0;
+    requestAnimationFrame(loop); })(performance.now()); });
+}
+</script>
+</body>
+</html>
