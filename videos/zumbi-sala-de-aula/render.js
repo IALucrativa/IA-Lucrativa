@@ -14,6 +14,7 @@ const { spawn } = require('child_process');
   page.on('pageerror', e => { console.error('PAGE ERROR', e); process.exit(1); });
   await page.goto('file://' + path.join(__dirname, 'scene.html'));
   await page.waitForFunction(() => window.renderFrame);
+  await page.evaluate(() => document.fonts.load('80px Anton')).catch(() => {});
   const grab = async t => Buffer.from((await page.evaluate(t => renderFrame(t), t)).split(',')[1], 'base64');
 
   if (mode === 'cover') {
