@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Você Decide: O Jogo</title>
+<style>
+  html,body{margin:0;background:#000;height:100%;}
+  body{display:flex;align-items:center;justify-content:center;}
+  canvas{height:100vh;max-width:100vw;aspect-ratio:9/16;display:block;image-rendering:pixelated;}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/* ================= CONFIG / TEXTOS ================= */
+const FPS = 30;
+const BRAND = '@VOCEDECIDEAI.BR';
+const HINTS = ['TREME', 'BRILHA', 'TRANCADO'];
+const MIMIC = 1;                                   // baú 2 é o mímico
+const F_HOOK = 45, F_WALK0 = 45, F_WALK1 = 125, F_HINT = 110, F_SUS = 235, F_COUNT = 300, CLUE = 330, F_VOTE = 385, TOTAL_FRAMES = 555;
+const DIALOGS = [
+  { s: 50,  e: 145, lines: ['TRÊS BAÚS. UM DELES É', 'UM MÍMICO QUE DEVORA', 'COFRINHOS!'] },
+  { s: 145, e: 235, lines: ['DICA: QUANDO A TELA PISCAR,', 'PAUSE O VÍDEO E VEJA', 'O MAPA SECRETO!'] },
+  { s: 235, e: 300, lines: ['QUAL BAÚ EU ABRO?', 'PREPARA O DEDO...'] },
+  { s: 300, e: 330, lines: ['A TELA VAI PISCAR!', 'PAUSA LOGO DEPOIS DO 1!'] },
+  { s: 331, e: 385, lines: ['PERDEU O MAPA SECRETO?', 'VOLTA E PAUSA LOGO', 'DEPOIS DO 1!'] },
+];
+
+/* ================= CANVAS ================= */
+const LW = 216, LH = 384, SC = 5;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const low = document.createElement('canvas'); low.width = LW; low.height = LH;
+const g = low.getContext('2d');
+const P = { k:'#000000', navy:'#1d2b53', plum:'#7e2553', dgreen:'#008751', brown:'#ab5236', dgray:'#5f574f', lgray:'#c2c3c7',
+  white:'#fff1e8', red:'#ff004d', orange:'#ffa300', yellow:'#ffec27', green:'#00e436', blue:'#29adff', lav:'#83769c', pink:'#ff77a8', peach:'#ffccaa' };
+
+function R(x,y,w,h,c){ g.fillStyle=c; g.fillRect(Math.round(x),Math.round(y),w,h); }
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed);
+  t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ================= FONTE 5x7 ================= */
+const F = {
+A:['.###.','#...#','#...#','#####','#...#','#...#','#...#'], B:['####.','#...#','#...#','####.','#...#','#...#','####.'],
+C:['.###.','#...#','#....','#....','#....','#...#','.###.'], D:['####.','#...#','#...#','#...#','#...#','#...#','####.'],
+E:['#####','#....','#....','####.','#....','#....','#####'], F:['#####','#....','#....','####.','#....','#....','#....'],
+G:['.###.','#...#','#....','#.###','#...#','#...#','.###.'], H:['#...#','#...#','#...#','#####','#...#','#...#','#...#'],
+I:['.###.','..#..','..#..','..#..','..#..','..#..','.###.'], J:['..###','...#.','...#.','...#.','#..#.','#..#.','.##..'],
+K:['#...#','#..#.','#.#..','##...','#.#..','#..#.','#...#'], L:['#....','#....','#....','#....','#....','#....','#####'],
+M:['#...#','##.##','#.#.#','#.#.#','#...#','#...#','#...#'], N:['#...#','##..#','#.#.#','#..##','#...#','#...#','#...#'],
+O:['.###.','#...#','#...#','#...#','#...#','#...#','.###.'], P:['####.','#...#','#...#','####.','#....','#....','#....'],
+Q:['.###.','#...#','#...#','#...#','#.#.#','#..#.','.##.#'], R:['####.','#...#','#...#','####.','#.#..','#..#.','#...#'],
+S:['.####','#....','#....','.###.','....#','....#','####.'], T:['#####','..#..','..#..','..#..','..#..','..#..','..#..'],
+U:['#...#','#...#','#...#','#...#','#...#','#...#','.###.'], V:['#...#','#...#','#...#','#...#','#...#','.#.#.','..#..'],
+W:['#...#','#...#','#...#','#.#.#','#.#.#','##.##','#...#'], X:['#...#','#...#','.#.#.','..#..','.#.#.','#...#','#...#'],
+Y:['#...#','#...#','.#.#.','..#..','..#..','..#..','..#..'], Z:['#####','....#','...#.','..#..','.#...','#....','#####'],
+'0':['.###.','#...#','#..##','#.#.#','##..#','#...#','.###.'], '1':['..#..','.##..','..#..','..#..','..#..','..#..','.###.'],
+'2':['.###.','#...#','....#','...#.','..#..','.#...','#####'], '3':['####.','....#','....#','.###.','....#','....#','####.'],
+'4':['...#.','..##.','.#.#.','#..#.','#####','...#.','...#.'], '5':['#####','#....','####.','....#','....#','#...#','.###.'],
+'6':['.###.','#....','#....','####.','#...#','#...#','.###.'], '7':['#####','....#','...#.','..#..','.#...','.#...','.#...'],
+'8':['.###.','#...#','#...#','.###.','#...#','#...#','.###.'], '9':['.###.','#...#','#...#','.####','....#','....#','.###.'],
+'!':['..#..','..#..','..#..','..#..','..#..','.....','..#..'], '?':['.###.','#...#','....#','...#.','..#..','.....','..#..'],
+'.':['.....','.....','.....','.....','.....','.....','..#..'], ',':['.....','.....','.....','.....','.....','..#..','.#...'],
+':':['.....','..#..','.....','.....','.....','..#..','.....'], '-':['.....','.....','.....','#####','.....','.....','.....'],
+'+':['.....','..#..','..#..','#####','..#..','..#..','.....'], '=':['.....','.....','#####','.....','#####','.....','.....'],
+'/':['....#','....#','...#.','..#..','.#...','#....','#....'], '>':['.#...','..#..','...#.','....#','...#.','..#..','.#...'],
+'×':['.....','.....','#...#','.#.#.','..#..','.#.#.','#...#'], '♥':['.....','.#.#.','#####','#####','.###.','..#..','.....'],
+'@':['.###.','#...#','#.###','#.#.#','#.###','#....','.###.'], '·':['.....','.....','.....','..#..','.....','.....','.....'],
+'★':['..#..','..#..','#####','.###.','.###.','.#.#.','#...#'], ' ':['.....','.....','.....','.....','.....','.....','.....'],
+};
+const ACC = {'Á':['A','a'],'Â':['A','c'],'Ã':['A','t'],'É':['E','a'],'Ê':['E','c'],'Í':['I','a'],'Ó':['O','a'],'Ô':['O','c'],'Õ':['O','t'],'Ú':['U','a'],'Ç':['C','d']};
+const ACCM = { a:[[3,-2],[2,-1]], c:[[2,-2],[1,-1],[3,-1]], t:[[1,-2],[2,-2],[4,-2],[0,-1],[3,-1]], d:[[2,7],[1,8]] };
+const tw = (s,sc)=> s.length*6*sc - sc;
+function drawStr(s,x,y,sc,col){
+  g.fillStyle=col;
+  for (let i=0;i<s.length;i++){
+    let ch=s[i], acc=null; if (ACC[ch]){ acc=ACC[ch][1]; ch=ACC[ch][0]; }
+    const gl=F[ch], ox=x+i*6*sc;
+    if (gl) for(let r=0;r<7;r++) for(let c=0;c<5;c++) if(gl[r][c]==='#') g.fillRect(ox+c*sc,y+r*sc,sc,sc);
+    if (acc) for (const [c,r] of ACCM[acc]) g.fillRect(ox+c*sc,y+r*sc,sc,sc);
+  }
+}
+function txt(s,x,y,sc,col,align='center',sh=P.k){
+  const w=tw(s,sc); const x0 = Math.round(align==='center'? x-w/2 : align==='right'? x-w : x);
+  if (sh) drawStr(s,x0+Math.max(1,sc/2|0),y+Math.max(1,sc/2|0),sc,sh);
+  drawStr(s,x0,y,sc,col);
+}
+
+/* ================= SPRITES ================= */
+function cellFn(ox,oy,k,dir){ return (x,y,c,w=1,h=1)=>{ for(let i=0;i<w;i++) for(let j=0;j<h;j++){ const xx=x+i; R(ox+(dir===1?xx:-xx-1)*k, oy+(y+j)*k, k, k, c); } }; }
+function pig(ox, bottom, k, dir=1, walk=0, worry=0, frame=0){
+  const oy = bottom - 9*k, C = cellFn(ox,oy,k,dir);
+  const legs=[-6,-3,2,5];
+  legs.forEach((lx,i)=>{ const up = walk && (i%2===(walk-1)) ? 1 : 0; C(lx,5,'#c2477a',2,4-up); });
+  // contorno + corpo
+  for(let y=-7;y<=7;y++) for(let x=-10;x<=10;x++) if(x*x/110+y*y/56<=1) C(x,y,P.plum);
+  for(let y=-6;y<=6;y++) for(let x=-9;x<=9;x++) if(x*x/90+y*y/42<=1) C(x,y,P.pink);
+  C(-6,-4,'#ffc2d9',3,1); C(-7,-3,'#ffc2d9',2,1);
+  C(-2,-6,P.plum,4,1);                                  // fenda da moeda
+  C(3,-9,P.plum,1,1); C(3,-8,P.pink,2,1); C(4,-9,P.plum,1,1); C(5,-8,P.plum,1,1); // orelha
+  C(9,-2,P.plum,4,5); C(9,-1,'#ff5c93',3,3); C(11,-1,P.plum); C(11,1,P.plum);        // focinho
+  C(5,-3,P.white,2,2); C(6, worry>0.5?-3:-2, P.k);                                   // olho
+  C(6,0,'#ff5c93',2,1);                                                              // bochecha
+  C(-11,-2,'#c2477a'); C(-12,-3,'#c2477a'); C(-11,-4,'#c2477a'); C(-10,-3,'#c2477a'); // rabo
+  if (worry>0.5){ const d=(frame>>1)%5; C(8,-9+d,P.blue); C(8,-8+d,P.blue); }
+}
+function chest(cx, bottom, k, mimic=false, shake=0, frame=0, sparkle=false, locked=false){
+  const ox = cx + shake, oy = bottom, C = cellFn(ox,oy,k,1);
+  R(cx-8*k, bottom, 16*k, k, 'rgba(0,0,0,0.45)');
+  const lift = mimic ? 2 : 0;
+  // base
+  C(-7,-6,'#3b1e14',14,6); C(-6,-5,P.brown,12,4); C(-6,-2,'#8a3f26',12,1);
+  // tampa
+  C(-7,-11-lift,'#3b1e14',14,6); C(-6,-10-lift,'#c4683f',12,4); C(-5,-11-lift,'#3b1e14',10,1); C(-5,-10-lift,'#d9824f',10,1);
+  C(-7,-6-lift,P.orange,14,1);
+  C(-4,-10-lift,P.yellow,1,4); C(3,-10-lift,P.yellow,1,4); C(-4,-5,P.yellow,1,4); C(3,-5,P.yellow,1,4);
+  if (mimic){
+    C(-6,-6,P.k,12,2);
+    for(let x=-6;x<6;x+=2){ C(x,-6,P.white); C(x+1,-5,P.white); }
+    C(-4,-9,P.red); C(2,-9,P.red); C(-4,-10,P.yellow); C(2,-10,P.yellow);
+    C(-1,-4,P.red,2,2);
+  } else {
+    C(-1,-7,P.yellow,2,3); C(-1,-6,'#3b1e14');
+  }
+  if (locked && !mimic){ for(let i=-6;i<6;i++) C(i, -4+((i&1)?0:1), P.lgray); C(-1,-3,P.dgray,2,2); }
+  if (sparkle){ const R2=rng(Math.floor(frame/4)); for(let i=0;i<3;i++){ const sx=Math.floor(R2()*18)-9, sy=-Math.floor(R2()*14)-2; C(sx,sy,P.yellow); } }
+}
+function coin(x,y,frame,i){ const w=[6,4,2,4][((frame>>2)+i)%4]; R(x-w/2,y-4,w,8,P.orange); if(w>2) R(x-w/2+1,y-3,w-2,6,P.yellow); }
+function heart(x,y,full){ drawStr('♥',x,y,1, full?P.red:P.dgray); }
+function floppy(x,y){ R(x,y,7,7,P.blue); R(x+1,y,5,3,P.lgray); R(x+4,y+1,1,1,P.navy); R(x+1,y+4,5,3,P.white); }
+
+/* ================= CENARIO ================= */
+const STARS = (()=>{ const r=rng(42), a=[]; for(let i=0;i<34;i++) a.push([Math.floor(r()*LW), 64+Math.floor(r()*130), r()]); return a; })();
+const CX = [40, 108, 176], GROUND = 250, LANE = 293;
+const COINS = [14, 30, 46, 62, 78, 94];
+function pigX(f){ return f<F_WALK0 ? -30 : Math.round(-30 + (108+30)*clamp((f-F_WALK0)/(F_WALK1-F_WALK0),0,1)); }
+const COIN_TAKEN = COINS.map(cx=>{ for(let f=F_WALK0; f<=F_WALK1; f++) if (pigX(f)+18 >= cx) return f; return 9999; });
+
+function sky(frame, moon=true){
+  const bands=['#05051a','#0b0b2e','#141443','#1d2b53','#2a3a6e'];
+  for(let i=0;i<bands.length;i++){ const y0=60+i*38; R(0,y0,LW,38,bands[i]);
+    if(i>0) for(let x=0;x<LW;x+=2) R(x+((y0>>1)&1),y0,1,1,bands[i-1]); }
+  for (const [x,y,t] of STARS){ const on = Math.sin(frame*0.15+t*20)>-0.3; if(on) R(x,y,1,1, t>0.7?P.yellow:P.white); }
+  // lua
+  if (moon){ for(let y=-10;y<=10;y++) for(let x=-10;x<=10;x++) if(x*x+y*y<=100) R(178+x,96+y,1,1,P.peach);
+  R(173,92,3,3,'#e0b090'); R(181,100,2,2,'#e0b090'); }
+  // montanhas
+  for(let x=0;x<LW;x++){ const h1=Math.round(196+14*Math.sin(x*0.045)+8*Math.sin(x*0.13+1)); R(x,h1,1,GROUND-h1,'#2a1d4a');
+    const h2=Math.round(218+10*Math.sin(x*0.07+2)+5*Math.sin(x*0.2)); R(x,h2,1,GROUND-h2,'#3b2a5f'); }
+}
+function ground(){
+  R(0,GROUND,LW,3,P.green); R(0,GROUND+3,LW,2,P.dgreen);
+  R(0,GROUND+5,LW,44,P.brown);
+  for(let y=GROUND+5;y<GROUND+49;y+=8){ R(0,y,LW,1,'#6b2f1c'); for(let x=((y>>3)&1)*8;x<LW;x+=16) R(x,y,1,8,'#6b2f1c'); }
+  R(0,LANE-2,LW,1,'#c4683f');
+}
+function hud(frame, coins, voting){
+  R(0,0,LW,16,P.k);
+  const blink = voting && Math.floor(frame/8)%2===0;
+  for(let i=0;i<3;i++) heart(4+i*7,4, !(blink && i>0));
+  txt('FASE 1-1', LW/2, 4, 1, P.white, 'center', null);
+  R(LW-40,4,6,7,P.orange); R(LW-39,5,4,5,P.yellow);
+  txt('×'+String(coins).padStart(3,'0'), LW-4, 4, 1, P.white, 'right', null);
+}
+function logo(y){
+  const w=tw('VOCÊ DECIDE',2)+30; const x=Math.round(LW/2-w/2);
+  R(x,y,w,22,P.white); R(x+1,y+1,w-2,20,P.white);
+  R(x+5,y+5,12,12,P.yellow); for(let i=0;i<5;i++) R(x+9,y+8+i-0,1+i,1,P.k), R(x+9,y+12+i-4,1+i,0,P.k);
+  R(x+9,y+7,1,8,P.k); R(x+10,y+8,1,6,P.k); R(x+11,y+9,1,4,P.k); R(x+12,y+10,1,2,P.k);
+  drawStr('VOCÊ DECIDE', x+22, y+5, 2, P.k);
+}
+function box(x,y,w,h,fill=P.navy,border=P.white){ R(x,y,w,h,border); R(x+1,y+1,w-2,h-2,P.k); R(x+2,y+2,w-4,h-4,border); R(x+3,y+3,w-6,h-6,fill); }
+function dialog(frame){
+  const d = DIALOGS.find(d=>frame>=d.s && frame<d.e); if(!d) return;
+  box(4,304,LW-8,66);
+  R(10,298,54,11,P.yellow); txt('NARRADOR',37,300,1,P.k,'center',null);
+  let n = Math.floor((frame-d.s)*1.4);
+  d.lines.forEach((ln,i)=>{ const show = ln.slice(0, clamp(n,0,ln.length)); n -= ln.length; txt(show, 12, 316+i*13, 1, P.white, 'left'); });
+  if (n>0 && Math.floor(frame/8)%2===0) txt('>', LW-16, 356, 1, P.yellow, 'left', null);
+}
+
+/* ================= TELAS ================= */
+function hookScreen(f){
+  R(0,0,LW,LH,'#07020c');
+  logo(18);
+  txt('ESSE JOGO É', LW/2, 64, 2, P.white);
+  txt('CONTROLADO', LW/2, 86, 2, P.white);
+  txt('PELOS SEUS', LW/2, 108, 2, P.white);
+  const pop = f<6 ? 4 : 3;
+  txt('COMENTÁRIOS', LW/2, 136, 3, Math.floor(f/5)%2 ? P.yellow : P.orange, 'center', P.red);
+  // cofrinho assustado + baús misteriosos
+  for (let i=0;i<3;i++){ chest(CX[i], 250, 2, false, 0, f); txt(String(i+1), CX[i], 256, 2, P.yellow); }
+  pig(LW/2, 222, 2, 1, 0, 1, f); txt('?', LW/2+28, 180, 2, P.red);
+  if (Math.floor(f/6)%2===0) txt('VOCÊ DECIDE CADA PASSO', LW/2, 290, 1, P.pink);
+  box(10,312,LW-20,38,'#2a0a1a',P.yellow);
+  txt('FICA ATÉ O FINAL:', LW/2, 320, 1, P.white);
+  txt('TEM UM MAPA SECRETO', LW/2, 334, 1, P.yellow);
+  if (f >= F_HOOK-5){ // glitch de transicao
+    const r=rng(f); for(let i=0;i<10;i++){ const y=Math.floor(r()*LH), h=2+Math.floor(r()*10); const img=g.getImageData(0,y,LW,h); g.putImageData(img, Math.floor((r()-0.5)*30), y); }
+    if (f===F_HOOK-1){ R(0,0,LW,LH,P.white); }
+  }
+}
+
+function countdownOverlay(frame){
+  const k = frame - F_COUNT; const n = 3 - Math.floor(k/10);
+  for(let y=60;y<250;y+=2) for(let x=(y>>1)&1;x<LW;x+=2) R(x,y,1,1,P.k);
+  box(LW/2-34, 64, 68, 76, P.navy, P.yellow);
+  txt(String(n), LW/2, 78, 7, P.white, 'center', P.red);
+  txt('PREPARA O DEDO!', LW/2, 148, 2, P.yellow);
+}
+
+function clueScreen(frame){
+  for(let y=0;y<LH;y++) for(let x=(y&1);x<LW;x+=2) R(x,y,1,1,P.k);
+  // conquista
+  box(8,20,LW-16,24,'#3a2a00',P.yellow);
+  txt('★ CONQUISTA: OLHO DE ÁGUIA', LW/2, 29, 1, P.yellow);
+  // PAUSE
+  R(40,56,6,26,P.white); R(50,56,6,26,P.white);
+  txt('PAUSE', 128, 58, 4, P.white, 'center', P.blue);
+  box(10,96,LW-20,160,'#0a1a2a',P.blue);
+  txt('MAPA SECRETO', LW/2, 104, 2, P.blue);
+  for (let i=0;i<3;i++){
+    chest(CX[i], 176, 2, i===MIMIC, 0, frame);
+    txt(String(i+1), CX[i], 182, 2, P.white);
+    txt(i===MIMIC ? 'MÍMICO!' : '?', CX[i], 202, 1, i===MIMIC ? P.red : P.lgray);
+  }
+  R(CX[MIMIC]-24,132,48,1,P.red); R(CX[MIMIC]-24,214,48,1,P.red); R(CX[MIMIC]-24,132,1,82,P.red); R(CX[MIMIC]+23,132,1,82,P.red);
+  txt('NÃO ABRA O 2!', LW/2, 228, 2, P.red);
+  box(4,304,LW-8,66,P.navy,P.yellow);
+  txt('VOCÊ PAUSOU NA HORA CERTA!', 12, 316, 1, P.yellow, 'left');
+  txt('AGORA COMENTA SUA ESCOLHA', 12, 329, 1, P.white, 'left');
+  txt('E MANDA PRO SEU PLAYER 2', 12, 342, 1, P.white, 'left');
+}
+
+function voteScreen(frame){
+  const f = frame - F_VOTE;
+  box(12,60,LW-24,138,P.navy,P.white);
+  txt('VOCÊ DECIDE!', LW/2, 68, 2, P.yellow);
+  txt('COMENTA O NÚMERO DO BAÚ', LW/2, 88, 1, P.white);
+  const cur = Math.floor(f/12)%3;
+  for (let i=0;i<3;i++){
+    const y = 104 + i*20;
+    if (i===cur){ R(20,y-3,LW-40,19,'#2a3a6e'); if (Math.floor(f/4)%2===0) txt('>', 26, y, 2, P.yellow, 'left'); }
+    txt(`${i+1} ${HINTS[i]}`, 44, y, 2, i===cur?P.white:P.lgray, 'left');
+  }
+  if (Math.floor(f/10)%2===0) txt('A MAIS COMENTADA', LW/2, 170, 1, P.yellow);
+  txt('ABRE NA FASE 1-2', LW/2, 183, 1, P.yellow);
+  // acoes
+  box(4,296,LW-8,76,P.navy,P.yellow);
+  const pulse = (i)=> Math.floor((f+i*6)/12)%2===0;
+  heart(12,304,true); txt('CURTE = +1 VIDA PRO COFRINHO', 22, 304, 1, pulse(0)?P.white:P.pink, 'left');
+  floppy(11,319); txt('SEGUE = SALVAR O JOGO', 22, 319, 1, pulse(1)?P.white:P.blue, 'left');
+  R(12,335,7,5,P.green); R(13,336,5,1,P.k); txt('ENVIA PRO SEU PLAYER 2', 22, 334, 1, pulse(2)?P.white:P.green, 'left');
+  txt('COMENTA 1, 2 OU 3', LW/2, 352, 1, P.yellow);
+}
+
+/* ================= FRAME ================= */
+function renderLow(frame){
+  g.clearRect(0,0,LW,LH);
+  if (frame < F_HOOK){ hookScreen(frame); return; }
+  R(0,0,LW,LH,P.k);
+  sky(frame); ground();
+  const voting = frame >= F_VOTE;
+  logo(20);
+  txt(voting ? 'COMENTA PRA JOGAR' : 'QUAL BAÚ ELE ABRE?', LW/2, 47, 1, P.yellow);
+  // baús + pistas
+  let cursor = -1;
+  if (frame>=F_SUS && frame<F_COUNT){ let f=F_SUS, d=14, i=0; while (f<=frame){ cursor=i%3; f+=Math.max(4,Math.round(d)); d*=0.88; i++; } }
+  for (let i=0;i<3;i++){
+    const shake = (i===0 && Math.floor(frame/3)%3===0) ? 1 : (i===cursor ? ((frame&1)?1:-1) : 0);
+    chest(CX[i], GROUND, 3, false, shake, frame, i===1, i===2);
+    if (frame >= F_HINT + i*8){
+      const w=tw(HINTS[i],1)+8; box(CX[i]-w/2, 196, w, 15, P.navy, i===cursor?P.yellow:P.white);
+      txt(HINTS[i], CX[i], 200, 1, i===cursor?P.yellow:P.white, 'center', null);
+      txt(String(i+1), CX[i]-1, 174, 2, i===cursor?P.yellow:P.white);
+    }
+    if (i===cursor && Math.floor(frame/3)%2===0){ for(let j=0;j<4;j++) R(CX[i]-3+j, 162+j, 7-2*j, 1, P.yellow); }
+  }
+  // moedas
+  COINS.forEach((cx,i)=>{ if (frame < COIN_TAKEN[i]) coin(cx, 276, frame, i);
+    else if (frame < COIN_TAKEN[i]+10) txt('+1', cx, 266-(frame-COIN_TAKEN[i]), 1, P.yellow, 'center'); });
+  const coins = COINS.reduce((a,_,i)=>a+(frame>=COIN_TAKEN[i]?1:0),0);
+  // cofrinho
+  const walking = frame>=F_WALK0 && frame<F_WALK1;
+  const hop = (cursor>=0 && (frame%6)<2) ? 2 : 0;
+  pig(pigX(frame), LANE - hop, 2, 1, walking ? 1+((frame>>2)&1) : 0, frame>=F_SUS ? 1 : 0, frame);
+  hud(frame, coins, voting);
+  if (frame >= F_COUNT && frame < CLUE) countdownOverlay(frame);
+  if (voting) voteScreen(frame); else dialog(frame);
+  txt(BRAND, LW/2, 376, 1, P.lav, 'center', null);
+  if (frame === CLUE) { clueScreen(frame); }
+  if (frame === CLUE+1 || frame === F_HOOK) R(0,0,LW,LH,'rgba(255,241,232,0.55)');
+}
+
+function render(frame){
+  renderLow(frame);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(low, 0, 0, cv.width, cv.height);
+  // linhas de CRT
+  ctx.fillStyle='rgba(0,0,0,0.13)'; for(let y=0;y<cv.height;y+=SC) ctx.fillRect(0,y+SC-1,cv.width,1);
+  const v=ctx.createRadialGradient(540,960,500,540,960,1250); v.addColorStop(0,'rgba(0,0,0,0)'); v.addColorStop(1,'rgba(0,0,0,0.45)');
+  ctx.fillStyle=v; ctx.fillRect(0,0,cv.width,cv.height);
+}
+
+/* ================= CAPA ================= */
+function renderCover(){
+  g.clearRect(0,0,LW,LH); R(0,0,LW,LH,P.k);
+  sky(7, false); ground();
+  logo(36);
+  txt('QUAL BAÚ', LW/2, 70, 3, P.yellow, 'center', P.red);
+  txt('ELE ABRE?', LW/2, 96, 3, P.yellow, 'center', P.red);
+  box(14,126,LW-28,22,'#2a0a1a',P.red);
+  txt('UM DELES É UM MÍMICO!', LW/2, 133, 1, P.white);
+  for (let i=0;i<3;i++){ chest(CX[i], GROUND, 3, false, 0, 9, i===1, i===2);
+    const w=tw(HINTS[i],1)+8; box(CX[i]-w/2, 196, w, 15, P.navy, P.white); txt(HINTS[i], CX[i], 200, 1, P.white, 'center', null);
+    txt(String(i+1), CX[i]-1, 174, 2, P.white); }
+  pig(108, LANE, 2, 1, 0, 1, 3);
+  R(0,0,LW,16,P.k); for(let i=0;i<3;i++) heart(4+i*7,4,true); txt('FASE 1-1', LW/2, 4, 1, P.white, 'center', null);
+  box(6,306,LW-12,30,P.dgreen,P.white);
+  txt('COMENTA 1,2 OU 3', LW/2, 314, 2, P.white);
+  txt('PAUSE QUANDO A TELA PISCAR', LW/2, 346, 1, P.yellow);
+  txt(BRAND, LW/2, 376, 1, P.lav, 'center', null);
+  ctx.imageSmoothingEnabled=false; ctx.drawImage(low,0,0,cv.width,cv.height);
+  ctx.fillStyle='rgba(0,0,0,0.13)'; for(let y=0;y<cv.height;y+=SC) ctx.fillRect(0,y+SC-1,cv.width,1);
+  return cv.toDataURL('image/png');
+}
+
+/* ================= EXPORT ================= */
+function typeEvents(){ const ev=[]; for (const d of DIALOGS){ const total=d.lines.join('').length; let last=-1;
+  for(let f=d.s; f<d.e; f++){ const n=Math.min(total, Math.floor((f-d.s)*1.4)); if (n>last && n<total && (n%2===0)) ev.push(f); last=n; } } return ev.filter(f=>f!==CLUE); }
+function cursorEvents(){ const ev=[]; let f=F_SUS, d=14; while (f<F_COUNT){ ev.push(f); f+=Math.max(4,Math.round(d)); d*=0.88; } return ev; }
+window.TOTAL_FRAMES = TOTAL_FRAMES;
+window.META = { total: TOTAL_FRAMES, hook: F_HOOK, clue: CLUE, vote: F_VOTE, count: [0,1,2].map(i=>F_COUNT+i*10),
+  coins: COIN_TAKEN, type: typeEvents(), cursor: cursorEvents(), voteCursor: [...Array(14).keys()].map(i=>F_VOTE+i*12) };
+window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
+window.renderCover = renderCover;
+
+if (!location.search.includes('export')){
+  let f=0, paused=false, last=performance.now(), acc=0;
+  const toggle=()=>paused=!paused; cv.addEventListener('click',toggle);
+  addEventListener('keydown',e=>{ if(e.code==='Space'){toggle();e.preventDefault();}
+    if(paused&&e.code==='ArrowRight'){f=(f+1)%TOTAL_FRAMES;render(f);} if(paused&&e.code==='ArrowLeft'){f=(f-1+TOTAL_FRAMES)%TOTAL_FRAMES;render(f);} });
+  (function loop(now){ acc+=now-last; last=now;
+    if(!paused){ while(acc>=1000/FPS){ acc-=1000/FPS; f=(f+1)%TOTAL_FRAMES; } render(f);} else acc=0;
+    requestAnimationFrame(loop); })(performance.now());
+}
+</script>
+</body>
+</html>
