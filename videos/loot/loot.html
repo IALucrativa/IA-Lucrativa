@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baú do Loot</title>
+<style>
+  html,body{margin:0;background:#000;height:100%;}
+  body{display:flex;align-items:center;justify-content:center;}
+  canvas{height:100vh;max-width:100vw;aspect-ratio:9/16;display:block;image-rendering:pixelated;}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/* ================= CONFIG ================= */
+const FPS = 30;
+const BRAND = '@VOCEDECIDEAI.BR';
+const F_HOOK = 45, F_OPEN = 45, F_REEL = 62, F_END = 430, TOTAL_FRAMES = 560;
+const MYTHIC_FRAME = 301;                         // o unico frame com o item mitico
+
+/* ================= CANVAS ================= */
+const LW = 216, LH = 384, SC = 5;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const low = document.createElement('canvas'); low.width = LW; low.height = LH;
+const g = low.getContext('2d');
+const P = { k:'#000000', navy:'#1d2b53', plum:'#7e2553', dgreen:'#008751', brown:'#ab5236', dgray:'#5f574f', lgray:'#c2c3c7',
+  white:'#fff1e8', red:'#ff004d', orange:'#ffa300', yellow:'#ffec27', green:'#00e436', blue:'#29adff', lav:'#83769c', pink:'#ff77a8', peach:'#ffccaa' };
+function R(x,y,w,h,c){ g.fillStyle=c; g.fillRect(Math.round(x),Math.round(y),w,h); }
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed);
+  t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ================= FONTE 5x7 ================= */
+const F = {
+A:['.###.','#...#','#...#','#####','#...#','#...#','#...#'], B:['####.','#...#','#...#','####.','#...#','#...#','####.'],
+C:['.###.','#...#','#....','#....','#....','#...#','.###.'], D:['####.','#...#','#...#','#...#','#...#','#...#','####.'],
+E:['#####','#....','#....','####.','#....','#....','#####'], F:['#####','#....','#....','####.','#....','#....','#....'],
+G:['.###.','#...#','#....','#.###','#...#','#...#','.###.'], H:['#...#','#...#','#...#','#####','#...#','#...#','#...#'],
+I:['.###.','..#..','..#..','..#..','..#..','..#..','.###.'], J:['..###','...#.','...#.','...#.','#..#.','#..#.','.##..'],
+K:['#...#','#..#.','#.#..','##...','#.#..','#..#.','#...#'], L:['#....','#....','#....','#....','#....','#....','#####'],
+M:['#...#','##.##','#.#.#','#.#.#','#...#','#...#','#...#'], N:['#...#','##..#','#.#.#','#..##','#...#','#...#','#...#'],
+O:['.###.','#...#','#...#','#...#','#...#','#...#','.###.'], P:['####.','#...#','#...#','####.','#....','#....','#....'],
+Q:['.###.','#...#','#...#','#...#','#.#.#','#..#.','.##.#'], R:['####.','#...#','#...#','####.','#.#..','#..#.','#...#'],
+S:['.####','#....','#....','.###.','....#','....#','####.'], T:['#####','..#..','..#..','..#..','..#..','..#..','..#..'],
+U:['#...#','#...#','#...#','#...#','#...#','#...#','.###.'], V:['#...#','#...#','#...#','#...#','#...#','.#.#.','..#..'],
+W:['#...#','#...#','#...#','#.#.#','#.#.#','##.##','#...#'], X:['#...#','#...#','.#.#.','..#..','.#.#.','#...#','#...#'],
+Y:['#...#','#...#','.#.#.','..#..','..#..','..#..','..#..'], Z:['#####','....#','...#.','..#..','.#...','#....','#####'],
+'0':['.###.','#...#','#..##','#.#.#','##..#','#...#','.###.'], '1':['..#..','.##..','..#..','..#..','..#..','..#..','.###.'],
+'2':['.###.','#...#','....#','...#.','..#..','.#...','#####'], '3':['####.','....#','....#','.###.','....#','....#','####.'],
+'4':['...#.','..##.','.#.#.','#..#.','#####','...#.','...#.'], '5':['#####','#....','####.','....#','....#','#...#','.###.'],
+'6':['.###.','#....','#....','####.','#...#','#...#','.###.'], '7':['#####','....#','...#.','..#..','.#...','.#...','.#...'],
+'8':['.###.','#...#','#...#','.###.','#...#','#...#','.###.'], '9':['.###.','#...#','#...#','.####','....#','....#','.###.'],
+'!':['..#..','..#..','..#..','..#..','..#..','.....','..#..'], '?':['.###.','#...#','....#','...#.','..#..','.....','..#..'],
+'.':['.....','.....','.....','.....','.....','.....','..#..'], ',':['.....','.....','.....','.....','.....','..#..','.#...'],
+':':['.....','..#..','.....','.....','.....','..#..','.....'], '-':['.....','.....','.....','#####','.....','.....','.....'],
+'+':['.....','..#..','..#..','#####','..#..','..#..','.....'], '=':['.....','.....','#####','.....','#####','.....','.....'],
+'/':['....#','....#','...#.','..#..','.#...','#....','#....'], '>':['.#...','..#..','...#.','....#','...#.','..#..','.#...'],
+'×':['.....','.....','#...#','.#.#.','..#..','.#.#.','#...#'], '♥':['.....','.#.#.','#####','#####','.###.','..#..','.....'],
+'@':['.###.','#...#','#.###','#.#.#','#.###','#....','.###.'], '·':['.....','.....','.....','..#..','.....','.....','.....'],
+'%':['##..#','##..#','...#.','..#..','.#...','#..##','#..##'], '★':['..#..','..#..','#####','.###.','.###.','.#.#.','#...#'], ' ':['.....','.....','.....','.....','.....','.....','.....'],
+};
+const ACC = {'Á':['A','a'],'Â':['A','c'],'Ã':['A','t'],'É':['E','a'],'Ê':['E','c'],'Í':['I','a'],'Ó':['O','a'],'Ô':['O','c'],'Õ':['O','t'],'Ú':['U','a'],'Ç':['C','d']};
+const ACCM = { a:[[3,-2],[2,-1]], c:[[2,-2],[1,-1],[3,-1]], t:[[1,-2],[2,-2],[4,-2],[0,-1],[3,-1]], d:[[2,7],[1,8]] };
+const tw = (s,sc)=> s.length*6*sc - sc;
+function drawStr(s,x,y,sc,col){
+  g.fillStyle=col;
+  for (let i=0;i<s.length;i++){
+    let ch=s[i], acc=null; if (ACC[ch]){ acc=ACC[ch][1]; ch=ACC[ch][0]; }
+    const gl=F[ch], ox=x+i*6*sc;
+    if (gl) for(let r=0;r<7;r++) for(let c=0;c<5;c++) if(gl[r][c]==='#') g.fillRect(ox+c*sc,y+r*sc,sc,sc);
+    if (acc) for (const [c,r] of ACCM[acc]) g.fillRect(ox+c*sc,y+r*sc,sc,sc);
+  }
+}
+function txt(s,x,y,sc,col,align='center',sh=P.k){
+  const w=tw(s,sc); const x0 = Math.round(align==='center'? x-w/2 : align==='right'? x-w : x);
+  if (sh) drawStr(s,x0+Math.max(1,sc/2|0),y+Math.max(1,sc/2|0),sc,sh);
+  drawStr(s,x0,y,sc,col);
+}
+
+/* ================= SPRITES ================= */
+function cellFn(ox,oy,k,dir){ return (x,y,c,w=1,h=1)=>{ for(let i=0;i<w;i++) for(let j=0;j<h;j++){ const xx=x+i; R(ox+(dir===1?xx:-xx-1)*k, oy+(y+j)*k, k, k, c); } }; }
+function pig(ox, bottom, k, dir=1, walk=0, worry=0, frame=0){
+  const oy = bottom - 9*k, C = cellFn(ox,oy,k,dir);
+  const legs=[-6,-3,2,5];
+  legs.forEach((lx,i)=>{ const up = walk && (i%2===(walk-1)) ? 1 : 0; C(lx,5,'#c2477a',2,4-up); });
+  // contorno + corpo
+  for(let y=-7;y<=7;y++) for(let x=-10;x<=10;x++) if(x*x/110+y*y/56<=1) C(x,y,P.plum);
+  for(let y=-6;y<=6;y++) for(let x=-9;x<=9;x++) if(x*x/90+y*y/42<=1) C(x,y,P.pink);
+  C(-6,-4,'#ffc2d9',3,1); C(-7,-3,'#ffc2d9',2,1);
+  C(-2,-6,P.plum,4,1);                                  // fenda da moeda
+  C(3,-9,P.plum,1,1); C(3,-8,P.pink,2,1); C(4,-9,P.plum,1,1); C(5,-8,P.plum,1,1); // orelha
+  C(9,-2,P.plum,4,5); C(9,-1,'#ff5c93',3,3); C(11,-1,P.plum); C(11,1,P.plum);        // focinho
+  C(5,-3,P.white,2,2); C(6, worry>0.5?-3:-2, P.k);                                   // olho
+  C(6,0,'#ff5c93',2,1);                                                              // bochecha
+  C(-11,-2,'#c2477a'); C(-12,-3,'#c2477a'); C(-11,-4,'#c2477a'); C(-10,-3,'#c2477a'); // rabo
+  if (worry>0.5){ const d=(frame>>1)%5; C(8,-9+d,P.blue); C(8,-8+d,P.blue); }
+}
+function chest(cx, bottom, k, mimic=false, shake=0, frame=0, sparkle=false, locked=false){
+  const ox = cx + shake, oy = bottom, C = cellFn(ox,oy,k,1);
+  R(cx-8*k, bottom, 16*k, k, 'rgba(0,0,0,0.45)');
+  const lift = mimic ? 2 : 0;
+  // base
+  C(-7,-6,'#3b1e14',14,6); C(-6,-5,P.brown,12,4); C(-6,-2,'#8a3f26',12,1);
+  // tampa
+  C(-7,-11-lift,'#3b1e14',14,6); C(-6,-10-lift,'#c4683f',12,4); C(-5,-11-lift,'#3b1e14',10,1); C(-5,-10-lift,'#d9824f',10,1);
+  C(-7,-6-lift,P.orange,14,1);
+  C(-4,-10-lift,P.yellow,1,4); C(3,-10-lift,P.yellow,1,4); C(-4,-5,P.yellow,1,4); C(3,-5,P.yellow,1,4);
+  if (mimic){
+    C(-6,-6,P.k,12,2);
+    for(let x=-6;x<6;x+=2){ C(x,-6,P.white); C(x+1,-5,P.white); }
+    C(-4,-9,P.red); C(2,-9,P.red); C(-4,-10,P.yellow); C(2,-10,P.yellow);
+    C(-1,-4,P.red,2,2);
+  } else {
+    C(-1,-7,P.yellow,2,3); C(-1,-6,'#3b1e14');
+  }
+  if (locked && !mimic){ for(let i=-6;i<6;i++) C(i, -4+((i&1)?0:1), P.lgray); C(-1,-3,P.dgray,2,2); }
+  if (sparkle){ const R2=rng(Math.floor(frame/4)); for(let i=0;i<3;i++){ const sx=Math.floor(R2()*18)-9, sy=-Math.floor(R2()*14)-2; C(sx,sy,P.yellow); } }
+}
+function coin(x,y,frame,i){ const w=[6,4,2,4][((frame>>2)+i)%4]; R(x-w/2,y-4,w,8,P.orange); if(w>2) R(x-w/2+1,y-3,w-2,6,P.yellow); }
+function heart(x,y,full){ drawStr('♥',x,y,1, full?P.red:P.dgray); }
+function floppy(x,y){ R(x,y,7,7,P.blue); R(x+1,y,5,3,P.lgray); R(x+4,y+1,1,1,P.navy); R(x+1,y+4,5,3,P.white); }
+
+
+
+/* ================= RARIDADES E ITENS ================= */
+const RAR = {
+  C:{ name:'COMUM',    col:P.lgray,  stars:1 },
+  R:{ name:'RARO',     col:P.blue,   stars:2 },
+  E:{ name:'ÉPICO',    col:'#b06cff',stars:3 },
+  L:{ name:'LENDÁRIO', col:P.orange, stars:4 },
+  M:{ name:'MALDITO',  col:P.red,    stars:0 },
+  X:{ name:'MÍTICO',   col:P.yellow, stars:5 },
+};
+// paleta dos sprites
+const SP = { k:P.k, w:P.white, y:P.yellow, o:P.orange, b:P.brown, B:P.blue, g:P.lgray, d:P.dgray, l:'#e6e6ec', r:P.red, p:P.pink, c:P.peach, P:'#b06cff', n:P.navy, G:P.green, D:'#3b1e14' };
+const ITEMS = [
+ { n:'PÃO DE ONTEM', r:'C', d:'CURA 1 DE FOME. DURO IGUAL PEDRA', s:[
+  '............','............','...bbbbbb...','..bocoooob..','.bococooocb.','.boooooooob.','.bcooocooob.','.boooooooob.','.bbbbbbbbbb.','............','............','............']},
+ { n:'MEIA FURADA', r:'C', d:'DEFESA 0. CHEIRO -10', s:[
+  '....wwww....','....wlww....','....wwww....','....wwww....','....wkkw....','....wwww....','....wwwwww..','...wwwwwwww.','...wwwwwwkw.','...wwwwwww..','....wwwww...','............']},
+ { n:'PEDRA COMUM', r:'C', d:'É UMA PEDRA. SÓ ISSO.', s:[
+  '............','............','....dddd....','...dlllldd..','..dlggggggd.','.dlggggggggd','.dgggggggggd','.dggggggdggd','..dgggggggd.','...dddddddd.','............','............']},
+ { n:'CAFÉ TURBINADO', r:'R', d:'+100 DE ENERGIA ATÉ AS 15H', s:[
+  '...w..w.....','....w..w....','...w..w.....','............','.gggggggg...','.gDDDDDDggg.','.gDDDDDDg.g.','.gDDDDDDg.g.','.gDDDDDDggg.','.gggggggg...','..gggggg....','............']},
+ { n:'WI-FI INFINITO', r:'R', d:'NUNCA MAIS FICA SEM SINAL', s:[
+  '............','..BBBBBBBB..','.B........B.','B..BBBBBB..B','..B......B..','.B..BBBB..B.','...B....B...','....B..B....','............','.....BB.....','.....BB.....','............']},
+ { n:'TÊNIS VELOZ', r:'R', d:'VELOCIDADE +50. FOGE DE BOLETO', s:[
+  '............','............','...rrr......','...rwrr.....','...rrrrr....','...rrrrrrr..','..rrrrrrrrr.','..rwrwrwrrr.','.rrrrrrrrrrr','.wwwwwwwwwww','............','............']},
+ { n:'ESPADA DE PIXEL', r:'E', d:'ATAQUE +80. CORTA FILA', s:[
+  '..........ll','.........lwl','........lwl.','.......lwl..','......lwl...','.....lwl....','..o.lwl.....','...owl......','...bo.......','..b..o......','.b..........','b...........']},
+ { n:'ESCUDO DE PANELA', r:'E', d:'DEFESA +70. FAZ BARULHO', s:[
+  '............','....dddd....','..ddllllldd.','.dlllwlllld.','.dllwllllld.','dllllllllld.','dllllkklllld','dlllllllllld','.dllllllllld','..dllllllld.','....dddddd..','............']},
+ { n:'CAPA INVISÍVEL', r:'E', d:'NINGUÉM TE CHAMA PRA TRABALHAR', s:[
+  '....kkkk....','...P.P.P....','..P.P.P.P...','...P.P.P.P..','..P.P.P.P.P.','.P.P.P.P.P..','..P.P.P.P.P.','.P.P.P.P.P.P','P.P.P.P.P.P.','.P.P.P.P.P.P','............','............']},
+ { n:'CHINELO DA MÃE', r:'L', d:'ACERTO CRÍTICO 100%. NUNCA ERRA', s:[
+  '............','....BBBB....','...BBBBBB...','...BwBBwB...','...BBwwBB...','...BBBBBB...','...BBBBBB...','...BBBBBB...','...BBBBBB...','...BBBBBB...','....BBBB....','............']},
+ { n:'COROA DO REI', r:'L', d:'TODO MUNDO TE OBEDECE', s:[
+  '............','............','............','.y...y...y..','.yy.yyy.yy..','.yyyyyyyyy..','.yryyByyry..','.yyyyyyyyy..','.ooooooooo..','............','............','............']},
+ { n:'BOLETO VENCIDO', r:'M', d:'-50 DE FELICIDADE. COM JUROS', s:[
+  '............','.wwwwwwwwww.','.wkkkwwwwww.','.wwwwwwwwww.','.wkkkkkkwww.','.wwwwwwwwww.','.wkwkkwkwkw.','.wkwkkwkwkw.','.wkwkkwkwkw.','.wwwwwwrrrw.','.wwwwwwrrrw.','.wwwwwwwwww.']},
+ { n:'CELULAR COM 1%', r:'M', d:'VAI DESLIGAR A QUALQUER MOMENTO', s:[
+  '...kkkkkk...','...kddddk...','...kdgggk...','...kdgggk...','...kddddk...','...kddddk...','...kdrddk...','...kdrddk...','...kddddk...','...kkkkkk...','....kggk....','............']},
+ { n:'SEGUNDA-FEIRA', r:'M', d:'-100 DE ÂNIMO. DURA O DIA TODO', s:[
+  '............','.rrrrrrrrrr.','.rkrrrrrrkr.','.wwwwwwwwww.','.wkwkwkwkww.','.wwwwwwwwww.','.wkwkwkwkww.','.wwwwwwwwww.','.wkwkrrwkww.','.wwwwrrwwww.','.wwwwwwwwww.','............']},
+];
+const MYTHIC = { n:'PIX DE 1 MILHÃO', r:'X', d:'VOCÊ ACHOU O ÚNICO ITEM MÍTICO!', s:[
+  '....oooo....','.....oo.....','....yyyy....','...yyyyyy...','..yyyykyyy..','..yyykkkyy..','.yyyyykyyyy.','.yyyykkkyyy.','.yyyyykyyyy.','.yyyyyyyyyy.','..yyyyyyyy..','............']};
+
+/* sequencia de itens por frame (sem repetir em seguida) */
+const WEIGHT = { C:35, R:25, E:17, M:16, L:7 };
+const SEQ = (()=>{ const r=rng(2026), seq={}; let last=-1, hold=0;
+  for (let f=F_REEL; f<F_END; f++){
+    const every = f < F_REEL+40 ? 3 : f < F_REEL+80 ? 2 : 1;          // comeca devagar e acelera
+    if (hold>0 && f!==MYTHIC_FRAME && f-1!==MYTHIC_FRAME){ seq[f]=seq[f-1]; hold--; continue; }
+    let idx; do { let x=r()*100, key='C'; for (const k of Object.keys(WEIGHT)){ if (x < WEIGHT[k]){ key=k; break; } x-=WEIGHT[k]; }
+      const pool=ITEMS.map((it,i)=>i).filter(i=>ITEMS[i].r===key); idx=pool[Math.floor(r()*pool.length)]; } while (idx===last);
+    if (f===MYTHIC_FRAME-1 || f===MYTHIC_FRAME+1){ const leg=ITEMS.map((it,i)=>i).filter(i=>ITEMS[i].r==='L' && i!==last); idx=leg[Math.floor(r()*leg.length)]; }
+    seq[f]=idx; last=idx; hold=every-1;
+  }
+  seq[MYTHIC_FRAME]=-1; return seq; })();
+const itemAt = f => SEQ[f]===-1 ? MYTHIC : ITEMS[SEQ[f]];
+
+/* ================= DESENHO ================= */
+function sprite(s, cx, cy, k){ const w=s[0].length, h=s.length, x0=Math.round(cx-w*k/2), y0=Math.round(cy-h*k/2);
+  for(let y=0;y<h;y++) for(let x=0;x<w;x++){ const c=s[y][x]; if(c!=='.' && SP[c]) R(x0+x*k, y0+y*k, k, k, SP[c]); } }
+function openChest(cx, bottom, k, frame){
+  const C = cellFn(cx,bottom,k,1);
+  R(cx-8*k, bottom, 16*k, k, 'rgba(0,0,0,0.45)');
+  // luz saindo
+  const h=60+((frame>>1)%3)*2; for(let y=0;y<h;y++){ const w=Math.round(10*k*(0.4+0.6*y/h)); if(((y+frame)&1)===0) R(cx-w/2, bottom-11*k-y+2, w, 1, 'rgba(255,236,39,0.35)'); }
+  C(-7,-6,'#3b1e14',14,6); C(-6,-5,P.brown,12,4); C(-6,-2,'#8a3f26',12,1); C(-7,-6,P.orange,14,1);
+  C(-4,-5,P.yellow,1,4); C(3,-5,P.yellow,1,4);
+  C(-6,-7,P.yellow,12,1);                                    // brilho dentro
+  C(-7,-16,'#3b1e14',14,5); C(-6,-15,'#c4683f',12,3); C(-4,-15,P.yellow,1,3); C(3,-15,P.yellow,1,3); C(-7,-12,P.orange,14,1);
+}
+function sky(frame){
+  const bands=['#05051a','#0b0b2e','#141443','#1d2b53','#2a3a6e'];
+  for(let i=0;i<bands.length;i++){ const y0=i*60; R(0,y0,LW,60,bands[i]); if(i>0) for(let x=0;x<LW;x+=2) R(x+((y0>>1)&1),y0,1,1,bands[i-1]); }
+  const r=rng(7); for(let i=0;i<40;i++){ const x=Math.floor(r()*LW), y=20+Math.floor(r()*250), t=r(); if (Math.sin(frame*0.15+t*20)>-0.3) R(x,y,1,1,t>0.7?P.yellow:P.white); }
+}
+function floor(){ R(0,300,LW,3,P.green); R(0,303,LW,2,P.dgreen); R(0,305,LW,79,P.brown);
+  for(let y=305;y<384;y+=8){ R(0,y,LW,1,'#6b2f1c'); for(let x=((y>>3)&1)*8;x<LW;x+=16) R(x,y,1,8,'#6b2f1c'); } }
+function hud(frame){ R(0,0,LW,16,P.k); for(let i=0;i<3;i++) heart(4+i*7,4,true);
+  txt('BAÚ DO LOOT', LW/2, 4, 1, P.white, 'center', null); R(LW-40,4,6,7,P.orange); R(LW-39,5,4,5,P.yellow); txt('×999', LW-4, 4, 1, P.white, 'right', null); }
+function logo(y){ const w=tw('VOCÊ DECIDE',2)+30, x=Math.round(LW/2-w/2);
+  R(x,y,w,22,P.white); R(x+5,y+5,12,12,P.yellow); R(x+9,y+7,1,8,P.k); R(x+10,y+8,1,6,P.k); R(x+11,y+9,1,4,P.k); R(x+12,y+10,1,2,P.k);
+  drawStr('VOCÊ DECIDE', x+22, y+5, 2, P.k); }
+function box(x,y,w,h,fill=P.navy,border=P.white){ R(x,y,w,h,border); R(x+1,y+1,w-2,h-2,P.k); R(x+2,y+2,w-4,h-4,border); R(x+3,y+3,w-6,h-6,fill); }
+function stars(n, cx, y, col){ const tot=5, w=tot*8-2, x0=Math.round(cx-w/2); for(let i=0;i<tot;i++) drawStr('★', x0+i*8, y, 1, i<n?col:P.dgray); }
+
+function card(item, frame, big){
+  const rr = RAR[item.r], col = rr.col;
+  box(5, 84, LW-10, 176, item.r==='X' ? '#3a2a00' : '#0d0d26', col);
+  // raios de brilho atras do item
+  const cx=LW/2, cy=150;
+  for (let a=0;a<12;a++){ const ang=a/12*Math.PI*2 + frame*0.05; for(let d=34; d<58; d+=3){ if (((d>>1)+a)&1) continue; R(cx+Math.cos(ang)*d, cy+Math.sin(ang)*d, 2, 2, col); } }
+  // faixa da raridade
+  const tw2 = tw(rr.name,2)+16; R(cx-tw2/2, 92, tw2, 18, col); txt(rr.name, cx, 94, 2, P.k, 'center', null);
+  sprite(item.s, cx, cy, item.r==='X' ? 5 : 4);
+  if (item.r==='X'){ const r=rng(frame); for(let i=0;i<30;i++) R(10+r()*(LW-20), 112+r()*140, 2, 2, [P.yellow,P.white,P.orange][i%3]); }
+  const nm = item.n; const sc = tw(nm,2) <= LW-20 ? 2 : 1;
+  txt(nm, cx, 196, sc, col);
+  txt(item.d, cx, 218, 1, P.white);
+  stars(rr.stars, cx, 234, col);
+  if (item.r==='M'){ txt('ITEM AMALDIÇOADO', cx, 246, 1, P.red, 'center', null); }
+}
+
+function legend(y){
+  box(4, y, LW-8, 384-y-14, P.navy, P.yellow);
+  txt('COMENTA O ITEM QUE VOCÊ TIROU!', LW/2, y+8, 1, P.yellow);
+  const rows=[[['C','COMUM'],['R','RARO'],['E','ÉPICO']],[['L','LENDÁRIO'],['M','MALDITO']]];
+  rows.forEach((row,ri)=>{ const parts=row.map(([k,n])=>tw(n,1)+12); const tot=parts.reduce((a,b)=>a+b,0)+(row.length-1)*8; let x=Math.round(LW/2-tot/2);
+    row.forEach(([k,n],i)=>{ R(x,y+22+ri*13,7,7,RAR[k].col); txt(n, x+10, y+22+ri*13, 1, P.white, 'left', null); x+=parts[i]+8; }); });
+  R(28, y+48, 7, 7, P.yellow); txt('MÍTICO: SÓ 1 FRAME NO VÍDEO!', 40, y+48, 1, P.yellow, 'left', null);
+}
+
+function hookScreen(f){
+  R(0,0,LW,LH,'#07020c'); logo(18);
+  txt('PAUSE', LW/2, 52, 5, Math.floor(f/5)%2 ? P.yellow : P.orange, 'center', P.red);
+  txt('O VÍDEO E VEJA', LW/2, 100, 2, P.white);
+  txt('QUAL ITEM VOCÊ', LW/2, 122, 2, P.white);
+  txt('GANHOU', LW/2, 144, 3, P.yellow, 'center', P.red);
+  const sh = (f>>1)&1 ? 1 : -1;
+  chest(LW/2+sh, 250, 4, false, 0, f, true, false);
+  txt('?', LW/2-40, 186, 3, P.red); txt('?', LW/2+34, 176, 2, P.red);
+  pig(LW/2-62, 282, 2, 1, 0, 1, f);
+  box(10,300,LW-20,44,'#2a0a1a',P.yellow);
+  txt('SÓ 1 FRAME TEM O', LW/2, 309, 1, P.white);
+  txt('ITEM MÍTICO', LW/2, 324, 2, Math.floor(f/6)%2 ? P.yellow : P.white);
+  txt(BRAND, LW/2, 372, 1, P.lav, 'center', null);
+  if (f >= F_HOOK-5){ const r=rng(f); for(let i=0;i<10;i++){ const y=Math.floor(r()*LH), h=2+Math.floor(r()*10); const img=g.getImageData(0,y,LW,h); g.putImageData(img, Math.floor((r()-0.5)*30), y); }
+    if (f===F_HOOK-1) R(0,0,LW,LH,P.white); }
+}
+
+function endScreen(frame){
+  const f = frame - F_END;
+  box(5, 84, LW-10, 176, P.navy, P.white);
+  txt('QUAL ITEM', LW/2, 96, 3, P.yellow, 'center', P.red);
+  txt('VOCÊ TIROU?', LW/2, 122, 3, P.yellow, 'center', P.red);
+  txt('COMENTA O NOME DO ITEM', LW/2, 152, 1, P.white);
+  // vitrine girando de itens
+  const show=[ITEMS[9], ITEMS[11], ITEMS[4], ITEMS[13], ITEMS[6]]; const i0=Math.floor(f/14)%show.length;
+  for (let j=-1;j<=1;j++){ const it=show[(i0+j+show.length)%show.length]; const x=LW/2+j*56;
+    R(x-22,166,44,44, j===0? '#2a3a6e':'#141443'); R(x-22,166,44,2,RAR[it.r].col); sprite(it.s, x, 188, j===0?3:2); }
+  txt(show[i0].n, LW/2, 218, 1, RAR[show[i0].r].col);
+  const pk = Math.floor(f/10)%2===0 ? P.pink : P.white;
+  txt('TIROU MALDITO? MARCA UM AMIGO', LW/2, 236, 1, pk);
+  txt('PRA TENTAR TAMBÉM', LW/2, 248, 1, pk);
+  box(4,300,LW-8,70,P.navy,P.yellow);
+  const pulse = (i)=> Math.floor((f+i*6)/12)%2===0;
+  heart(12,309,true); txt('CURTE = +1 DE SORTE', 22, 309, 1, pulse(0)?P.white:P.pink, 'left');
+  floppy(11,324); txt('SEGUE = SALVAR SEU INVENTÁRIO', 22, 324, 1, pulse(1)?P.white:P.blue, 'left');
+  R(12,340,7,5,P.green); R(13,341,5,1,P.k); txt('MANDA PRO PLAYER 2 TENTAR', 22, 339, 1, pulse(2)?P.white:P.green, 'left');
+  txt('PAUSE DE NOVO E TENTA O MÍTICO', LW/2, 355, 1, P.yellow);
+}
+
+function renderLow(frame){
+  g.clearRect(0,0,LW,LH);
+  if (frame < F_HOOK){ hookScreen(frame); return; }
+  sky(frame); floor();
+  logo(20);
+  hud(frame);
+  const reel = frame >= F_REEL && frame < F_END;
+  txt(frame>=F_END ? 'TENTA DE NOVO!' : 'PAUSE E VEJA SEU ITEM!', LW/2, 47, 1, P.yellow);
+  if (reel || frame>=F_END) { /* bau aberto */ }
+  openChest(LW/2, 298, 3, frame);
+  pig(36, 298, 2, 1, 0, frame>=F_REEL ? 1 : 0, frame);
+  // pausa piscando ao lado
+  if (reel && Math.floor(frame/8)%2===0){ R(LW-26,270,4,14,P.white); R(LW-20,270,4,14,P.white); txt('PAUSE!', LW-22, 288, 1, P.yellow, 'center'); }
+  if (reel) card(itemAt(frame), frame);
+  else if (frame < F_REEL){ const k=(frame-F_OPEN)/(F_REEL-F_OPEN); R(0,0,LW,LH,`rgba(255,236,39,${0.5*(1-k)})`); txt('ABRINDO...', LW/2, 160, 2, P.white); }
+  if (frame >= F_END) endScreen(frame);
+  else legend(306);
+  txt(BRAND, LW/2, 376, 1, P.lav, 'center', null);
+}
+function render(frame){
+  renderLow(frame);
+  ctx.imageSmoothingEnabled = false; ctx.drawImage(low, 0, 0, cv.width, cv.height);
+  ctx.fillStyle='rgba(0,0,0,0.13)'; for(let y=0;y<cv.height;y+=SC) ctx.fillRect(0,y+SC-1,cv.width,1);
+  const v=ctx.createRadialGradient(540,960,500,540,960,1250); v.addColorStop(0,'rgba(0,0,0,0)'); v.addColorStop(1,'rgba(0,0,0,0.45)');
+  ctx.fillStyle=v; ctx.fillRect(0,0,cv.width,cv.height);
+}
+
+/* ================= CAPA ================= */
+function renderCover(){
+  g.clearRect(0,0,LW,LH); sky(3); floor(); logo(30);
+  txt('PAUSE E VEJA', LW/2, 62, 2, P.white);
+  txt('SEU ITEM', LW/2, 82, 3, P.yellow, 'center', P.red);
+  // tres itens em vitrine
+  const show=[ITEMS[9], MYTHIC, ITEMS[11]];
+  show.forEach((it,j)=>{ const x=LW/2+(j-1)*66, big=j===1; box(x-30,118,60,92, big?'#3a2a00':'#0d0d26', RAR[it.r].col);
+    sprite(it.s, x, 152, big?4:3); txt(RAR[it.r].name, x, 186, 1, RAR[it.r].col, 'center', null); });
+  txt('PIX DE 1 MILHÃO?', LW/2, 222, 2, P.yellow);
+  txt('SÓ 1 FRAME TEM O MÍTICO', LW/2, 244, 1, P.white);
+  openChest(LW/2, 298, 3, 2); pig(36, 298, 2, 1, 0, 1, 2);
+  box(6,310,LW-12,30,P.dgreen,P.white);
+  txt('QUAL VOCÊ TIROU?', LW/2, 318, 2, P.white);
+  txt(BRAND, LW/2, 376, 1, P.lav, 'center', null);
+  ctx.imageSmoothingEnabled=false; ctx.drawImage(low,0,0,cv.width,cv.height);
+  ctx.fillStyle='rgba(0,0,0,0.13)'; for(let y=0;y<cv.height;y+=SC) ctx.fillRect(0,y+SC-1,cv.width,1);
+  return cv.toDataURL('image/png');
+}
+
+/* ================= EXPORT ================= */
+const CHANGES = []; for (let f=F_REEL; f<F_END; f++) if (f===F_REEL || SEQ[f]!==SEQ[f-1]) CHANGES.push(f);
+const COUNTS = {}; for (let f=F_REEL; f<F_END; f++){ const r=itemAt(f).r; COUNTS[r]=(COUNTS[r]||0)+1; }
+window.TOTAL_FRAMES = TOTAL_FRAMES;
+window.META = { total: TOTAL_FRAMES, hook: F_HOOK, reel: F_REEL, end: F_END, mythic: MYTHIC_FRAME, changes: CHANGES, counts: COUNTS,
+  rarity: Object.fromEntries([...Array(F_END-F_REEL).keys()].map(i=>[F_REEL+i, itemAt(F_REEL+i).r])) };
+window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
+window.renderCover = renderCover;
+
+if (!location.search.includes('export')){
+  let f=0, paused=false, last=performance.now(), acc=0;
+  const toggle=()=>paused=!paused; cv.addEventListener('click',toggle);
+  addEventListener('keydown',e=>{ if(e.code==='Space'){toggle();e.preventDefault();}
+    if(paused&&e.code==='ArrowRight'){f=(f+1)%TOTAL_FRAMES;render(f);} if(paused&&e.code==='ArrowLeft'){f=(f-1+TOTAL_FRAMES)%TOTAL_FRAMES;render(f);} });
+  (function loop(now){ acc+=now-last; last=now;
+    if(!paused){ while(acc>=1000/FPS){ acc-=1000/FPS; f=(f+1)%TOTAL_FRAMES; } render(f);} else acc=0;
+    requestAnimationFrame(loop); })(performance.now());
+}
+</script>
+</body>
+</html>
