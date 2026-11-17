@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ache o Diferente</title>
+<style>
+  html,body{margin:0;background:#fff6e5;height:100%;}
+  body{display:flex;align-items:center;justify-content:center;}
+  canvas{height:100vh;max-width:100vw;aspect-ratio:9/16;display:block;}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/* ================= CONFIG / TEXTOS ================= */
+const FPS = 30, BRAND = '@vocedecideai.br';
+const COLS = 6, ROWS = 8, LETTERS = 'ABCDEF';
+const HOOK = 36, LEVEL_LEN = 130;
+const LEVELS = [
+  { name:'FÁCIL',   kind:'pig',  odd:'flip',  col:4, row:1, color:'#7bd88f' },   // E2
+  { name:'MÉDIO',   kind:'coin', odd:'S',     col:1, row:5, color:'#ffd23f' },   // B6
+  { name:'DIFÍCIL', kind:'pig',  odd:'noear', col:5, row:3, color:'#ff6b6b' },   // F4
+];
+const LV = LEVELS.map((l,i)=>({ ...l, start: HOOK + i*LEVEL_LEN, reveal: HOOK + (i+1)*LEVEL_LEN - 1 }));
+const END = HOOK + LEVELS.length*LEVEL_LEN, TOTAL_FRAMES = END + 111;
+const T = {
+  title:'ACHE O DIFERENTE', hook1:'SÓ QUEM TEM', hook2:'OLHO DE ÁGUIA', hook3:'ACHA OS 3',
+  comment:'COMENTA A POSIÇÃO (EX: C5)', rule:'A RESPOSTA APARECE POR SÓ 1 FRAME QUANDO O TEMPO ACABAR',
+  answer:'RESPOSTA', paused:'VOCÊ PAUSOU NA HORA CERTA!',
+  q1:'QUANTOS', q2:'VOCÊ ACHOU?', opts:['0/3','1/3','2/3','3/3'], tag:'MARCA QUEM TEM OLHO DE ÁGUIA', follow:'SEGUE PRO PRÓXIMO TESTE',
+  missed:'NÃO VIU A RESPOSTA? VOLTA E PAUSA NO 0',
+};
+
+/* ================= HELPERS ================= */
+const W = 720, H = 1280;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const S = cv.width / W;
+const C = { bg:'#fff6e5', ink:'#151515', pink:'#ffb3c7', pinkD:'#ff7aa2', yellow:'#ffd23f', blue:'#6ec8ff', green:'#7bd88f', red:'#ff5a5f', purple:'#b69cff', white:'#ffffff' };
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const back = p => { p=clamp(p,0,1); const c=1.7; return 1+(c+1)*Math.pow(p-1,3)+c*Math.pow(p-1,2); };
+function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function text(s,x,y,size,color,weight=900,align='center'){ ctx.font=`${weight} ${size}px Inter`; ctx.fillStyle=color; ctx.textAlign=align; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+function fitText(s,x,y,maxW,size,color,weight=900,align='center'){ ctx.font=`${weight} ${size}px Inter`; const w=ctx.measureText(s).width; if(w>maxW) size*=maxW/w; text(s,x,y,size,color,weight,align); }
+// "adesivo": caixa com contorno grosso e sombra deslocada
+function sticker(x,y,w,h,fill,r=18,sh=6){ rr(x+sh,y+sh,w,h,r); ctx.fillStyle=C.ink; ctx.fill(); rr(x,y,w,h,r); ctx.fillStyle=fill; ctx.fill(); ctx.lineWidth=4; ctx.strokeStyle=C.ink; ctx.stroke(); }
+function inkText(s,x,y,size,fill,maxW=660){ ctx.font=`900 ${size}px Inter`; let w=ctx.measureText(s).width; if(w>maxW){ size*=maxW/w; ctx.font=`900 ${size}px Inter`; }
+  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.lineJoin='round'; ctx.lineWidth=size*0.22; ctx.strokeStyle=C.ink; ctx.strokeText(s,x+3,y+4); ctx.strokeText(s,x,y); ctx.fillStyle=fill; ctx.fillText(s,x,y); }
+
+/* ================= ICONES ================= */
+function pigIcon(cx, cy, s, variant){
+  ctx.save(); ctx.translate(cx,cy); if (variant==='flip') ctx.scale(-1,1); ctx.scale(s,s);
+  ctx.lineWidth=3/s*0.9+2; ctx.lineJoin='round'; ctx.strokeStyle=C.ink;
+  // pernas
+  ctx.fillStyle=C.pinkD; for (const lx of [-20,-8,8,20]){ rr(lx-4,10,8,14,3); ctx.fill(); ctx.stroke(); }
+  // rabo
+  ctx.beginPath(); ctx.moveTo(-30,-2); ctx.bezierCurveTo(-40,-8,-38,-16,-32,-14); ctx.stroke();
+  // orelha de tras
+  if (variant!=='noear'){ ctx.fillStyle=C.pinkD; ctx.beginPath(); ctx.moveTo(8,-18); ctx.lineTo(14,-32); ctx.lineTo(22,-17); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  // corpo
+  ctx.fillStyle=C.pink; ctx.beginPath(); ctx.ellipse(0,0,30,21,0,0,7); ctx.fill(); ctx.stroke();
+  // fenda
+  ctx.fillStyle=C.ink; rr(-8,-20,14,3.5,1.5); ctx.fill();
+  // focinho
+  ctx.fillStyle=C.pinkD; ctx.beginPath(); ctx.ellipse(30,3,7,9,0,0,7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle=C.ink; ctx.beginPath(); ctx.arc(31,0,1.6,0,7); ctx.fill(); ctx.beginPath(); ctx.arc(31,6,1.6,0,7); ctx.fill();
+  // olho e bochecha
+  ctx.beginPath(); ctx.arc(17,-5,3,0,7); ctx.fill();
+  ctx.fillStyle='rgba(255,90,120,0.5)'; ctx.beginPath(); ctx.ellipse(16,5,4,2.5,0,0,7); ctx.fill();
+  ctx.restore();
+}
+function coinIcon(cx, cy, s, variant){
+  ctx.save(); ctx.translate(cx,cy); ctx.scale(s,s);
+  ctx.lineWidth=3.2; ctx.strokeStyle=C.ink;
+  ctx.fillStyle='#e0a800'; ctx.beginPath(); ctx.arc(2,3,27,0,7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle=C.yellow; ctx.beginPath(); ctx.arc(0,0,27,0,7); ctx.fill(); ctx.stroke();
+  ctx.lineWidth=2; ctx.beginPath(); ctx.arc(0,0,20,0,7); ctx.stroke();
+  ctx.font='900 30px Inter'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle=C.ink;
+  ctx.fillText(variant==='S' ? 'S' : '$', 0, 2);
+  ctx.restore();
+}
+
+/* ================= GRADE ================= */
+const GX = 72, GY = 318, CW = 100, CH = 92;
+function cellCenter(c,r){ return [GX + c*CW + CW/2, GY + r*CH + CH/2]; }
+function grid(lv, frame, dim){
+  sticker(GX-14, GY-14, COLS*CW+28, ROWS*CH+28, C.white, 22, 8);
+  // rotulos
+  for (let c=0;c<COLS;c++) text(LETTERS[c], GX + c*CW + CW/2, GY-40, 28, C.ink, 900);
+  for (let r=0;r<ROWS;r++) text(String(r+1), GX-40, GY + r*CH + CH/2, 28, C.ink, 900);
+  // linhas da grade
+  ctx.strokeStyle='rgba(21,21,21,0.12)'; ctx.lineWidth=2;
+  for (let c=1;c<COLS;c++){ ctx.beginPath(); ctx.moveTo(GX+c*CW, GY); ctx.lineTo(GX+c*CW, GY+ROWS*CH); ctx.stroke(); }
+  for (let r=1;r<ROWS;r++){ ctx.beginPath(); ctx.moveTo(GX, GY+r*CH); ctx.lineTo(GX+COLS*CW, GY+r*CH); ctx.stroke(); }
+  const bob = Math.sin(frame*0.25)*2.5;
+  for (let r=0;r<ROWS;r++) for (let c=0;c<COLS;c++){
+    const [x,y] = cellCenter(c,r); const odd = c===lv.col && r===lv.row;
+    const v = odd ? lv.odd : '';
+    if (lv.kind==='pig') pigIcon(x-2, y+bob-2, 1.12, v); else coinIcon(x, y+bob, 1.15, v);
+  }
+  if (dim){ ctx.fillStyle='rgba(255,246,229,0.78)'; ctx.fillRect(GX, GY, COLS*CW, ROWS*CH); }
+}
+
+function header(lv, idx, frame){
+  // marca
+  sticker(210, 52, 300, 50, C.ink, 25, 0);
+  ctx.fillStyle=C.yellow; ctx.beginPath(); ctx.arc(240,77,14,0,7); ctx.fill();
+  ctx.fillStyle=C.ink; ctx.beginPath(); ctx.moveTo(236,70); ctx.lineTo(236,84); ctx.lineTo(247,77); ctx.fill();
+  text('VOCÊ DECIDE', 380, 78, 26, C.white, 900);
+  inkText(T.title, 360, 142, 66, C.yellow);
+  // nivel + timer
+  const left = Math.max(0, (lv.reveal - frame)/FPS);
+  sticker(60, 184, 300, 56, lv.color, 28, 5);
+  text(`NÍVEL ${idx+1}/3 · ${lv.name}`, 210, 213, 26, C.ink, 900);
+  const tx = 600, ty = 214, k = clamp((frame - lv.start)/(lv.reveal - lv.start), 0, 1);
+  ctx.fillStyle=C.ink; ctx.beginPath(); ctx.arc(tx+4,ty+5,36,0,7); ctx.fill();
+  ctx.fillStyle=C.white; ctx.beginPath(); ctx.arc(tx,ty,36,0,7); ctx.fill(); ctx.lineWidth=4; ctx.strokeStyle=C.ink; ctx.stroke();
+  ctx.fillStyle = k>0.75 ? C.red : C.green; ctx.beginPath(); ctx.moveTo(tx,ty); ctx.arc(tx,ty,29,-Math.PI/2,-Math.PI/2+Math.PI*2*(1-k)); ctx.closePath(); ctx.fill();
+  text(Math.ceil(left).toString(), tx, ty+2, 34, C.ink, 900);
+  text('TEMPO', tx-100, ty, 18, C.ink, 900);
+}
+
+function footer(frame, lv){
+  const late = frame > lv.reveal - 30;
+  sticker(40, 1090, 640, 64, late ? C.yellow : C.white, 32, 5);
+  fitText(late ? 'PAUSA QUANDO CHEGAR NO 0!' : T.comment, 360, 1122, 600, 30, C.ink, 900);
+  fitText(T.rule, 360, 1188, 640, 18, C.ink, 800);
+  text(BRAND, 360, 1240, 18, 'rgba(21,21,21,0.45)', 800);
+}
+
+function revealFrame(lv, idx){
+  const [x,y] = cellCenter(lv.col, lv.row);
+  ctx.lineWidth=8; ctx.strokeStyle=C.red; ctx.beginPath(); ctx.arc(x,y,54,0,7); ctx.stroke();
+  ctx.lineWidth=4; ctx.strokeStyle=C.ink; ctx.beginPath(); ctx.arc(x,y,60,0,7); ctx.stroke();
+  // item diferente em destaque por cima do escurecido
+  ctx.fillStyle=C.white; ctx.beginPath(); ctx.arc(x,y,50,0,7); ctx.fill();
+  if (lv.kind==='pig') pigIcon(x-2, y-2, 1.25, lv.odd); else coinIcon(x, y, 1.25, lv.odd);
+  ctx.lineWidth=8; ctx.strokeStyle=C.red; ctx.beginPath(); ctx.arc(x,y,54,0,7); ctx.stroke();
+  const pos = LETTERS[lv.col] + (lv.row+1);
+  const bx = 120, by = lv.row <= 3 ? 820 : 360;
+  sticker(bx, by, 480, 190, C.yellow, 26, 8);
+  text(T.answer + ` NÍVEL ${idx+1}`, 360, by+40, 30, C.ink, 900);
+  inkText(pos, 360, by+112, 96, C.white);
+  sticker(60, 1090, 600, 64, C.green, 32, 5);
+  fitText(T.paused, 360, 1122, 560, 30, C.ink, 900);
+}
+
+function hookScreen(f){
+  ctx.fillStyle=C.bg; ctx.fillRect(0,0,W,H);
+  dots();
+  // grade de fundo desfocada
+  ctx.globalAlpha=0.35; grid(LV[2], f, false); ctx.globalAlpha=1;
+  ctx.fillStyle='rgba(255,246,229,0.55)'; ctx.fillRect(0,0,W,H);
+  const p1=back((f+8)/8), p2=back((f+6)/8), p3=back((f+4)/8);
+  ctx.save(); ctx.translate(360,330); ctx.scale(p1,p1); inkText(T.hook1, 0, 0, 74, C.white); ctx.restore();
+  ctx.save(); ctx.translate(360,430); ctx.scale(p2,p2); ctx.rotate(-0.04); sticker(-320,-62,640,124,C.yellow,30,8); inkText(T.hook2, 0, 4, 78, C.white, 600); ctx.restore();
+  if (p3>0){ ctx.save(); ctx.translate(360,560); ctx.scale(p3,p3); inkText(T.hook3, 0, 0, 74, C.white); ctx.restore(); }
+  // lupa
+  const lx = 360 + Math.sin(f*0.3)*120, ly = 820 + Math.cos(f*0.25)*40;
+  ctx.lineWidth=14; ctx.strokeStyle=C.ink; ctx.beginPath(); ctx.moveTo(lx+60,ly+60); ctx.lineTo(lx+120,ly+120); ctx.stroke();
+  ctx.fillStyle='rgba(110,200,255,0.35)'; ctx.beginPath(); ctx.arc(lx,ly,80,0,7); ctx.fill(); ctx.lineWidth=12; ctx.stroke();
+  pigIcon(lx, ly, 1.7, 'flip');
+  sticker(110, 1060, 500, 70, C.ink, 35, 0); text('3 NÍVEIS · 4 SEGUNDOS CADA', 360, 1096, 28, C.white, 900);
+}
+function dots(){ ctx.fillStyle='rgba(21,21,21,0.06)'; for(let y=20;y<H;y+=36) for(let x=((y/36)&1)*18+10;x<W;x+=36){ ctx.beginPath(); ctx.arc(x,y,3,0,7); ctx.fill(); } }
+
+function transition(lv, idx, f){ // banner do nivel nos primeiros frames
+  if (f >= 16) return;
+  const p = back(f/8), a = f<12 ? 1 : 1-(f-12)/4;
+  ctx.globalAlpha=a; ctx.save(); ctx.translate(360, 700); ctx.scale(p,p); ctx.rotate(-0.04);
+  sticker(-260,-70,520,140,lv.color,30,8); inkText(`NÍVEL ${idx+1}`, 0, -14, 64, C.white); text(lv.name, 0, 40, 30, C.ink, 900);
+  ctx.restore(); ctx.globalAlpha=1;
+}
+
+function endScreen(f){
+  ctx.fillStyle=C.bg; ctx.fillRect(0,0,W,H); dots();
+  sticker(210, 52, 300, 50, C.ink, 25, 0);
+  ctx.fillStyle=C.yellow; ctx.beginPath(); ctx.arc(240,77,14,0,7); ctx.fill();
+  ctx.fillStyle=C.ink; ctx.beginPath(); ctx.moveTo(236,70); ctx.lineTo(236,84); ctx.lineTo(247,77); ctx.fill();
+  text('VOCÊ DECIDE', 380, 78, 26, C.white, 900);
+  const p=back((f+5)/10);
+  ctx.save(); ctx.translate(360,210); ctx.scale(p,p); inkText(T.q1, 0, 0, 84, C.white); inkText(T.q2, 0, 96, 84, C.yellow); ctx.restore();
+  text('COMENTA SEU PLACAR', 360, 400, 30, C.ink, 900);
+  const cols=[C.red,C.blue,C.purple,C.green];
+  T.opts.forEach((o,i)=>{ const q=back((f+2-i*2)/8); if(q<=0) return; const x=110+i*167;
+    ctx.save(); ctx.translate(x,500); ctx.scale(q,q); sticker(-70,-60,140,120,cols[i],24,6); inkText(o,0,2,48,C.white,120); ctx.restore(); });
+  text('3/3 = OLHO DE ÁGUIA OFICIAL', 360, 610, 26, C.ink, 800);
+  const b=clamp((f-8)/8,0,1); ctx.globalAlpha=b;
+  sticker(60, 680, 600, 96, C.yellow, 30, 7); fitText('MARCA QUEM TEM OLHO DE ÁGUIA', 360, 728, 560, 32, C.ink, 900);
+  sticker(60, 806, 600, 96, C.pink, 30, 7); fitText('SEGUE PRO PRÓXIMO TESTE', 360, 854, 560, 34, C.ink, 900);
+  sticker(60, 932, 600, 96, C.white, 30, 7); fitText('NÃO VIU AS RESPOSTAS? VOLTA E PAUSA NO 0', 360, 980, 560, 26, C.ink, 900);
+  ctx.globalAlpha=1;
+  // porquinhos pulando
+  for (let i=0;i<5;i++) pigIcon(120+i*120, 1110 - Math.abs(Math.sin(f*0.3+i))*24, 1.1, i%2?'flip':'');
+  text(BRAND, 360, 1240, 18, 'rgba(21,21,21,0.45)', 800);
+}
+
+/* ================= FRAME ================= */
+function render(frame){
+  ctx.setTransform(S,0,0,S,0,0);
+  if (frame < HOOK){ hookScreen(frame); return; }
+  if (frame >= END){ endScreen(frame-END); return; }
+  const idx = Math.min(LEVELS.length-1, Math.floor((frame-HOOK)/LEVEL_LEN)), lv = LV[idx];
+  const isReveal = frame === lv.reveal;
+  ctx.fillStyle=C.bg; ctx.fillRect(0,0,W,H); dots();
+  header(lv, idx, frame);
+  grid(lv, frame, isReveal);
+  if (isReveal) revealFrame(lv, idx); else { footer(frame, lv); transition(lv, idx, frame-lv.start); }
+  if (isReveal){ fitText(T.rule, 360, 1188, 640, 18, C.ink, 800); text(BRAND, 360, 1240, 18, 'rgba(21,21,21,0.45)', 800); }
+}
+
+/* ================= CAPA ================= */
+function renderCover(){
+  ctx.setTransform(S,0,0,S,0,0);
+  ctx.fillStyle=C.bg; ctx.fillRect(0,0,W,H); dots();
+  ctx.save(); ctx.translate(0,90); grid(LV[0], 0, false); ctx.restore();
+  ctx.fillStyle='rgba(255,246,229,0.35)'; ctx.fillRect(0,0,W,H);
+  sticker(210, 160, 300, 50, C.ink, 25, 0);
+  ctx.fillStyle=C.yellow; ctx.beginPath(); ctx.arc(240,185,14,0,7); ctx.fill();
+  ctx.fillStyle=C.ink; ctx.beginPath(); ctx.moveTo(236,178); ctx.lineTo(236,192); ctx.lineTo(247,185); ctx.fill();
+  text('VOCÊ DECIDE', 380, 186, 26, C.white, 900);
+  ctx.save(); ctx.translate(360,300); ctx.rotate(-0.04); sticker(-330,-70,660,140,C.yellow,30,8); inkText(T.title, 0, 4, 76, C.white, 620); ctx.restore();
+  sticker(80, 840, 560, 150, C.white, 30, 8);
+  text('SÓ QUEM TEM', 360, 885, 34, C.ink, 900); inkText('OLHO DE ÁGUIA', 360, 945, 54, C.pink, 520);
+  sticker(110, 1020, 500, 76, C.green, 38, 6); text('ACHA OS 3. E VOCÊ?', 360, 1058, 32, C.ink, 900);
+  return cv.toDataURL('image/png');
+}
+
+window.TOTAL_FRAMES = TOTAL_FRAMES;
+window.META = { total: TOTAL_FRAMES, hook: HOOK, end: END, levels: LV.map(l=>({start:l.start, reveal:l.reveal})) };
+window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
+window.renderCover = renderCover;
+
+if (!location.search.includes('export')){
+  let f=0, paused=false, last=performance.now(), acc=0;
+  const toggle=()=>paused=!paused; cv.addEventListener('click',toggle);
+  addEventListener('keydown',e=>{ if(e.code==='Space'){toggle();e.preventDefault();}
+    if(paused&&e.code==='ArrowRight'){f=(f+1)%TOTAL_FRAMES;render(f);} if(paused&&e.code==='ArrowLeft'){f=(f-1+TOTAL_FRAMES)%TOTAL_FRAMES;render(f);} });
+  document.fonts.ready.then(()=>{ (function loop(now){ acc+=now-last; last=now;
+    if(!paused){ while(acc>=1000/FPS){ acc-=1000/FPS; f=(f+1)%TOTAL_FRAMES; } render(f);} else acc=0;
+    requestAnimationFrame(loop); })(performance.now()); });
+}
+</script>
+</body>
+</html>
