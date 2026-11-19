@@ -306,14 +306,13 @@ function scene(ri, round, lf, e, gold, broke, worry, jitter, frame){
   const bx = CAR_X + jolt;
   ctx.save(); if (broke && tb<0.3){ ctx.translate(bx,CAR_Y); ctx.rotate(-0.08*Math.sin(tb*30)*(1-tb/0.3)); ctx.translate(-bx,-CAR_Y); }
   pigCool(bx-27, 862, 0.448, frame/FPS);
-  vehicle(bx, CAR_Y, SC_V, false, gold, frame, !broke);
-  if (gold){ ctx.save(); ctx.shadowColor='rgba(90,60,0,0.8)'; ctx.shadowOffsetY=4; text(WORD[ri], bx-20, CAR_Y+12, 66, '#fffbe6', 900); ctx.restore(); }
+  vehicle(bx, CAR_Y, SC_V, false, false, frame, !broke);
+  if (gold) text(WORD[ri], bx-20, CAR_Y+12, 58, 'rgba(110,8,62,0.9)', 900);   // letra discreta: so aparece pausando
   ctx.restore();
   vehicle(px, CAR_Y, SC_V, true, false, frame, !broke);
   if (!broke){ const on=Math.floor(frame/3)%2===0; const rg=ctx.createRadialGradient(px-15,CAR_Y-40,5,px-15,CAR_Y-40,160);
     rg.addColorStop(0, on?'rgba(255,46,77,0.45)':'rgba(45,123,255,0.45)'); rg.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=rg; ctx.fillRect(px-200,CAR_Y-220,400,320); }
   if (worry>0.55 && !broke && !gold){ const dy=(frame*2)%22, sx=bx+28, sy=790+dy; ctx.fillStyle='rgba(126,224,255,0.95)'; ctx.beginPath(); ctx.moveTo(sx,sy-10); ctx.quadraticCurveTo(sx-8,sy+4,sx,sy+6); ctx.quadraticCurveTo(sx+8,sy+4,sx,sy-10); ctx.fill(); }
-  if (gold) sparkles(bx, 880);
   if (broke) crash(round, tb, bx);
 }
 function coverScene(){ ctx.translate(0,-90); pigCool(CAR_X-27, 862, 0.448, 0.2); vehicle(CAR_X, CAR_Y, SC_V, false, false, 4, false); vehicle(CONTACT_X-30, CAR_Y, SC_V, true, false, 0, false); }
@@ -374,8 +373,7 @@ function render(frame){
   scene(ri, round, lf, e, gold, broke, worry, jitter, frame);
   ctx.restore();
 
-  hud(ri, ms, p, nb, broke, gold);
-  if (gold) goldBanner(ri);
+  hud(ri, ms, p, nb, broke, false);
 
   for(let i=0;i<ROUNDS.length;i++){
     const x=360+(i-(ROUNDS.length-1)/2)*44, y=1110, done=i<ri||(i===ri&&broke), cur=i===ri&&!broke;
