@@ -364,18 +364,6 @@
   .sp-item { display: flex; align-items: center; gap: 8px; }
   .sp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cta); animation: blink 1.5s ease-in-out infinite; }
   @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
-  /* ─── VÍDEO QUIZ ─── */
-  .vq-section { padding: 80px 0 60px; }
-  .vq-wrap { position: relative; width: 100%; max-width: 360px; margin: 0 auto; aspect-ratio: 9 / 16;
-    border-radius: 24px; overflow: hidden; border: 1px solid rgba(0,198,255,0.25);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 60px rgba(0,198,255,0.15); background: #04070f; }
-  .vq-wrap video { width: 100%; height: 100%; display: block; object-fit: cover; }
-  .vq-sound { position: absolute; right: 12px; bottom: 16px; z-index: 2; border: none; cursor: pointer;
-    background: rgba(4,7,15,0.75); color: #fff; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.8rem;
-    padding: 9px 14px; border-radius: 50px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-  .vq-sound.on { display: none; }
-  .vq-cta { text-align: center; margin-top: 32px; }
 </style>
 </head>
 <body>
@@ -438,25 +426,6 @@
   <div class="sp-item"><div class="sp-dot"></div> Avaliação média: ★ 4,9 / 5</div>
   <div class="sp-item"><div class="sp-dot"></div> Conteúdo em constante atualização</div>
 </div>
-
-<!-- VÍDEO QUIZ -->
-<section class="vq-section">
-  <div class="container">
-    <div class="sec-header reveal">
-      <div class="sec-tag">▶ Teste Rápido · 34 segundos</div>
-      <h2 class="sec-title">Você Acerta as 3 Perguntas Sobre IA?</h2>
-      <p class="sec-sub">Quando o relógio aparecer, pause o vídeo e responda. Aposto que você erra a última.</p>
-    </div>
-    <div class="vq-wrap reveal">
-      <video id="vqVideo" src="assets/video-quiz-ia-web.mp4" poster="assets/video-quiz-ia-poster.jpg"
-        muted playsinline loop controls preload="metadata"></video>
-      <button class="vq-sound" id="vqSound">🔊 Ativar som</button>
-    </div>
-    <div class="vq-cta reveal">
-      <a href="https://pay.cakto.com.br/op2j3bo_917615" class="btn-hero">🔓 QUERO A RESPOSTA DA 3ª PERGUNTA</a>
-    </div>
-  </div>
-</section>
 
 <div class="divider"></div>
 
@@ -804,17 +773,6 @@
 
   // Open first FAQ by default
   document.querySelector('.faq-item').classList.add('open');
-
-  // ─── VÍDEO QUIZ: toca sozinho (mudo) quando aparece na tela ───
-  (function () {
-    const v = document.getElementById('vqVideo'), btn = document.getElementById('vqSound');
-    if (!v) return;
-    new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
-    }), { threshold: 0.5 }).observe(v);
-    btn.addEventListener('click', () => { v.muted = false; v.currentTime = 0; v.play(); btn.classList.add('on'); });
-    v.addEventListener('volumechange', () => btn.classList.toggle('on', !v.muted));
-  })();
 </script>
 </body>
 </html>
