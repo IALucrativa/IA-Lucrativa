@@ -364,6 +364,142 @@
   .sp-item { display: flex; align-items: center; gap: 8px; }
   .sp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cta); animation: blink 1.5s ease-in-out infinite; }
   @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  /* ─── PAUSE & REVELE (vídeo) ─── */
+  .pr-section { padding: 90px 0 70px; }
+  .pr-player {
+    position: relative; width: 100%; max-width: 760px; margin: 0 auto;
+    aspect-ratio: 16 / 10; border-radius: 20px; overflow: hidden; cursor: pointer;
+    background: radial-gradient(ellipse 90% 70% at 30% 20%, rgba(0,198,255,0.16), transparent 60%),
+                radial-gradient(ellipse 70% 60% at 80% 90%, rgba(123,94,167,0.22), transparent 60%), #050a16;
+    border: 1px solid rgba(0,198,255,0.25);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 60px rgba(0,198,255,0.12);
+    user-select: none;
+  }
+  .pr-player::after { /* scanlines */
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 3;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px);
+  }
+  .pr-bg-orb { position: absolute; border-radius: 50%; filter: blur(50px); opacity: 0.55; z-index: 0;
+    animation: prOrb 7s ease-in-out infinite alternate; }
+  .pr-bg-orb.a { width: 220px; height: 220px; background: rgba(0,229,160,0.35); top: -60px; right: 10%; }
+  .pr-bg-orb.b { width: 260px; height: 260px; background: rgba(0,198,255,0.28); bottom: -90px; left: 5%; animation-delay: -3s; }
+  @keyframes prOrb { to { transform: translate(-40px, 30px) scale(1.15); } }
+
+  .pr-topbar {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 4;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; font-size: 0.75rem; color: rgba(232,240,254,0.75);
+    font-family: 'Syne', sans-serif; letter-spacing: 0.06em;
+  }
+  .pr-rec { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; }
+  .pr-rec i { width: 9px; height: 9px; border-radius: 50%; background: var(--danger); animation: prBlink 1s infinite; }
+  @keyframes prBlink { 50% { opacity: 0.2; } }
+  .pr-time { font-variant-numeric: tabular-nums; }
+
+  .pr-scene {
+    position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; padding: 50px 8%;
+    opacity: 0; transform: scale(1.04); transition: opacity 0.45s ease, transform 0.6s ease;
+    pointer-events: none;
+  }
+  .pr-scene.active { opacity: 1; transform: none; }
+  .pr-scene .pr-kicker { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--gold); margin-bottom: 14px; }
+  .pr-scene .pr-text {
+    font-family: 'Syne', sans-serif; font-weight: 800; color: #fff;
+    font-size: clamp(1.35rem, 4.2vw, 2.5rem); line-height: 1.2; letter-spacing: -0.01em;
+  }
+  .pr-scene .pr-text.big { font-size: clamp(2rem, 7vw, 4rem); }
+  .pr-scene em { font-style: normal; color: var(--cta); text-shadow: 0 0 24px rgba(0,229,160,0.45); }
+  .pr-scene .w { display: inline-block; opacity: 0; transform: translateY(18px); filter: blur(6px); }
+  .pr-scene.active .w { animation: prWord 0.5s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--i) * 0.13s); }
+  @keyframes prWord { to { opacity: 1; transform: none; filter: none; } }
+  .pr-caret { display: inline-block; width: 3px; height: 1em; background: var(--accent); margin-left: 4px; vertical-align: -0.12em; animation: prBlink 0.8s infinite; }
+
+  .pr-stack { display: flex; flex-direction: column; gap: 6px; }
+  .pr-stack .w { font-size: clamp(1.4rem, 4.6vw, 2.6rem); }
+  .pr-stack .w s { color: var(--danger); text-decoration-thickness: 3px; }
+
+  .pr-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255,255,255,0.1); z-index: 4; }
+  .pr-progress span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--cta)); box-shadow: 0 0 12px var(--cta); }
+
+  .pr-start, .pr-pause {
+    position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 24px;
+    transition: opacity 0.4s ease;
+  }
+  .pr-start { background: rgba(4,7,15,0.55); }
+  .pr-start.hide, .pr-pause.hide { opacity: 0; pointer-events: none; }
+  .pr-play-btn {
+    width: 84px; height: 84px; border-radius: 50%; border: none; cursor: pointer;
+    background: var(--cta); color: #04070f; display: grid; place-items: center;
+    box-shadow: 0 0 0 0 rgba(0,229,160,0.6); animation: prRing 1.6s infinite;
+  }
+  @keyframes prRing { 70% { box-shadow: 0 0 0 22px rgba(0,229,160,0); } 100% { box-shadow: 0 0 0 0 rgba(0,229,160,0); } }
+  .pr-start p { font-family: 'Syne', sans-serif; font-weight: 700; color: #fff; font-size: 1rem; }
+  .pr-start small { color: var(--muted); font-size: 0.8rem; }
+
+  .pr-player.frozen .pr-scene.active { filter: grayscale(0.6) contrast(1.2); animation: prGlitch 0.35s steps(2) 2; }
+  @keyframes prGlitch {
+    0% { transform: translate(0); clip-path: inset(0 0 0 0); }
+    33% { transform: translate(-6px, 2px); clip-path: inset(20% 0 30% 0); }
+    66% { transform: translate(6px, -2px); clip-path: inset(50% 0 10% 0); }
+    100% { transform: translate(0); clip-path: inset(0 0 0 0); }
+  }
+  .pr-pause { opacity: 0; pointer-events: none; background: rgba(4,7,15,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .pr-pause.show { opacity: 1; pointer-events: auto; }
+  .pr-pause-icon { width: 64px; height: 64px; display: flex; gap: 10px; justify-content: center; }
+  .pr-pause-icon i { width: 18px; height: 64px; border-radius: 5px; background: #fff; }
+  .pr-pause h3 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); color: #fff; max-width: 520px; }
+  .pr-pause p { color: var(--muted); font-size: 0.9rem; max-width: 440px; }
+  .pr-reveal-btn {
+    margin-top: 6px; background: linear-gradient(135deg, var(--gold), #ffb020); color: #04070f;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; letter-spacing: 0.04em;
+    padding: 15px 30px; border-radius: 50px; border: none; cursor: pointer;
+    box-shadow: 0 0 30px rgba(245,200,66,0.45); animation: prShake 2.4s ease-in-out infinite;
+  }
+  @keyframes prShake { 0%, 84%, 100% { transform: none; } 88% { transform: rotate(-3deg) scale(1.05); } 92% { transform: rotate(3deg) scale(1.05); } 96% { transform: rotate(-2deg); } }
+
+  .pr-reveal { max-width: 760px; margin: 0 auto; display: grid; gap: 14px; overflow: hidden;
+    max-height: 0; opacity: 0; transition: max-height 0.9s ease, opacity 0.6s ease, margin 0.6s ease; }
+  .pr-reveal { scroll-margin-top: 90px; }
+  .pr-reveal.open { max-height: 1400px; opacity: 1; margin-top: 28px; }
+  .pr-secret {
+    position: relative; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px 22px 22px 74px; overflow: hidden;
+    transform: translateY(20px); opacity: 0; transition: transform 0.6s ease, opacity 0.6s ease, border-color 0.4s;
+  }
+  .pr-reveal.open .pr-secret { transform: none; opacity: 1; }
+  .pr-reveal.open .pr-secret:nth-child(2) { transition-delay: 0.25s; }
+  .pr-reveal.open .pr-secret:nth-child(3) { transition-delay: 0.5s; }
+  .pr-secret-num {
+    position: absolute; left: 20px; top: 22px; width: 38px; height: 38px; border-radius: 10px;
+    display: grid; place-items: center; font-family: 'Syne', sans-serif; font-weight: 800;
+    background: rgba(0,229,160,0.12); color: var(--cta); border: 1px solid rgba(0,229,160,0.3);
+  }
+  .pr-secret h4 { font-size: 1.05rem; margin-bottom: 6px; }
+  .pr-secret p { color: var(--muted); font-size: 0.93rem; }
+  .pr-secret.unlocked { border-color: rgba(0,229,160,0.45); box-shadow: 0 0 30px rgba(0,229,160,0.1); }
+  .pr-secret.locked .pr-secret-body { filter: blur(6px); opacity: 0.6; }
+  .pr-secret.locked .pr-secret-num { background: rgba(245,200,66,0.12); color: var(--gold); border-color: rgba(245,200,66,0.3); }
+  .pr-lock {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--gold);
+    letter-spacing: 0.04em; background: linear-gradient(90deg, transparent, rgba(4,7,15,0.55) 30%, rgba(4,7,15,0.55) 70%, transparent);
+  }
+  .pr-reveal-cta { text-align: center; margin-top: 14px; }
+  .pr-reveal-cta p { color: var(--muted); font-size: 0.9rem; margin-bottom: 16px; }
+  .pr-replay { background: none; border: none; color: var(--muted); font-size: 0.82rem; cursor: pointer; margin-top: 14px; text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .pr-player { aspect-ratio: 4 / 5; border-radius: 16px; }
+    .pr-secret { padding: 18px 16px 18px 64px; }
+    .pr-secret-num { left: 14px; top: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pr-scene .w { opacity: 1; transform: none; filter: none; }
+    .pr-scene.active .w, .pr-bg-orb, .pr-reveal-btn, .pr-play-btn { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -426,6 +562,102 @@
   <div class="sp-item"><div class="sp-dot"></div> Avaliação média: ★ 4,9 / 5</div>
   <div class="sp-item"><div class="sp-dot"></div> Conteúdo em constante atualização</div>
 </div>
+
+<!-- PAUSE & REVELE (vídeo) -->
+<section class="pr-section">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-tag">▶ Assista Antes de Continuar</div>
+      <h2 class="sec-title">O Que Quase Ninguém Te Conta Sobre IA</h2>
+      <p class="sec-sub">Menos de 30 segundos. Assista até o final — o vídeo vai pausar no momento mais importante.</p>
+    </div>
+
+    <div class="pr-player reveal" id="prPlayer" role="region" aria-label="Vídeo: o que quase ninguém te conta sobre IA">
+      <div class="pr-bg-orb a"></div>
+      <div class="pr-bg-orb b"></div>
+
+      <div class="pr-topbar">
+        <span class="pr-rec"><i></i> IA LUCRATIVA</span>
+        <span class="pr-time" id="prTime">0:00 / 0:47</span>
+      </div>
+
+      <div class="pr-scene" data-dur="2600">
+        <div class="pr-kicker">Atenção</div>
+        <div class="pr-text" data-words>Pare de rolar a tela por 30 segundos.</div>
+      </div>
+      <div class="pr-scene" data-dur="2600">
+        <div class="pr-text"><span id="prType"></span><span class="pr-caret"></span></div>
+      </div>
+      <div class="pr-scene" data-dur="4200">
+        <div class="pr-text" data-words>alguém está usando <em>IA</em> para fazer em <em>10 minutos</em> o que antes levava <em>um dia inteiro.</em></div>
+      </div>
+      <div class="pr-scene" data-dur="3400">
+        <div class="pr-text pr-stack">
+          <span class="w" style="--i:0">Sem <s>programar</s>.</span>
+          <span class="w" style="--i:3">Sem <s>equipe</s>.</span>
+          <span class="w" style="--i:6">Sem <s>aparecer</s>.</span>
+        </div>
+      </div>
+      <div class="pr-scene" data-dur="2000">
+        <div class="pr-text big" data-words>A diferença?</div>
+      </div>
+      <div class="pr-scene" data-dur="3600">
+        <div class="pr-text" data-words>Essa pessoa aprendeu <em>3 coisas</em> que quase ninguém ensina.</div>
+      </div>
+      <div class="pr-scene" data-dur="2300">
+        <div class="pr-text big" data-words>E a primeira é...</div>
+      </div>
+
+      <div class="pr-progress"><span id="prBar"></span></div>
+
+      <div class="pr-start" id="prStart">
+        <button class="pr-play-btn" aria-label="Assistir vídeo">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <p>Toque para assistir</p>
+        <small>🔇 Não precisa de som</small>
+      </div>
+
+      <div class="pr-pause" id="prPause">
+        <div class="pr-pause-icon"><i></i><i></i></div>
+        <h3>Pausamos exatamente na parte mais importante.</h3>
+        <p>A maioria das pessoas para aqui. Quem continua descobre o que separa quem só testa IA de quem realmente aproveita ela.</p>
+        <button class="pr-reveal-btn" id="prRevealBtn">👆 TOQUE PARA REVELAR</button>
+      </div>
+    </div>
+
+    <div class="pr-reveal" id="prReveal" aria-live="polite">
+      <div class="pr-secret unlocked">
+        <div class="pr-secret-num">1</div>
+        <div class="pr-secret-body">
+          <h4>🔓 Não é sobre a ferramenta — é sobre o problema que ela resolve.</h4>
+          <p>Quem tira proveito da IA não é quem conhece 50 ferramentas. É quem escolhe <strong style="color: var(--text);">um problema real</strong> (de uma pessoa, de uma empresa, o seu próprio) e usa a IA para resolvê-lo mais rápido e melhor. Isso muda completamente o jeito de começar.</p>
+        </div>
+      </div>
+      <div class="pr-secret locked">
+        <div class="pr-secret-num">2</div>
+        <div class="pr-secret-body">
+          <h4>As ferramentas gratuitas que fazem o trabalho pesado</h4>
+          <p>Quais usar para texto, imagem e organização — e em que ordem aprender cada uma sem se perder.</p>
+        </div>
+        <div class="pr-lock">🔒 Revelado dentro do guia</div>
+      </div>
+      <div class="pr-secret locked">
+        <div class="pr-secret-num">3</div>
+        <div class="pr-secret-body">
+          <h4>Como transformar isso em uma oportunidade digital</h4>
+          <p>O passo a passo para sair do "estou testando" para algo que você possa oferecer a outras pessoas.</p>
+        </div>
+        <div class="pr-lock">🔒 Revelado dentro do guia</div>
+      </div>
+      <div class="pr-reveal-cta">
+        <p>Você acabou de ver 1 de 3. As outras duas estão no guia completo — por <strong style="color: var(--cta);">R$ 27,90</strong>.</p>
+        <a href="https://pay.cakto.com.br/op2j3bo_917615" class="btn-hero">🔓 DESBLOQUEAR AS OUTRAS 2 AGORA</a>
+        <div><button class="pr-replay" id="prReplay">↺ Assistir o vídeo de novo</button></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <div class="divider"></div>
 
@@ -773,6 +1005,101 @@
 
   // Open first FAQ by default
   document.querySelector('.faq-item').classList.add('open');
+
+  // ─── PAUSE & REVELE (vídeo) ───
+  (function () {
+    const player = document.getElementById('prPlayer');
+    if (!player) return;
+    const scenes = [...player.querySelectorAll('.pr-scene')];
+    const startEl = document.getElementById('prStart');
+    const pauseEl = document.getElementById('prPause');
+    const bar = document.getElementById('prBar');
+    const timeEl = document.getElementById('prTime');
+    const typeEl = document.getElementById('prType');
+    const revealEl = document.getElementById('prReveal');
+    const FAKE_TOTAL = 47; // duração exibida (s) — o vídeo "pausa" antes do fim
+    const total = scenes.reduce((s, el) => s + +el.dataset.dur, 0);
+    let timers = [], raf = null, playing = false, autoplayed = false;
+
+    // Quebra o texto em palavras animadas
+    player.querySelectorAll('[data-words]').forEach(el => {
+      let i = 0;
+      const walk = node => [...node.childNodes].forEach(n => {
+        if (n.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            const s = document.createElement('span');
+            s.className = 'w'; s.style.setProperty('--i', i++); s.textContent = part;
+            frag.appendChild(s);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1) walk(n);
+      });
+      walk(el);
+    });
+
+    const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+
+    function typewriter(text, ms) {
+      typeEl.textContent = '';
+      [...text].forEach((ch, k) => timers.push(setTimeout(() => { typeEl.textContent += ch; }, k * ms)));
+    }
+
+    function show(idx) {
+      scenes.forEach((s, k) => s.classList.toggle('active', k === idx));
+      if (scenes[idx].contains(typeEl)) typewriter('Enquanto você lê isso...', 70);
+    }
+
+    function stop() { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(raf); playing = false; }
+
+    function play() {
+      stop(); playing = true;
+      player.classList.remove('frozen');
+      pauseEl.classList.remove('show');
+      startEl.classList.add('hide');
+      let t = 0;
+      scenes.forEach((s, k) => { timers.push(setTimeout(() => show(k), t)); t += +s.dataset.dur; });
+      timers.push(setTimeout(freeze, total));
+      const t0 = performance.now();
+      const shownEnd = 0.42; // a barra para em ~42%: sensação de "ainda tem mais"
+      const tick = now => {
+        const p = Math.min((now - t0) / total, 1);
+        bar.style.width = (p * shownEnd * 100) + '%';
+        timeEl.textContent = fmt(p * shownEnd * FAKE_TOTAL) + ' / ' + fmt(FAKE_TOTAL);
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }
+
+    function freeze() {
+      playing = false;
+      player.classList.add('frozen');
+      timers.push(setTimeout(() => pauseEl.classList.add('show'), 650));
+    }
+
+    function revealSecrets() {
+      pauseEl.classList.remove('show');
+      revealEl.classList.add('open');
+      setTimeout(() => revealEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 350);
+    }
+
+    startEl.addEventListener('click', e => { e.stopPropagation(); play(); });
+    document.getElementById('prRevealBtn').addEventListener('click', e => { e.stopPropagation(); revealSecrets(); });
+    pauseEl.addEventListener('click', revealSecrets);
+    document.getElementById('prReplay').addEventListener('click', () => {
+      player.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(play, 400);
+    });
+
+    // Começa sozinho quando o vídeo aparece na tela
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !autoplayed && !playing) { autoplayed = true; setTimeout(play, 500); }
+      });
+    }, { threshold: 0.6 }).observe(player);
+  })();
 </script>
 </body>
 </html>
