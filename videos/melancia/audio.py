@@ -18,7 +18,6 @@ for r in meta['rounds']:
     cr = lp(rng.standard_normal(n), 40) * (1 + 0.8 * np.sign(np.sin(2 * np.pi * (20 + 40 * p) * t)))
     add(cr * (0.02 + 0.5 * p ** 3), t0)
     n = int(0.5 * SR); t = np.arange(n) / SR   # ding
-    add((np.sin(2 * np.pi * 1318 * t) + 0.5 * np.sin(2 * np.pi * 1976 * t)) * np.exp(-t / 0.12) * 0.22, tc)
     tb = tc + 1 / FPS; n = int(0.7 * SR); t = np.arange(n) / SR   # explosao molhada
     add(np.sin(2 * np.pi * (110 * np.exp(-t * 10) + 40) * t) * np.exp(-t / 0.12) * 0.9, tb)
     add(lp(rng.standard_normal(n), 3) * np.exp(-t / 0.05) * 0.7, tb)

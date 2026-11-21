@@ -22,7 +22,6 @@ for r in meta['rounds']:
         tt += 0.13 - 0.09 * (tt / A)
     # ding no frame dourado
     n = int(0.5 * SR); t = np.arange(n) / SR
-    add((np.sin(2 * np.pi * 1318 * t) + 0.5 * np.sin(2 * np.pi * 1976 * t)) * np.exp(-t / 0.12) * 0.22, tc)
     # impacto: boom + ceramica + moedas
     tb = tc + 1 / FPS
     n = int(0.6 * SR); t = np.arange(n) / SR

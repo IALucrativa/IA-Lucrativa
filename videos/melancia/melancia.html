@@ -23,7 +23,7 @@ const BANDS    = [312, 287, 341, 298, 326, 305, 352];   // elasticos no momento 
 const BREAK    = 22;
 const OUTRO    = 45;
 const T = {
-  title:'PARE ANTES DA MELANCIA EXPLODIR', lvl:'NÍVEL IMPOSSÍVEL', sub:' · SÓ 1 FRAME REVELA A LETRA',
+  title:'PARE ANTES DA MELANCIA EXPLODIR', lvl:'NÍVEL IMPOSSÍVEL', sub:' · SÓ A LETRA DO 0 MS VALE',
   item:'MELANCIA', bands:'ELÁSTICOS', st:['TRANQUILA','APERTANDO','ESTUFANDO','QUASE!','AGORA!','EXPLODIU!'],
   lim:'LIMITE', boom:'EXPLOSÃO', gauge:'PRESSÃO', items:'MELANCIAS',
   gold:'MELANCIA DE OURO! LETRA', join:'JUNTE AS 7 LETRAS E COMENTA A PALAVRA',
@@ -41,6 +41,10 @@ const ROUNDS = [];
 }
 const OUTRO_START = ROUNDS[ROUNDS.length - 1].end;
 const TOTAL_FRAMES = OUTRO_START + OUTRO;
+/* letras falsas: a cada frame aparece uma letra aleatoria; so o frame do 0 ms tem a letra certa */
+const DECOY_AB = 'ABCDEFGHIJLMNOPQRSTUVXZ';
+function letterAt(ri, lf, A, frame){ if (lf===A) return WORD[ri]; if (lf>A) return ''; const R=rng(frame*977+13); let c; do { c=DECOY_AB[Math.floor(R()*DECOY_AB.length)]; } while (c===WORD[ri]); return c; }
+
 
 /* ================= HELPERS ================= */
 const W = 720, H = 1280;
@@ -330,12 +334,11 @@ function render(frame){
 
   ctx.save(); ctx.translate(sx,sy);
   gauge(e, broke, frame); table();
-  if (!broke){ const cy=melon(MX+jitter, pinch, nb, gold, WORD[ri], worry, frame, round.start+1); if (gold) sparkles(MX,cy); }
+  if (!broke){ const cy=melon(MX+jitter, pinch, nb, false, '', worry, frame, round.start+1); text(letterAt(ri, lf, round.A, frame), MX-110+jitter, cy+6, 84, 'rgba(8,36,10,0.78)', 900); }
   else explode(round, (lf-round.A)/FPS);
   ctx.restore();
 
-  hud(ri, ms, p, nb, broke, gold);
-  if (gold) goldBanner(ri);
+  hud(ri, ms, p, nb, broke, false);
 
   for(let i=0;i<ROUNDS.length;i++){
     const x=360+(i-(ROUNDS.length-1)/2)*44, y=1110, done=i<ri||(i===ri&&broke), cur=i===ri&&!broke;

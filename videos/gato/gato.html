@@ -23,7 +23,7 @@ const BANDS    = [12, 14, 11, 15, 13, 16, 17];
 const BREAK    = 22;
 const OUTRO    = 45;
 const T = {
-  title:'PARE ANTES DO GATO DERRUBAR O COPO', lvl:'NÍVEL IMPOSSÍVEL', sub:' · SÓ 1 FRAME REVELA A LETRA',
+  title:'PARE ANTES DO GATO DERRUBAR O COPO', lvl:'NÍVEL IMPOSSÍVEL', sub:' · SÓ A LETRA DO 0 MS VALE',
   item:'COPO', bands:'EMPURRÕES', st:['NA MESA','EMPURRANDO','NA BEIRADA','QUASE!','AGORA!','CRASH!'],
   lim:'LIMITE', boom:'QUEDA', gauge:'', items:'COPOS', gold:'', join:'',
   q:'ACHOU AS 7 LETRAS?', hint:'PAUSE NO FRAME CERTO EM CADA COPO', cta:'COMENTA A PALAVRA', follow:'e me segue pra mais desafios',
@@ -40,6 +40,9 @@ const ROUNDS = [];
 }
 const OUTRO_START = ROUNDS[ROUNDS.length - 1].end;
 const TOTAL_FRAMES = OUTRO_START + OUTRO;
+/* letras falsas: a cada frame aparece uma letra aleatoria; so o frame do 0 ms tem a letra certa */
+const DECOY_AB = 'ABCDEFGHIJLMNOPQRSTUVXZ';
+function letterAt(ri, lf, A, frame){ if (lf===A) return WORD[ri]; if (lf>A) return ''; const R=rng(frame*977+13); let c; do { c=DECOY_AB[Math.floor(R()*DECOY_AB.length)]; } while (c===WORD[ri]); return c; }
 
 /* ================= HELPERS ================= */
 const W = 720, H = 1280;
@@ -61,6 +64,7 @@ function ease(p, style){
   if (style===0) return p*p*(3-2*p)*0.35 + p*0.65;
   if (style===1) return Math.pow(p, 1.8);
   if (style===2) return p<0.55 ? p/0.55*0.62 : 0.62 + (p<0.75?0:(p-0.75)/0.25*0.38);
+  if (style===4) return p<0.5 ? p/0.5*0.85 : p<0.7 ? 0.85-(p-0.5)/0.2*0.2 : 0.65+(p-0.7)/0.3*0.35;   // finta: chega perto, recua e dispara
   return 1 - Math.pow(1-p, 1.6);
 }
 
@@ -223,7 +227,7 @@ function scene(ri, round, lf, e, gold, broke, worry, jitter, frame){
   if (!broke){
     const gx = GX0 + (EDGE-GX0)*e, rot = 0.22*Math.max(0,(e-0.86)/0.14);
     cat(gx, frame, true, false);
-    glass(gx+(jitter||0)*0.6, TOP, rot, worry, gold?WORD[ri]:'', frame);
+    glass(gx+(jitter||0)*0.6, TOP, rot, worry, letterAt(ri, lf, round.A, frame), frame);
   } else {
     const tb=(lf-round.A)/FPS, tf=Math.min(tb,0.25);
     cat(EDGE, frame, false, true);

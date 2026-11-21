@@ -23,7 +23,7 @@ const BANDS    = [15, 17, 16, 18, 15, 17, 19];
 const BREAK    = 22;
 const OUTRO    = 45;
 const T = {
-  title:'PARE ANTES DA PANELA EXPLODIR', lvl:'NÍVEL IMPOSSÍVEL', sub:' · SÓ 1 FRAME REVELA A LETRA',
+  title:'PARE ANTES DA PANELA EXPLODIR', lvl:'NÍVEL IMPOSSÍVEL', sub:' · SÓ A LETRA DO 0 MS VALE',
   item:'PANELA', bands:'PRESSÃO PSI', st:['MORNA','ESQUENTANDO','CHIANDO','QUASE!','AGORA!','EXPLODIU!'],
   lim:'LIMITE', boom:'EXPLOSÃO', gauge:'PRESSÃO', items:'PANELAS',
   gold:'PANELA DE OURO! LETRA', join:'JUNTE AS 7 LETRAS E COMENTA A PALAVRA',
@@ -41,6 +41,9 @@ const ROUNDS = [];
 }
 const OUTRO_START = ROUNDS[ROUNDS.length - 1].end;
 const TOTAL_FRAMES = OUTRO_START + OUTRO;
+/* letras falsas: a cada frame aparece uma letra aleatoria; so o frame do 0 ms tem a letra certa */
+const DECOY_AB = 'ABCDEFGHIJLMNOPQRSTUVXZ';
+function letterAt(ri, lf, A, frame){ if (lf===A) return WORD[ri]; if (lf>A) return ''; const R=rng(frame*977+13); let c; do { c=DECOY_AB[Math.floor(R()*DECOY_AB.length)]; } while (c===WORD[ri]); return c; }
 
 /* ================= HELPERS ================= */
 const W = 720, H = 1280;
@@ -62,6 +65,7 @@ function ease(p, style){
   if (style===0) return p*p*(3-2*p)*0.35 + p*0.65;
   if (style===1) return Math.pow(p, 1.8);
   if (style===2) return p<0.55 ? p/0.55*0.62 : 0.62 + (p<0.75?0:(p-0.75)/0.25*0.38);
+  if (style===4) return p<0.5 ? p/0.5*0.85 : p<0.7 ? 0.85-(p-0.5)/0.2*0.2 : 0.65+(p-0.7)/0.3*0.35;   // finta: chega perto, recua e dispara
   return 1 - Math.pow(1-p, 1.6);
 }
 
@@ -184,10 +188,6 @@ function pot(cx, e, gold, letter, worry, frame, lid=true){
   if (gold){ ctx.save(); ctx.shadowColor='rgba(90,60,0,0.8)'; ctx.shadowOffsetY=5; text(letter, cx, POT_TOP+h/2+8, 110, '#fffbe6', 900); ctx.restore();
     ctx.textAlign='center'; ctx.strokeStyle='rgba(122,86,0,0.6)'; ctx.lineWidth=2; ctx.font='900 110px Inter'; ctx.strokeText(letter,cx,POT_TOP+h/2+8); return; }
   const ey=POT_TOP+62, es=15;
-  if (!lid){ // depois da explosao: fuligem e olhos em X
-    ctx.fillStyle='rgba(20,20,20,0.35)'; for (const [dx,dy,r] of [[-70,30,30],[60,50,26],[10,90,22]]){ ctx.beginPath(); ctx.arc(cx+dx,POT_TOP+dy,r,0,7); ctx.fill(); }
-    ctx.strokeStyle='#222'; ctx.lineWidth=5; for (const s of [-1,1]){ const ex=cx+s*44; ctx.beginPath(); ctx.moveTo(ex-11,ey-11); ctx.lineTo(ex+11,ey+11); ctx.moveTo(ex+11,ey-11); ctx.lineTo(ex-11,ey+11); ctx.stroke(); }
-    ctx.beginPath(); ctx.moveTo(cx-18,ey+40); for(let i=0;i<=6;i++) ctx.lineTo(cx-18+i*6, ey+40+(i%2?-5:5)); ctx.stroke(); return; }
   for (const s of [-1,1]){ const ex=cx+s*44;
     ctx.fillStyle='#fff'; ctx.beginPath(); ctx.ellipse(ex,ey,es,es*(1.15+worry*0.3),0,0,7); ctx.fill(); ctx.strokeStyle='#222'; ctx.lineWidth=2; ctx.stroke();
     ctx.fillStyle='#10131c'; ctx.beginPath(); ctx.arc(ex, ey+3-worry*9, es*0.5, 0, 7); ctx.fill();
@@ -219,7 +219,7 @@ function blast(round, tb){
 }
 function scene(ri, round, lf, e, gold, broke, worry, jitter, frame){
   stove(frame, broke?1:e);
-  if (!broke){ steam(PX, e, frame); pot(PX+jitter, e, gold, WORD[ri], worry, frame); if (gold) sparkles(PX, 860); }
+  if (!broke){ steam(PX, e, frame); pot(PX+jitter, e, false, '', worry, frame); text(letterAt(ri, lf, round.A, frame), PX+jitter, POT_TOP+120, 46, 'rgba(60,60,75,0.33)', 900); }
   else blast(round, (lf-round.A)/FPS);
 }
 function coverScene(){ stove(6, 1); steam(PX, 1, 6); steam(PX, 0.8, 23); pot(PX, 1, false, '', 1, 4); }
@@ -280,8 +280,7 @@ function render(frame){
   scene(ri, round, lf, e, gold, broke, worry, jitter, frame);
   ctx.restore();
 
-  hud(ri, ms, p, nb, broke, gold);
-  if (gold) goldBanner(ri);
+  hud(ri, ms, p, nb, broke, false);
 
   for(let i=0;i<ROUNDS.length;i++){
     const x=360+(i-(ROUNDS.length-1)/2)*44, y=1110, done=i<ri||(i===ri&&broke), cur=i===ri&&!broke;
