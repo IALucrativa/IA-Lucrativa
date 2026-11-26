@@ -16,6 +16,8 @@ for r in meta['rounds']:
     elif th == 'fuga':   # sirene de dois tons chegando + motor
         f2 = np.where((t * 2.2) % 1 < 0.5, 720, 960)
         add(np.sin(2 * np.pi * np.cumsum(f2) / SR) * (0.02 + 0.13 * p ** 1.5) + lp(np.sign(np.sin(2*np.pi*np.cumsum(55+30*p)/SR)), 20) * 0.05, t0)
+    elif th == 'chiclete': # sopro + borracha esticando
+        add(lp(rng.standard_normal(n), 6) * (0.03 + 0.12 * p) + np.sin(2 * np.pi * np.cumsum(220 + 500 * p ** 2) / SR) * 0.03 * p ** 2, t0)
     elif th == 'vulcao': # ronco + borbulhas
         add(lp(rng.standard_normal(n), 60) * (0.1 + 0.6 * p) + np.diff(rng.standard_normal(n), prepend=0) * (rng.random(n) < 0.03 + 0.2 * p) * 0.25, t0)
     elif th == 'arroz':  # fervura + tampa batendo
@@ -71,7 +73,7 @@ for r in meta['rounds']:
         add(np.sin(2 * np.pi * f * tm) * np.exp(-tm / 0.02) * 0.08, tb + 0.05 + rng.uniform(0, 0.5))
 for f in meta['events']:
     m = int(0.05 * SR); tm = np.arange(m) / SR
-    add((np.sin(2 * np.pi * ({'prensa':180,'fuga':1568,'refri':220,'bomba':3200,'jacare':140,'micro':3400,'gato':500,'pipoca':2600,'dog':900,'liqui':1200,'chaleira':600,'torra':2200,'pneu':160,'sorvete':1500,'espumante':700,'vulcao':300,'arroz':2400,'privada':170}.get(th, 2400)) * tm)) * np.exp(-tm / 0.012) * 0.12, f / FPS)
+    add((np.sin(2 * np.pi * ({'prensa':180,'fuga':1568,'refri':220,'bomba':3200,'jacare':140,'micro':3400,'gato':500,'pipoca':2600,'dog':900,'liqui':1200,'chaleira':600,'torra':2200,'pneu':160,'sorvete':1500,'espumante':700,'vulcao':300,'arroz':2400,'privada':170,'chiclete':500}.get(th, 2400)) * tm)) * np.exp(-tm / 0.012) * 0.12, f / FPS)
 to = meta['outro'] / FPS; n = int(0.5 * SR); t = np.arange(n) / SR
 add(lp(rng.standard_normal(n), 30) * np.sin(np.pi * t / 0.5) * 0.6, to)
 a = a / np.max(np.abs(a)) * 0.89

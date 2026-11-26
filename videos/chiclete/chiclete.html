@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pare o Chiclete</title>
+<style>
+  @font-face { font-family:'Hand'; src:url('patrick-hand-latin-400-normal.woff2') format('woff2'); }
+  html,body{margin:0;background:#fbf8ef;height:100%;}
+  body{display:flex;align-items:center;justify-content:center;}
+  canvas{height:100vh;max-width:100vw;aspect-ratio:9/16;display:block;}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/* ================= CONFIG ================= */
+const WORD = "SEGREDO", BRAND = "@vocedecideai.br", FPS = 30;
+const APPROACH = [57, 45, 60, 42, 54, 39, 51];
+const STYLE    = [1, 4, 0, 2, 3, 1, 4];
+const BREAK = 22, OUTRO = 45;
+const T = {
+  t1:'PARE ANTES DA BOLHA', t2:'DE CHICLETE ESTOURAR', sub:'só a letra do 0 ms vale!',
+  item:'bolha', count:'tamanho', st:['MASCANDO','SOPRANDO','CRESCENDO','QUASE!','AGORA!','PLOC!'], fx:'PLOC!',
+  q:'ACHOU AS 7 LETRAS?', cta:'COMENTA A PALAVRA!', follow:'e me segue pra mais desafios'
+};
+
+/* ================= TIMELINE ================= */
+const ROUNDS = []; { let f=0; for (let i=0;i<WORD.length;i++){ ROUNDS.push({ start:f, contact:f+APPROACH[i], end:f+APPROACH[i]+BREAK, A:APPROACH[i], style:STYLE[i] }); f+=APPROACH[i]+BREAK; } }
+const OUTRO_START = ROUNDS[ROUNDS.length-1].end, TOTAL_FRAMES = OUTRO_START + OUTRO;
+function ease(p, style){
+  if (style===0) return p*p*(3-2*p)*0.35 + p*0.65;
+  if (style===1) return Math.pow(p, 1.8);
+  if (style===2) return p<0.55 ? p/0.55*0.62 : 0.62 + (p<0.75?0:(p-0.75)/0.25*0.38);
+  if (style===4) return p<0.5 ? p/0.5*0.85 : p<0.7 ? 0.85-(p-0.5)/0.2*0.2 : 0.65+(p-0.7)/0.3*0.35;   // finta
+  return 1 - Math.pow(1-p, 1.6);
+}
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+/* letras falsas: a cada frame uma letra aleatoria; so o frame do 0 ms tem a certa */
+const DECOY_AB = 'ABCDEFGHIJLMNOPQRSTUVXZ';
+function letterAt(ri, lf, A, frame){ if (lf===A) return WORD[ri]; if (lf>A) return ''; const R=rng(frame*977+13); let c; do { c=DECOY_AB[Math.floor(R()*DECOY_AB.length)]; } while (c===WORD[ri]); return c; }
+
+/* ================= CANVAS + TRACO DE CANETA ================= */
+const W = 720, H = 1280;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const S = cv.width / W;
+const INK = '#1f3a93', RED = '#d93636', PINK = '#ff5fa2', YEL = '#ffe14d', PAPER = '#fbf8ef';
+let FRAME = 0;                                         // controla o "tremido" do traco
+const boil = id => rng((Math.floor(FRAME/3)+1)*7919 + id*104729);
+function wpath(pts, closed, id, j=1.8){
+  const R = boil(id); ctx.beginPath();
+  pts.forEach(([x,y],i)=>{ const xx=x+(R()-0.5)*2*j, yy=y+(R()-0.5)*2*j; i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); });
+  if (closed) ctx.closePath();
+}
+function circlePts(cx,cy,rx,ry,n=40){ const p=[]; for(let i=0;i<n;i++){ const a=i/n*Math.PI*2; p.push([cx+Math.cos(a)*rx, cy+Math.sin(a)*ry]); } return p; }
+function rectPts(x,y,w,h){ const p=[]; const n=6; for(let i=0;i<n;i++) p.push([x+w*i/n,y]); for(let i=0;i<n;i++) p.push([x+w,y+h*i/n]); for(let i=0;i<n;i++) p.push([x+w-w*i/n,y+h]); for(let i=0;i<n;i++) p.push([x,y+h-h*i/n]); return p; }
+function sketch(pts, closed, id, col=INK, lw=4, fill=null){
+  if (fill){ wpath(pts, true, id, 1.2); ctx.fillStyle=fill; ctx.fill(); }
+  ctx.lineJoin='round'; ctx.lineCap='round'; ctx.strokeStyle=col;
+  ctx.lineWidth=lw; wpath(pts, closed, id); ctx.stroke();
+  ctx.globalAlpha=0.45; ctx.lineWidth=lw*0.6; wpath(pts, closed, id+500, 2.4); ctx.stroke(); ctx.globalAlpha=1;
+}
+function hatch(pts, id, col, gap=14){ ctx.save(); wpath(pts, true, id, 1); ctx.clip(); ctx.strokeStyle=col; ctx.lineWidth=3; const R=boil(id+900);
+  for (let x=-400; x<1200; x+=gap){ ctx.beginPath(); ctx.moveTo(x+R()*3,0); ctx.lineTo(x+700+R()*3,1280); ctx.stroke(); } ctx.restore(); }
+function hand(s,x,y,size,col=INK,align='center',maxW=0){ ctx.font=`${size}px Hand`; if (maxW){ const w=ctx.measureText(s).width; if (w>maxW){ size*=maxW/w; ctx.font=`${size}px Hand`; } }
+  ctx.fillStyle=col; ctx.textAlign=align; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+function scribbleLine(x1,y,x2,id,col=RED,lw=4){ const p=[]; for(let i=0;i<=10;i++) p.push([x1+(x2-x1)*i/10, y+Math.sin(i*1.3)*2]); sketch(p,false,id,col,lw); }
+function star(cx,cy,r,id,col){ const p=[]; for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr2=i%2?r*0.45:r; p.push([cx+Math.cos(a)*rr2, cy+Math.sin(a)*rr2]); } sketch(p,true,id,col,3); }
+
+/* ================= PAPEL ================= */
+function paper(){
+  ctx.fillStyle=PAPER; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(80,140,220,0.28)'; ctx.lineWidth=2; for (let y=60;y<H;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  ctx.strokeStyle='rgba(220,60,60,0.45)'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(58,0); ctx.lineTo(58,H); ctx.stroke();
+  ctx.fillStyle='#e9e4d6'; for (const y of [200,640,1080]){ ctx.beginPath(); ctx.arc(26,y,13,0,7); ctx.fill(); }
+  star(640,560,16,801,'rgba(31,58,147,0.5)'); star(110,1000,12,802,'rgba(31,58,147,0.4)');
+  const sp=[]; for(let i=0;i<40;i++){ const a=i*0.45, r=2+i*0.55; sp.push([650+Math.cos(a)*r, 1010+Math.sin(a)*r]); } sketch(sp,false,803,'rgba(31,58,147,0.35)',2.5);
+}
+function header(){
+  hand(T.t1, 360, 82, 56, INK, 'center', 640); hand(T.t2, 360, 140, 56, INK, 'center', 640);
+  scribbleLine(120,172,600,11,RED,5);
+  hand(T.sub, 360, 210, 32, RED);
+}
+
+/* ================= POST-IT (painel) ================= */
+function postit(idx, ms, p, count, broke){
+  ctx.save(); ctx.translate(360,330); ctx.rotate(-0.025);
+  ctx.fillStyle='rgba(0,0,0,0.12)'; ctx.fillRect(-206,-74,420,156);
+  const pts=rectPts(-210,-80,420,154); sketch(pts,true,21,'#c9a400',3, broke?'#ffb3b3':YEL);
+  ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.fillRect(-60,-92,120,24);       // fita adesiva
+  hand(`${T.item} ${idx+1}/7`, -190, -52, 26, INK, 'left'); hand(`${T.count} ${broke?'---':count+'%'}`, 190, -52, 26, INK, 'right');
+  let label, col;
+  if (broke){ label=T.st[5]; col=RED; } else if (ms>1000){ label=T.st[0]; col='#1e8a4c'; } else if (ms>500){ label=T.st[1]; col=INK; } else if (ms>200){ label=T.st[2]; col='#d9731f'; } else { label=T.st[3]; col=RED; }
+  hand(label, -190, -2, 50, col, 'left');
+  hand((ms>0?'-':ms<0?'+':'')+Math.abs(Math.round(ms))+' ms', 190, -2, 42, broke?RED:INK, 'right');
+  // barra a lapis
+  scribbleLine(-180,46,180,31,'rgba(60,60,60,0.5)',3);
+  const lim=0.82, x0=-180, x1=180, pp=clamp(p,0,1.2), mx=x0+(x1-x0)*lim*Math.min(pp,1)+(pp>1?(x1-x0)*(1-lim)*(pp-1)/0.2:0);
+  sketch([[x0+(x1-x0)*lim,36],[x0+(x1-x0)*lim,56]],false,32,RED,3);
+  sketch([[mx,30],[mx,62]],false,33,INK,5);
+  hand('limite', x0+(x1-x0)*lim-4, 64, 18, RED, 'right');
+  ctx.restore();
+}
+function progress(ri, broke){
+  for (let i=0;i<7;i++){ const x=360+(i-3)*56, y=1120, done=i<ri||(i===ri&&broke), cur=i===ri&&!broke;
+    sketch(circlePts(x,y,18,18,16),true,60+i, cur?RED:INK, cur?4:3, cur?'rgba(255,225,77,0.7)':null);
+    if (done){ sketch([[x-10,y],[x-2,y+9],[x+12,y-10]],false,70+i,'#1e8a4c',4); } }
+  hand(BRAND, 360, 1205, 28, 'rgba(31,58,147,0.6)');
+}
+
+/* ================= CENA: MENINO + CHICLETE ================= */
+const HX = 360, HY = 680, HR = 112;
+function kid(worry, frame, cover){
+  // corpo/camiseta
+  sketch([[HX-150,1030],[HX-130,880],[HX-60,840],[HX+60,840],[HX+130,880],[HX+150,1030]], false, 101, INK, 4, null);
+  hatch([[HX-150,1030],[HX-130,880],[HX-60,840],[HX+60,840],[HX+130,880],[HX+150,1030]], 102, 'rgba(110,200,255,0.55)', 16);
+  // cabeca
+  sketch(circlePts(HX,HY,HR,HR*1.02), true, 103, INK, 4, '#fff1e0');
+  // cabelo rabiscado
+  const hair=[]; for(let i=0;i<=16;i++){ const a=Math.PI*(1.05+0.9*i/16); hair.push([HX+Math.cos(a)*(HR+6), HY+Math.sin(a)*(HR+6)+ (i%2?14:0)]); } sketch(hair,false,104,'#5a3a22',6);
+  // bochechas
+  ctx.fillStyle='rgba(255,120,150,0.35)'; ctx.beginPath(); ctx.ellipse(HX-62,HY+34,20,12,0,0,7); ctx.fill(); ctx.beginPath(); ctx.ellipse(HX+62,HY+34,20,12,0,0,7); ctx.fill();
+  if (cover) return;
+  // olhos (olhando pra bolha, ficando vesgos)
+  for (const s of [-1,1]){ const ex=HX+s*38, ey=HY-14; sketch(circlePts(ex,ey,18,20+worry*4,14),true,110+s,INK,3,'#fff');
+    ctx.fillStyle=INK; ctx.beginPath(); ctx.arc(ex - s*worry*6, ey+6+worry*8, 7, 0, 7); ctx.fill();
+    if (worry>0.3) sketch([[ex-s*20,ey-26-worry*6],[ex+s*14,ey-34]],false,120+s,INK,4); }
+  if (worry>0.5){ const d=(frame*2)%20; ctx.fillStyle='rgba(80,170,255,0.8)'; ctx.beginPath(); ctx.ellipse(HX+HR-10,HY-30+d,6,10,0,0,7); ctx.fill(); }
+}
+function bubble(r, letter, frame){
+  const cy = HY+86 + r*0.55, pts=circlePts(HX, cy, r, r*0.96, 44);
+  sketch(pts, true, 130, '#d6337f', 4, 'rgba(255,105,180,0.55)');
+  ctx.strokeStyle='rgba(255,255,255,0.85)'; ctx.lineWidth=5; ctx.beginPath(); ctx.arc(HX-r*0.35, cy-r*0.35, r*0.35, Math.PI*1.1, Math.PI*1.45); ctx.stroke();
+  if (letter) hand(letter, HX+r*0.1, cy+r*0.1, 46, 'rgba(176,24,104,0.55)');       // letra (falsas em todo frame, certa no 0 ms)
+  // labios segurando
+  ctx.fillStyle='#e0607e'; ctx.beginPath(); ctx.ellipse(HX, HY+86, 16, 9, 0, 0, 7); ctx.fill();
+}
+function ploc(round, tb, frame){
+  kid(0, frame, true);
+  const R=rng(round.start*31+7);
+  // chiclete grudado na cara
+  for (let i=0;i<12;i++){ const a=R()*Math.PI*2, d=R()*HR*0.9, k=clamp(tb/0.12,0,1); sketch(circlePts(HX+Math.cos(a)*d, HY+20+Math.sin(a)*d*0.9, (24+R()*30)*k, (20+R()*26)*k, 14), true, 140+i, '#d6337f', 3, 'rgba(255,105,180,0.8)'); }
+  for (let i=0;i<6;i++){ const x=HX-120+i*48, len=(30+R()*60)*clamp(tb/0.4,0,1); sketch([[x,HY+60],[x+R()*10-5,HY+60+len]],false,160+i,'#d6337f',8); }
+  // olhos arregalados espiando
+  for (const s of [-1,1]){ sketch(circlePts(HX+s*38,HY-20,20,22,14),true,170+s,INK,3,'#fff'); ctx.fillStyle=INK; ctx.beginPath(); ctx.arc(HX+s*38,HY-18,6,0,7); ctx.fill(); }
+  // estrela do PLOC
+  if (tb<0.4){ const k=tb/0.4, sc=1+0.4*k; ctx.save(); ctx.translate(HX+150,HY-170); ctx.scale(sc,sc); ctx.rotate(-0.12); ctx.globalAlpha=1-k*k;
+    const p=[]; for(let i=0;i<22;i++){ const a=i/22*Math.PI*2, rr2=i%2?70:120; p.push([Math.cos(a)*rr2*1.3, Math.sin(a)*rr2*0.8]); } sketch(p,true,180,RED,4,'rgba(255,225,77,0.95)');
+    hand(T.fx, 0, 4, 72, RED); ctx.restore(); ctx.globalAlpha=1; }
+}
+
+/* ================= FINAL ================= */
+function outro(f){
+  const k=clamp(f/6,0,1); ctx.fillStyle=`rgba(251,248,239,${0.95*k})`; ctx.fillRect(0,0,W,H); if (k<1) return;
+  hand(T.q, 360, 420, 68, INK, 'center', 640); scribbleLine(110,462,610,201,RED,5);
+  for (let i=0;i<7;i++){ const x=360+(i-3)*84, d=clamp((f-6-i*2)/5,0,1); if (d<=0) continue;
+    sketch(rectPts(x-34,540,68,86),true,210+i,INK,4,'#fff'); hand('?', x, 586, 56, RED); }
+  const b=clamp((f-20)/6,0,1); ctx.globalAlpha=b;
+  sketch([[360,650],[352,700],[364,740]],false,230,INK,4); sketch([[344,722],[364,744],[380,720]],false,231,INK,4);
+  sketch(rectPts(130,770,460,90),true,232,INK,4,'rgba(255,225,77,0.85)'); hand(T.cta, 360, 816, 50, INK);
+  hand(T.follow, 360, 920, 34, INK);
+  ctx.globalAlpha=1;
+}
+
+/* ================= FRAME ================= */
+function render(frame){
+  FRAME = frame; ctx.setTransform(S,0,0,S,0,0);
+  paper(); header();
+  let ri=ROUNDS.findIndex(r=>frame<r.end); if (ri<0) ri=ROUNDS.length-1;
+  const round=ROUNDS[ri], lf=Math.min(frame, round.end-1)-round.start, broke=lf>round.A;
+  const p=lf/round.A, e=ease(clamp(p,0,1), round.style), ms=(round.A-lf)*1000/FPS;
+  const worry = broke?0:clamp(1-ms/900,0,1);
+  if (!broke){ kid(worry, frame, false); bubble(18+160*e + (e>0.8?Math.sin(frame*1.7)*3:0), letterAt(ri, lf, round.A, frame), frame); }
+  else ploc(round, (lf-round.A)/FPS, frame);
+  postit(ri, ms, p, Math.round(100*e), broke);
+  progress(ri, broke);
+  if (frame>=OUTRO_START) outro(frame-OUTRO_START);
+}
+
+/* ================= CAPA ================= */
+function renderCover(){
+  FRAME = 0; ctx.setTransform(S,0,0,S,0,0);
+  paper();
+  ctx.save(); ctx.translate(360,110); ctx.rotate(-0.05); sketch(rectPts(-160,-30,320,60),true,301,RED,4,'rgba(255,255,255,0.6)'); hand('NÍVEL IMPOSSÍVEL', 0, 2, 38, RED); ctx.restore();
+  hand('SÓ 1 FRAME', 360, 210, 96, INK); scribbleLine(150,262,570,302,RED,6);
+  hand('REVELA A PALAVRA', 360, 310, 56, INK);
+  kid(1, 0, false); bubble(165, '', 0);
+  ctx.save(); ctx.translate(560,470); ctx.rotate(0.06); sketch(rectPts(-110,-50,220,100),true,303,'#c9a400',3,YEL); hand('7 letras', 0, -14, 34, INK); hand('escondidas!', 0, 22, 34, INK); ctx.restore();
+  sketch(rectPts(120,1120,480,80),true,304,INK,4,'rgba(255,225,77,0.85)'); hand('VOCÊ CONSEGUE PAUSAR?', 360, 1162, 44, INK, 'center', 440);
+  return cv.toDataURL('image/png');
+}
+
+/* ================= EXPORT ================= */
+const EVENTS=[]; ROUNDS.forEach(r=>{ let last=0; for(let lf=0; lf<=r.A; lf++){ const n=Math.floor(ease(lf/r.A,r.style)*10); if(n>last){ EVENTS.push(r.start+lf); last=n; } } });
+window.TOTAL_FRAMES = TOTAL_FRAMES;
+window.META = { theme:'chiclete', total: TOTAL_FRAMES, rounds: ROUNDS, outro: OUTRO_START, events: EVENTS };
+window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
+window.renderCover = renderCover;
+
+if (!location.search.includes('export')){
+  let f=0, paused=false, last=performance.now(), acc=0;
+  const toggle=()=>paused=!paused; cv.addEventListener('click',toggle);
+  addEventListener('keydown',e=>{ if(e.code==='Space'){toggle();e.preventDefault();}
+    if(paused&&e.code==='ArrowRight'){f=(f+1)%TOTAL_FRAMES;render(f);} if(paused&&e.code==='ArrowLeft'){f=(f-1+TOTAL_FRAMES)%TOTAL_FRAMES;render(f);} });
+  document.fonts.load('40px Hand').then(()=>{ (function loop(now){ acc+=now-last; last=now;
+    if(!paused){ while(acc>=1000/FPS){ acc-=1000/FPS; f=(f+1)%TOTAL_FRAMES; } render(f);} else acc=0;
+    requestAnimationFrame(loop); })(performance.now()); });
+}
+</script>
+</body>
+</html>
