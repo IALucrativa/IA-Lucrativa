@@ -180,6 +180,7 @@ exec(open('/tmp/claude-0/-home-user-IA-Lucrativa/cf9f494a-2ac2-543d-b0e1-8c1c84a
 exec(open('/tmp/claude-0/-home-user-IA-Lucrativa/cf9f494a-2ac2-543d-b0e1-8c1c84ae0be6/scratchpad/dog_theme.py').read())
 exec(open('/tmp/claude-0/-home-user-IA-Lucrativa/cf9f494a-2ac2-543d-b0e1-8c1c84ae0be6/scratchpad/cozinha_theme.py').read())
 exec(open('/tmp/claude-0/-home-user-IA-Lucrativa/cf9f494a-2ac2-543d-b0e1-8c1c84ae0be6/scratchpad/cozinha2_theme.py').read())
+exec(open('/tmp/claude-0/-home-user-IA-Lucrativa/cf9f494a-2ac2-543d-b0e1-8c1c84ae0be6/scratchpad/cozinha3_theme.py').read())
 th = TH[theme]; s = base
 if theme in ('fuga','jacare'): s = s.replace('background(); header();\n  let ri','CUR_FRAME=frame; background(); header();\n  let ri')
 def cut(a, b, new):
