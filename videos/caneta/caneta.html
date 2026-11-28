@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pare a Caneta</title>
+<style>
+  @font-face { font-family:'Hand'; src:url('patrick-hand-latin-400-normal.woff2') format('woff2'); }
+  html,body{margin:0;background:#fbf8ef;height:100%;}
+  body{display:flex;align-items:center;justify-content:center;}
+  canvas{height:100vh;max-width:100vw;aspect-ratio:9/16;display:block;}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/* ================= CONFIG ================= */
+const WORD = "ESCRITA", BRAND = "@vocedecideai.br", FPS = 30;
+const APPROACH = [54, 60, 45, 57, 39, 63, 48];
+const STYLE    = [0, 4, 1, 2, 3, 4, 1];
+const BREAK = 22, OUTRO = 45;
+const T = {
+  t1:'PARE ANTES DA', t2:'CANETA VAZAR', sub:'só a letra do 0 ms vale!',
+  item:'caneta', count:'gota', st:['SEQUINHA','PINGANDO','CRESCENDO','QUASE!','AGORA!','SPLAT!'], fx:'SPLAT!',
+  q:'ACHOU AS 7 LETRAS?', cta:'COMENTA A PALAVRA!', follow:'e me segue pra mais desafios'
+};
+
+/* ================= TIMELINE ================= */
+const ROUNDS = []; { let f=0; for (let i=0;i<WORD.length;i++){ ROUNDS.push({ start:f, contact:f+APPROACH[i], end:f+APPROACH[i]+BREAK, A:APPROACH[i], style:STYLE[i] }); f+=APPROACH[i]+BREAK; } }
+const OUTRO_START = ROUNDS[ROUNDS.length-1].end, TOTAL_FRAMES = OUTRO_START + OUTRO;
+function ease(p, style){
+  if (style===0) return p*p*(3-2*p)*0.35 + p*0.65;
+  if (style===1) return Math.pow(p, 1.8);
+  if (style===2) return p<0.55 ? p/0.55*0.62 : 0.62 + (p<0.75?0:(p-0.75)/0.25*0.38);
+  if (style===4) return p<0.5 ? p/0.5*0.85 : p<0.7 ? 0.85-(p-0.5)/0.2*0.2 : 0.65+(p-0.7)/0.3*0.35;   // finta
+  return 1 - Math.pow(1-p, 1.6);
+}
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+/* letras falsas: a cada frame uma letra aleatoria; so o frame do 0 ms tem a certa */
+const DECOY_AB = 'ABCDEFGHIJLMNOPQRSTUVXZ';
+function letterAt(ri, lf, A, frame){ if (lf===A) return WORD[ri]; if (lf>A) return ''; const R=rng(frame*977+13); let c; do { c=DECOY_AB[Math.floor(R()*DECOY_AB.length)]; } while (c===WORD[ri]); return c; }
+
+/* ================= CANVAS + TRACO DE CANETA ================= */
+const W = 720, H = 1280;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const S = cv.width / W;
+const INK = '#1f3a93', RED = '#d93636', PINK = '#ff5fa2', YEL = '#ffe14d', PAPER = '#fbf8ef';
+let FRAME = 0;                                         // controla o "tremido" do traco
+const boil = id => rng((Math.floor(FRAME/3)+1)*7919 + id*104729);
+function wpath(pts, closed, id, j=1.8){
+  const R = boil(id); ctx.beginPath();
+  pts.forEach(([x,y],i)=>{ const xx=x+(R()-0.5)*2*j, yy=y+(R()-0.5)*2*j; i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); });
+  if (closed) ctx.closePath();
+}
+function circlePts(cx,cy,rx,ry,n=40){ const p=[]; for(let i=0;i<n;i++){ const a=i/n*Math.PI*2; p.push([cx+Math.cos(a)*rx, cy+Math.sin(a)*ry]); } return p; }
+function rectPts(x,y,w,h){ const p=[]; const n=6; for(let i=0;i<n;i++) p.push([x+w*i/n,y]); for(let i=0;i<n;i++) p.push([x+w,y+h*i/n]); for(let i=0;i<n;i++) p.push([x+w-w*i/n,y+h]); for(let i=0;i<n;i++) p.push([x,y+h-h*i/n]); return p; }
+function sketch(pts, closed, id, col=INK, lw=4, fill=null){
+  if (fill){ wpath(pts, true, id, 1.2); ctx.fillStyle=fill; ctx.fill(); }
+  ctx.lineJoin='round'; ctx.lineCap='round'; ctx.strokeStyle=col;
+  ctx.lineWidth=lw; wpath(pts, closed, id); ctx.stroke();
+  ctx.globalAlpha=0.45; ctx.lineWidth=lw*0.6; wpath(pts, closed, id+500, 2.4); ctx.stroke(); ctx.globalAlpha=1;
+}
+function hatch(pts, id, col, gap=14){ ctx.save(); wpath(pts, true, id, 1); ctx.clip(); ctx.strokeStyle=col; ctx.lineWidth=3; const R=boil(id+900);
+  for (let x=-400; x<1200; x+=gap){ ctx.beginPath(); ctx.moveTo(x+R()*3,0); ctx.lineTo(x+700+R()*3,1280); ctx.stroke(); } ctx.restore(); }
+function hand(s,x,y,size,col=INK,align='center',maxW=0){ ctx.font=`${size}px Hand`; if (maxW){ const w=ctx.measureText(s).width; if (w>maxW){ size*=maxW/w; ctx.font=`${size}px Hand`; } }
+  ctx.fillStyle=col; ctx.textAlign=align; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+function scribbleLine(x1,y,x2,id,col=RED,lw=4){ const p=[]; for(let i=0;i<=10;i++) p.push([x1+(x2-x1)*i/10, y+Math.sin(i*1.3)*2]); sketch(p,false,id,col,lw); }
+function star(cx,cy,r,id,col){ const p=[]; for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr2=i%2?r*0.45:r; p.push([cx+Math.cos(a)*rr2, cy+Math.sin(a)*rr2]); } sketch(p,true,id,col,3); }
+
+/* ================= PAPEL ================= */
+function paper(){
+  ctx.fillStyle=PAPER; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(80,140,220,0.28)'; ctx.lineWidth=2; for (let y=60;y<H;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  ctx.strokeStyle='rgba(220,60,60,0.45)'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(58,0); ctx.lineTo(58,H); ctx.stroke();
+  ctx.fillStyle='#e9e4d6'; for (const y of [200,640,1080]){ ctx.beginPath(); ctx.arc(26,y,13,0,7); ctx.fill(); }
+  star(640,560,16,801,'rgba(31,58,147,0.5)'); star(110,1000,12,802,'rgba(31,58,147,0.4)');
+  const sp=[]; for(let i=0;i<40;i++){ const a=i*0.45, r=2+i*0.55; sp.push([650+Math.cos(a)*r, 1010+Math.sin(a)*r]); } sketch(sp,false,803,'rgba(31,58,147,0.35)',2.5);
+}
+function header(){
+  hand(T.t1, 360, 82, 56, INK, 'center', 640); hand(T.t2, 360, 140, 56, INK, 'center', 640);
+  scribbleLine(120,172,600,11,RED,5);
+  hand(T.sub, 360, 210, 32, RED);
+}
+
+/* ================= POST-IT (painel) ================= */
+function postit(idx, ms, p, count, broke){
+  ctx.save(); ctx.translate(360,330); ctx.rotate(-0.025);
+  ctx.fillStyle='rgba(0,0,0,0.12)'; ctx.fillRect(-206,-74,420,156);
+  const pts=rectPts(-210,-80,420,154); sketch(pts,true,21,'#c9a400',3, broke?'#ffb3b3':YEL);
+  ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.fillRect(-60,-92,120,24);       // fita adesiva
+  hand(`${T.item} ${idx+1}/7`, -190, -52, 26, INK, 'left'); hand(`${T.count} ${broke?'---':count+'%'}`, 190, -52, 26, INK, 'right');
+  let label, col;
+  if (broke){ label=T.st[5]; col=RED; } else if (ms>1000){ label=T.st[0]; col='#1e8a4c'; } else if (ms>500){ label=T.st[1]; col=INK; } else if (ms>200){ label=T.st[2]; col='#d9731f'; } else { label=T.st[3]; col=RED; }
+  hand(label, -190, -2, 50, col, 'left');
+  hand((ms>0?'-':ms<0?'+':'')+Math.abs(Math.round(ms))+' ms', 190, -2, 42, broke?RED:INK, 'right');
+  // barra a lapis
+  scribbleLine(-180,46,180,31,'rgba(60,60,60,0.5)',3);
+  const lim=0.82, x0=-180, x1=180, pp=clamp(p,0,1.2), mx=x0+(x1-x0)*lim*Math.min(pp,1)+(pp>1?(x1-x0)*(1-lim)*(pp-1)/0.2:0);
+  sketch([[x0+(x1-x0)*lim,36],[x0+(x1-x0)*lim,56]],false,32,RED,3);
+  sketch([[mx,30],[mx,62]],false,33,INK,5);
+  hand('limite', x0+(x1-x0)*lim-4, 64, 18, RED, 'right');
+  ctx.restore();
+}
+function progress(ri, broke){
+  for (let i=0;i<7;i++){ const x=360+(i-3)*56, y=1120, done=i<ri||(i===ri&&broke), cur=i===ri&&!broke;
+    sketch(circlePts(x,y,18,18,16),true,60+i, cur?RED:INK, cur?4:3, cur?'rgba(255,225,77,0.7)':null);
+    if (done){ sketch([[x-10,y],[x-2,y+9],[x+12,y-10]],false,70+i,'#1e8a4c',4); } }
+  hand(BRAND, 360, 1205, 28, 'rgba(31,58,147,0.6)');
+}
+
+/* ================= CENA: CANETA PINGANDO ================= */
+const TIPX = 330, TIPY = 740, ANG = -0.72;     // ponta da caneta e inclinacao
+function pen(letter, worry, frame, jit, shake){
+  ctx.save(); ctx.translate(TIPX+jit, TIPY); ctx.rotate(ANG+shake);
+  // corpo (aponta para +x a partir da ponta, desenhado para tras)
+  sketch([[0,0],[34,-14],[34,14]],true,601,INK,4,'#c9ced9');              // ponta metalica
+  sketch(rectPts(34,-22,60,44),true,602,INK,4,'#2b4fbf');                   // grip
+  for (let k=0;k<4;k++) sketch([[44+k*12,-22],[44+k*12,22]],false,603+k,'rgba(255,255,255,0.4)',3);
+  const body=rectPts(94,-26,330,52); sketch(body,true,610,INK,4,'rgba(240,244,255,0.95)');
+  sketch(rectPts(160,-8,230,16),true,611,'#2b4fbf',2,'rgba(43,79,191,0.55)');   // carga de tinta
+  sketch(rectPts(424,-26,40,52),true,612,INK,4,'#2b4fbf');                   // tampa de tras
+  sketch([[300,-26],[440,-40],[440,-30],[310,-26]],true,613,INK,3,'#2b4fbf'); // clip
+  if (letter){ ctx.save(); ctx.translate(127,0); ctx.rotate(-ANG); hand(letter, 0, 2, 44, 'rgba(31,58,147,0.6)'); ctx.restore(); }   // letra (falsas em todo frame, certa no 0 ms)
+  // rostinho
+  for (const s2 of [-1,1]){ const ex=360, ey=s2*12; sketch(circlePts(ex,ey,9,10,10),true,620+s2,INK,2.5,'#fff'); ctx.fillStyle=INK; ctx.beginPath(); ctx.arc(ex-4-worry*3,ey,4,0,7); ctx.fill(); }
+  ctx.restore();
+  if (worry>0.5){ const d=(frame*2)%18; ctx.fillStyle='rgba(80,170,255,0.8)'; ctx.beginPath(); ctx.ellipse(TIPX+330,TIPY-310+d,6,10,0,0,7); ctx.fill(); }
+}
+function drop(e, frame){
+  const r = 8 + 46*e, cy = TIPY + 10 + r*1.1, wob = e>0.7 ? Math.sin(frame*1.6)*3*e : 0;
+  const p=[]; for (let i=0;i<40;i++){ const a=i/40*Math.PI*2; const rr2 = r*(1 + (Math.sin(a)<0 ? -0.35*Math.pow(Math.max(0,-Math.sin(a)),2) : 0)); p.push([TIPX + Math.cos(a)*rr2 + wob, cy + Math.sin(a)*rr2*1.15]); }
+  sketch(p,true,630,'#14287a',3,'rgba(31,58,180,0.9)');
+  ctx.strokeStyle='rgba(255,255,255,0.7)'; ctx.lineWidth=4; ctx.beginPath(); ctx.arc(TIPX-r*0.3+wob, cy-r*0.3, r*0.3, Math.PI*1.1, Math.PI*1.5); ctx.stroke();
+}
+function splat(round, tb, frame){
+  pen('', 0, frame, 0, 0);
+  const R=rng(round.start*11+7), k=clamp(tb/0.12,0,1), g=2200, fy=TIPY+60+Math.min(tb,0.08)/0.08*180, cx=TIPX, cy=960;
+  if (tb<0.08){ sketch(circlePts(cx, fy, 40, 50, 20),true,640,'#14287a',3,'rgba(31,58,180,0.9)'); }
+  else {
+    const p=[]; for (let i=0;i<28;i++){ const a=i/28*Math.PI*2, rr2=(70+R()*60)*k*(i%2?0.7:1); p.push([cx+Math.cos(a)*rr2*1.5, cy+Math.sin(a)*rr2*0.5]); }
+    sketch(p,true,641,'#14287a',3,'rgba(31,58,180,0.92)');
+    for (let i=0;i<14;i++){ const a=-Math.PI*(0.05+0.9*R()), sp=200+R()*500, ts=tb-0.08, x=cx+Math.cos(a)*sp*ts, y=cy+Math.sin(a)*sp*ts+0.5*g*ts*ts;
+      if (y<cy+20) sketch(circlePts(x,y,6+R()*8,6+R()*8,10),true,650+i,'#14287a',2,'rgba(31,58,180,0.9)'); }
+    if (tb>0.3) hand('ops...', cx+170, cy+60, 40, RED);
+  }
+  if (tb<0.4){ const kk=tb/0.4, sc=1+0.4*kk; ctx.save(); ctx.translate(300,500); ctx.scale(sc,sc); ctx.rotate(-0.1); ctx.globalAlpha=1-kk*kk;
+    const p=[]; for(let i=0;i<22;i++){ const a=i/22*Math.PI*2, rr2=i%2?70:120; p.push([Math.cos(a)*rr2*1.3, Math.sin(a)*rr2*0.8]); } sketch(p,true,680,RED,4,'rgba(255,225,77,0.95)');
+    hand(T.fx, 0, 4, 66, RED); ctx.restore(); ctx.globalAlpha=1; }
+}
+function scene(ri, round, lf, e, broke, worry, frame){
+  ctx.save(); ctx.translate(360,720); ctx.scale(1.15,1.15); ctx.translate(-360,-720);
+  if (!broke){ const sh = e>0.6 ? Math.sin(frame*2.2)*0.02*e : 0; pen(letterAt(ri, lf, round.A, frame), worry, frame, 0, sh); drop(e, frame); }
+  else splat(round, (lf-round.A)/FPS, frame);
+  ctx.restore();
+}
+
+/* ================= FINAL ================= */
+function outro(f){
+  const k=clamp(f/6,0,1); ctx.fillStyle=`rgba(251,248,239,${0.95*k})`; ctx.fillRect(0,0,W,H); if (k<1) return;
+  hand(T.q, 360, 420, 68, INK, 'center', 640); scribbleLine(110,462,610,201,RED,5);
+  for (let i=0;i<7;i++){ const x=360+(i-3)*84, d=clamp((f-6-i*2)/5,0,1); if (d<=0) continue;
+    sketch(rectPts(x-34,540,68,86),true,210+i,INK,4,'#fff'); hand('?', x, 586, 56, RED); }
+  const b=clamp((f-20)/6,0,1); ctx.globalAlpha=b;
+  sketch([[360,650],[352,700],[364,740]],false,230,INK,4); sketch([[344,722],[364,744],[380,720]],false,231,INK,4);
+  sketch(rectPts(130,770,460,90),true,232,INK,4,'rgba(255,225,77,0.85)'); hand(T.cta, 360, 816, 50, INK);
+  hand(T.follow, 360, 920, 34, INK);
+  ctx.globalAlpha=1;
+}
+
+/* ================= FRAME ================= */
+function render(frame){
+  FRAME = frame; ctx.setTransform(S,0,0,S,0,0);
+  paper(); header();
+  let ri=ROUNDS.findIndex(r=>frame<r.end); if (ri<0) ri=ROUNDS.length-1;
+  const round=ROUNDS[ri], lf=Math.min(frame, round.end-1)-round.start, broke=lf>round.A;
+  const p=lf/round.A, e=ease(clamp(p,0,1), round.style), ms=(round.A-lf)*1000/FPS;
+  const worry = broke?0:clamp(1-ms/900,0,1);
+  scene(ri, round, lf, e, broke, worry, frame);
+  postit(ri, ms, p, Math.round(100*e), broke);
+  progress(ri, broke);
+  if (frame>=OUTRO_START) outro(frame-OUTRO_START);
+}
+
+/* ================= CAPA ================= */
+function renderCover(){
+  FRAME = 0; ctx.setTransform(S,0,0,S,0,0);
+  paper();
+  ctx.save(); ctx.translate(360,110); ctx.rotate(-0.05); sketch(rectPts(-160,-30,320,60),true,301,RED,4,'rgba(255,255,255,0.6)'); hand('NÍVEL IMPOSSÍVEL', 0, 2, 38, RED); ctx.restore();
+  hand('SÓ 1 FRAME', 360, 210, 96, INK); scribbleLine(150,262,570,302,RED,6);
+  hand('REVELA A PALAVRA', 360, 310, 56, INK);
+  ctx.save(); ctx.translate(360,720); ctx.scale(1.15,1.15); ctx.translate(-360,-720); pen('', 1, 4, 0, 0); drop(0.95, 4); ctx.restore();
+  ctx.save(); ctx.translate(560,470); ctx.rotate(0.06); sketch(rectPts(-110,-50,220,100),true,303,'#c9a400',3,YEL); hand('7 letras', 0, -14, 34, INK); hand('escondidas!', 0, 22, 34, INK); ctx.restore();
+  sketch(rectPts(120,1120,480,80),true,304,INK,4,'rgba(255,225,77,0.85)'); hand('VOCÊ CONSEGUE PAUSAR?', 360, 1162, 44, INK, 'center', 440);
+  return cv.toDataURL('image/png');
+}
+
+/* ================= EXPORT ================= */
+const EVENTS=[]; ROUNDS.forEach(r=>{ let last=0; for(let lf=0; lf<=r.A; lf++){ const n=Math.floor(ease(lf/r.A,r.style)*10); if(n>last){ EVENTS.push(r.start+lf); last=n; } } });
+window.TOTAL_FRAMES = TOTAL_FRAMES;
+window.META = { theme:'caneta', total: TOTAL_FRAMES, rounds: ROUNDS, outro: OUTRO_START, events: EVENTS };
+window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
+window.renderCover = renderCover;
+
+if (!location.search.includes('export')){
+  let f=0, paused=false, last=performance.now(), acc=0;
+  const toggle=()=>paused=!paused; cv.addEventListener('click',toggle);
+  addEventListener('keydown',e=>{ if(e.code==='Space'){toggle();e.preventDefault();}
+    if(paused&&e.code==='ArrowRight'){f=(f+1)%TOTAL_FRAMES;render(f);} if(paused&&e.code==='ArrowLeft'){f=(f-1+TOTAL_FRAMES)%TOTAL_FRAMES;render(f);} });
+  document.fonts.load('40px Hand').then(()=>{ (function loop(now){ acc+=now-last; last=now;
+    if(!paused){ while(acc>=1000/FPS){ acc-=1000/FPS; f=(f+1)%TOTAL_FRAMES; } render(f);} else acc=0;
+    requestAnimationFrame(loop); })(performance.now()); });
+}
+</script>
+</body>
+</html>
