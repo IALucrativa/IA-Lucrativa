@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pare o Aviãozinho</title>
+<style>
+  @font-face { font-family:'Hand'; src:url('patrick-hand-latin-400-normal.woff2') format('woff2'); }
+  html,body{margin:0;background:#fbf8ef;height:100%;}
+  body{display:flex;align-items:center;justify-content:center;}
+  canvas{height:100vh;max-width:100vw;aspect-ratio:9/16;display:block;}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/* ================= CONFIG ================= */
+const WORD = "DECOLAR", BRAND = "@vocedecideai.br", FPS = 30;
+const APPROACH = [57, 45, 63, 42, 54, 60, 39];
+const STYLE    = [1, 0, 4, 2, 3, 4, 1];
+const BREAK = 22, OUTRO = 45;
+const T = {
+  t1:'PARE ANTES DO AVIÃOZINHO', t2:'BATER NA PAREDE', sub:'só a letra do 0 ms vale!',
+  item:'voo', count:'velocidade', st:['DECOLANDO','PLANANDO','ACELERANDO','QUASE!','AGORA!','CRUNCH!'], fx:'CRUNCH!',
+  q:'ACHOU AS 7 LETRAS?', cta:'COMENTA A PALAVRA!', follow:'e me segue pra mais desafios'
+};
+
+/* ================= TIMELINE ================= */
+const ROUNDS = []; { let f=0; for (let i=0;i<WORD.length;i++){ ROUNDS.push({ start:f, contact:f+APPROACH[i], end:f+APPROACH[i]+BREAK, A:APPROACH[i], style:STYLE[i] }); f+=APPROACH[i]+BREAK; } }
+const OUTRO_START = ROUNDS[ROUNDS.length-1].end, TOTAL_FRAMES = OUTRO_START + OUTRO;
+function ease(p, style){
+  if (style===0) return p*p*(3-2*p)*0.35 + p*0.65;
+  if (style===1) return Math.pow(p, 1.8);
+  if (style===2) return p<0.55 ? p/0.55*0.62 : 0.62 + (p<0.75?0:(p-0.75)/0.25*0.38);
+  if (style===4) return p<0.5 ? p/0.5*0.85 : p<0.7 ? 0.85-(p-0.5)/0.2*0.2 : 0.65+(p-0.7)/0.3*0.35;   // finta
+  return 1 - Math.pow(1-p, 1.6);
+}
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+/* letras falsas: a cada frame uma letra aleatoria; so o frame do 0 ms tem a certa */
+const DECOY_AB = 'ABCDEFGHIJLMNOPQRSTUVXZ';
+function letterAt(ri, lf, A, frame){ if (lf===A) return WORD[ri]; if (lf>A) return ''; const R=rng(frame*977+13); let c; do { c=DECOY_AB[Math.floor(R()*DECOY_AB.length)]; } while (c===WORD[ri]); return c; }
+
+/* ================= CANVAS + TRACO DE CANETA ================= */
+const W = 720, H = 1280;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const S = cv.width / W;
+const INK = '#1f3a93', RED = '#d93636', PINK = '#ff5fa2', YEL = '#ffe14d', PAPER = '#fbf8ef';
+let FRAME = 0;                                         // controla o "tremido" do traco
+const boil = id => rng((Math.floor(FRAME/3)+1)*7919 + id*104729);
+function wpath(pts, closed, id, j=1.8){
+  const R = boil(id); ctx.beginPath();
+  pts.forEach(([x,y],i)=>{ const xx=x+(R()-0.5)*2*j, yy=y+(R()-0.5)*2*j; i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); });
+  if (closed) ctx.closePath();
+}
+function circlePts(cx,cy,rx,ry,n=40){ const p=[]; for(let i=0;i<n;i++){ const a=i/n*Math.PI*2; p.push([cx+Math.cos(a)*rx, cy+Math.sin(a)*ry]); } return p; }
+function rectPts(x,y,w,h){ const p=[]; const n=6; for(let i=0;i<n;i++) p.push([x+w*i/n,y]); for(let i=0;i<n;i++) p.push([x+w,y+h*i/n]); for(let i=0;i<n;i++) p.push([x+w-w*i/n,y+h]); for(let i=0;i<n;i++) p.push([x,y+h-h*i/n]); return p; }
+function sketch(pts, closed, id, col=INK, lw=4, fill=null){
+  if (fill){ wpath(pts, true, id, 1.2); ctx.fillStyle=fill; ctx.fill(); }
+  ctx.lineJoin='round'; ctx.lineCap='round'; ctx.strokeStyle=col;
+  ctx.lineWidth=lw; wpath(pts, closed, id); ctx.stroke();
+  ctx.globalAlpha=0.45; ctx.lineWidth=lw*0.6; wpath(pts, closed, id+500, 2.4); ctx.stroke(); ctx.globalAlpha=1;
+}
+function hatch(pts, id, col, gap=14){ ctx.save(); wpath(pts, true, id, 1); ctx.clip(); ctx.strokeStyle=col; ctx.lineWidth=3; const R=boil(id+900);
+  for (let x=-400; x<1200; x+=gap){ ctx.beginPath(); ctx.moveTo(x+R()*3,0); ctx.lineTo(x+700+R()*3,1280); ctx.stroke(); } ctx.restore(); }
+function hand(s,x,y,size,col=INK,align='center',maxW=0){ ctx.font=`${size}px Hand`; if (maxW){ const w=ctx.measureText(s).width; if (w>maxW){ size*=maxW/w; ctx.font=`${size}px Hand`; } }
+  ctx.fillStyle=col; ctx.textAlign=align; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+function scribbleLine(x1,y,x2,id,col=RED,lw=4){ const p=[]; for(let i=0;i<=10;i++) p.push([x1+(x2-x1)*i/10, y+Math.sin(i*1.3)*2]); sketch(p,false,id,col,lw); }
+function star(cx,cy,r,id,col){ const p=[]; for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr2=i%2?r*0.45:r; p.push([cx+Math.cos(a)*rr2, cy+Math.sin(a)*rr2]); } sketch(p,true,id,col,3); }
+
+/* ================= PAPEL ================= */
+function paper(){
+  ctx.fillStyle=PAPER; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(80,140,220,0.28)'; ctx.lineWidth=2; for (let y=60;y<H;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  ctx.strokeStyle='rgba(220,60,60,0.45)'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(58,0); ctx.lineTo(58,H); ctx.stroke();
+  ctx.fillStyle='#e9e4d6'; for (const y of [200,640,1080]){ ctx.beginPath(); ctx.arc(26,y,13,0,7); ctx.fill(); }
+  star(640,560,16,801,'rgba(31,58,147,0.5)'); star(110,1000,12,802,'rgba(31,58,147,0.4)');
+  const sp=[]; for(let i=0;i<40;i++){ const a=i*0.45, r=2+i*0.55; sp.push([650+Math.cos(a)*r, 1010+Math.sin(a)*r]); } sketch(sp,false,803,'rgba(31,58,147,0.35)',2.5);
+}
+function header(){
+  hand(T.t1, 360, 82, 56, INK, 'center', 640); hand(T.t2, 360, 140, 56, INK, 'center', 640);
+  scribbleLine(120,172,600,11,RED,5);
+  hand(T.sub, 360, 210, 32, RED);
+}
+
+/* ================= POST-IT (painel) ================= */
+function postit(idx, ms, p, count, broke){
+  ctx.save(); ctx.translate(360,330); ctx.rotate(-0.025);
+  ctx.fillStyle='rgba(0,0,0,0.12)'; ctx.fillRect(-206,-74,420,156);
+  const pts=rectPts(-210,-80,420,154); sketch(pts,true,21,'#c9a400',3, broke?'#ffb3b3':YEL);
+  ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.fillRect(-60,-92,120,24);       // fita adesiva
+  hand(`${T.item} ${idx+1}/7`, -190, -52, 26, INK, 'left'); hand(`${T.count} ${broke?'---':count+'%'}`, 190, -52, 26, INK, 'right');
+  let label, col;
+  if (broke){ label=T.st[5]; col=RED; } else if (ms>1000){ label=T.st[0]; col='#1e8a4c'; } else if (ms>500){ label=T.st[1]; col=INK; } else if (ms>200){ label=T.st[2]; col='#d9731f'; } else { label=T.st[3]; col=RED; }
+  hand(label, -190, -2, 50, col, 'left');
+  hand((ms>0?'-':ms<0?'+':'')+Math.abs(Math.round(ms))+' ms', 190, -2, 42, broke?RED:INK, 'right');
+  // barra a lapis
+  scribbleLine(-180,46,180,31,'rgba(60,60,60,0.5)',3);
+  const lim=0.82, x0=-180, x1=180, pp=clamp(p,0,1.2), mx=x0+(x1-x0)*lim*Math.min(pp,1)+(pp>1?(x1-x0)*(1-lim)*(pp-1)/0.2:0);
+  sketch([[x0+(x1-x0)*lim,36],[x0+(x1-x0)*lim,56]],false,32,RED,3);
+  sketch([[mx,30],[mx,62]],false,33,INK,5);
+  hand('limite', x0+(x1-x0)*lim-4, 64, 18, RED, 'right');
+  ctx.restore();
+}
+function progress(ri, broke){
+  for (let i=0;i<7;i++){ const x=360+(i-3)*56, y=1120, done=i<ri||(i===ri&&broke), cur=i===ri&&!broke;
+    sketch(circlePts(x,y,18,18,16),true,60+i, cur?RED:INK, cur?4:3, cur?'rgba(255,225,77,0.7)':null);
+    if (done){ sketch([[x-10,y],[x-2,y+9],[x+12,y-10]],false,70+i,'#1e8a4c',4); } }
+  hand(BRAND, 360, 1205, 28, 'rgba(31,58,147,0.6)');
+}
+
+/* ================= CENA: AVIAOZINHO x PAREDE (animacao caprichada) ================= */
+const WALLX = 580, X0 = -140, NOSE = 96;          // parede, inicio e comprimento ate o bico
+const PY = 740, PS = 1.75;
+const easeOutBack = p => { const c=1.70158; p=clamp(p,0,1); return 1+(c+1)*Math.pow(p-1,3)+c*Math.pow(p-1,2); };
+const easeOutCubic = p => 1-Math.pow(1-clamp(p,0,1),3);
+function flightPos(e, frame){
+  // trajetoria: avanca em x, ondula em y com amplitude que diminui perto da parede (ele "mira")
+  const x = X0 + (WALLX-NOSE*PS-X0)*e;
+  const amp = 70*(1-e*0.75), y = PY + Math.sin(e*7.5 + 0.6)*amp + Math.sin(frame*0.18)*6;
+  const dy = Math.cos(e*7.5+0.6)*amp*7.5*0.0045;     // derivada aproximada -> inclinacao
+  return { x, y, rot: clamp(dy*0.9, -0.45, 0.45) };
+}
+function wall(crack, shakeAmt){
+  const x=WALLX;
+  sketch([[x,330],[x,1060]],false,701,INK,6);
+  for (let r=0;r<18;r++){ const y=340+r*40, off=(r%2)*30; for (let c=0;c<4;c++){ const bx=x+off+c*60-30;
+    if (bx<x) continue; sketch(rectPts(bx,y,56,36),true,710+r*4+c,'rgba(180,60,40,0.75)',2.5,'rgba(220,110,80,0.35)'); } }
+  if (crack>0){ const cy=PY; const segs=[[[x,cy],[x+30,cy-40],[x+22,cy-80],[x+50,cy-120]],[[x,cy],[x+40,cy+30],[x+30,cy+70],[x+70,cy+100]],[[x,cy],[x+55,cy-5],[x+90,cy+20]]];
+    segs.forEach((sg,i)=>{ const n=Math.max(2,Math.round(sg.length*crack)); sketch(sg.slice(0,n),false,790+i,INK,4); }); }
+}
+function speedLines(e, frame){
+  const n=Math.floor(4+14*e); const R=rng(Math.floor(frame/2)*31+7);
+  for (let i=0;i<n;i++){ const y=420+R()*640, len=40+R()*140*(0.4+e), x=((frame*(20+40*e)+R()*900)%900)-200;
+    ctx.globalAlpha=0.25+0.35*e; sketch([[x+len,y],[x,y]],false,800+i,'rgba(31,58,147,0.6)',2.5); }
+  ctx.globalAlpha=1;
+}
+function trail(e, frame){
+  // rastro tracejado seguindo a trajetoria passada
+  const pts=[]; for (let k=0;k<=22;k++){ const ee=Math.max(0,e-k*0.018); const p=flightPos(ee, frame-k); pts.push([p.x-20, p.y+6]); }
+  ctx.setLineDash([10,12]); ctx.lineDashOffset=-frame*6; sketch(pts,false,820,'rgba(31,58,147,0.45)',3); ctx.setLineDash([]);
+  // fantasmas (smear) quando rapido
+  if (e>0.75){ for (let g2=1; g2<=1; g2++){ const p=flightPos(Math.max(0,e-0.05), frame-2); ctx.globalAlpha=0.12; plane(p.x, p.y, p.rot, 1+0.2*e, '', 0, frame, true); } ctx.globalAlpha=1; }
+}
+function plane(x, y, rot, stretch, letter, worry, frame, ghost=false, crumple=0){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(rot); ctx.scale(PS*stretch, PS/Math.sqrt(stretch));
+  const flap = ghost?0:Math.sin(frame*0.9)*4*(0.4+worry);
+  if (crumple>0){ // bolinha de papel amassado
+    const p=[]; const Rr=rng(77); for (let i=0;i<18;i++){ const a=i/18*Math.PI*2, r=46*(0.8+0.4*Rr()); p.push([Math.cos(a)*r, Math.sin(a)*r]); }
+    sketch(p,true,840,INK,4,'#ffffff'); for (let i=0;i<5;i++){ const a=Rr()*7; sketch([[Math.cos(a)*10,Math.sin(a)*10],[Math.cos(a+1)*36,Math.sin(a+1)*36]],false,845+i,INK,2.5); }
+    for (const s2 of [-1,1]){ const ex=s2*14, ey=-6; sketch([[ex-7,ey-7],[ex+7,ey+7]],false,850+s2,INK,3); sketch([[ex+7,ey-7],[ex-7,ey+7]],false,852+s2,INK,3); }
+    ctx.restore(); return;
+  }
+  // asa de tras
+  sketch([[NOSE,0],[-110,-58-flap],[-70,-6]],true,860,INK,2.6,'#e9eef7');
+  // corpo/quilha
+  sketch([[NOSE,0],[-110,14],[-80,34],[-70,6]],true,861,INK,2.6,'#ffffff');
+  // asa da frente
+  const wing=[[NOSE,0],[-120,26+flap],[-64,4]]; sketch(wing,true,862,INK,2.6,'#ffffff');
+  sketch([[NOSE-6,1],[-100,22+flap]],false,863,'rgba(31,58,147,0.35)',2);
+  if (!ghost){ ctx.save(); ctx.translate(-52,14); ctx.scale(1/stretch, Math.sqrt(stretch)); ctx.rotate(-rot); sketch(circlePts(0,0,15,15,14),true,865,INK,2,'rgba(255,225,77,0.95)'); if (letter) hand(letter, 0, 1, 22, 'rgba(31,58,147,0.75)'); ctx.restore(); }   // letra (falsas em todo frame, certa no 0 ms)
+  if (!ghost){
+    // olhos com piscada e pupilas olhando pra parede
+    const blink = (frame%47)<3 && worry<0.6;
+    for (const s2 of [-1,1]){ const ex=20+s2*14, ey=-14;
+      if (blink){ sketch([[ex-8,ey],[ex+8,ey]],false,870+s2,INK,3); continue; }
+      sketch(circlePts(ex,ey,9,10+worry*3,12),true,870+s2,INK,2.5,'#fff');
+      ctx.fillStyle=INK; ctx.beginPath(); ctx.arc(ex+3+worry*3, ey+1-worry*2, 4, 0, 7); ctx.fill(); }
+    if (worry>0.3) sketch([[8,-30-worry*4],[22,-34],[36,-30-worry*4]],false,875,INK,3);
+    if (worry>0.6) sketch(circlePts(22,8,5,7,8),true,876,INK,2.5,INK);
+    else sketch([[12,6],[22,10],[32,6]],false,877,INK,3);
+  }
+  ctx.restore();
+  // gotas de suor voando pra tras
+  if (!ghost && worry>0.45){ for (let k=0;k<2;k++){ const t=((frame*0.08+k*0.5)%1); ctx.fillStyle=`rgba(80,170,255,${0.85*(1-t)})`; ctx.beginPath(); ctx.ellipse(x-60-t*110, y-60-k*18+t*20, 6, 10, -0.6, 0, 7); ctx.fill(); } }
+}
+function crash(round, tb, frame){
+  const HIT = 2/FPS;                                   // hit-stop: 2 frames congelado
+  const crack = clamp(tb/0.15,0,1);
+  wall(crack, 0);
+  const R=rng(round.start*17+3);
+  if (tb < HIT){ // achatado contra a parede
+    plane(WALLX-NOSE*0.55*PS, PY, 0, 0.55, '', 1, frame);
+  } else {
+    const t=tb-HIT, g=2400, x=WALLX-60-260*t, y=PY-520*t+0.5*g*t*t, floorY=1030;
+    const yy=Math.min(y, floorY), bounced = y>floorY;
+    plane(x, yy-(bounced?Math.abs(Math.sin(t*18))*20*Math.max(0,1-(t-0.5)*3):0), t*-9, 1, '', 0, frame, false, 1);
+    // estrelinhas orbitando
+    for (let i=0;i<4;i++){ const a=frame*0.25+i*Math.PI/2; star(x+Math.cos(a)*60, yy-70+Math.sin(a)*16, 10, 880+i, '#e0a800'); }
+  }
+  // poeira com easing
+  for (let i=0;i<7;i++){ const a=-Math.PI*0.5+(i-3)*0.35, k=easeOutCubic(tb/0.5), d=40+120*k;
+    ctx.globalAlpha=Math.max(0,1-tb*1.8); sketch(circlePts(WALLX-10+Math.cos(a)*d*-1, PY+Math.sin(a)*d*0.8, 14+20*k, 12+16*k, 12),true,890+i,'rgba(120,120,130,0.7)',2.5,'rgba(220,220,225,0.7)'); }
+  ctx.globalAlpha=1;
+  // farpas de papel
+  for (let i=0;i<10;i++){ const a=Math.PI*(0.6+0.8*R()), sp=300+R()*500, x=WALLX+Math.cos(a)*sp*tb, y=PY+Math.sin(a)*sp*tb+1400*tb*tb;
+    if (y<1060) sketch([[x,y],[x+12,y+3],[x+5,y+10]],true,900+i,INK,2,'#fff'); }
+  // CRUNCH com "punch" (easeOutBack)
+  if (tb<0.5){ const k=easeOutBack(tb/0.18), fade=tb<0.3?1:1-(tb-0.3)/0.2; ctx.save(); ctx.translate(420,470); ctx.scale(0.3+0.8*k,0.3+0.8*k); ctx.rotate(-0.12); ctx.globalAlpha=fade;
+    const p=[]; for(let i=0;i<24;i++){ const a=i/24*Math.PI*2, rr2=i%2?78:130; p.push([Math.cos(a)*rr2*1.35, Math.sin(a)*rr2*0.8]); } sketch(p,true,950,RED,4,'rgba(255,225,77,0.97)');
+    hand(T.fx, 0, 4, 64, RED); ctx.restore(); ctx.globalAlpha=1; }
+}
+function scene(ri, round, lf, e, broke, worry, frame){
+  const tb = broke ? (lf-round.A)/FPS : 0;
+  // camera: zoom suave aproximando + tremor no impacto
+  const zoom = broke ? 1.12 : 1 + 0.12*easeOutCubic(e);
+  let sx=0, sy=0; if (broke && tb<0.25){ const Rr=rng(frame); const amp=18*(1-tb/0.25); sx=(Rr()-0.5)*amp*2; sy=(Rr()-0.5)*amp*2; }
+  else if (!broke && e>0.85){ sx=Math.sin(frame*3.1)*2.5; sy=Math.cos(frame*2.7)*2; }
+  ctx.save(); ctx.translate(360+sx, 740+sy); ctx.scale(zoom,zoom); ctx.translate(-(360+ (broke?60:60*e)), -740);
+  if (!broke){
+    speedLines(e, frame); wall(0, 0); trail(e, frame);
+    const p=flightPos(e, frame), stretch = 1 + 0.1*e;
+    plane(p.x, p.y, p.rot, stretch, letterAt(ri, lf, round.A, frame), worry, frame);
+  } else crash(round, tb, frame);
+  ctx.restore();
+}
+
+/* ================= FINAL ================= */
+function outro(f){
+  const k=clamp(f/6,0,1); ctx.fillStyle=`rgba(251,248,239,${0.95*k})`; ctx.fillRect(0,0,W,H); if (k<1) return;
+  hand(T.q, 360, 420, 68, INK, 'center', 640); scribbleLine(110,462,610,201,RED,5);
+  for (let i=0;i<7;i++){ const x=360+(i-3)*84, d=clamp((f-6-i*2)/5,0,1); if (d<=0) continue;
+    sketch(rectPts(x-34,540,68,86),true,210+i,INK,4,'#fff'); hand('?', x, 586, 56, RED); }
+  const b=clamp((f-20)/6,0,1); ctx.globalAlpha=b;
+  sketch([[360,650],[352,700],[364,740]],false,230,INK,4); sketch([[344,722],[364,744],[380,720]],false,231,INK,4);
+  sketch(rectPts(130,770,460,90),true,232,INK,4,'rgba(255,225,77,0.85)'); hand(T.cta, 360, 816, 50, INK);
+  hand(T.follow, 360, 920, 34, INK);
+  ctx.globalAlpha=1;
+}
+
+/* ================= FRAME ================= */
+function render(frame){
+  FRAME = frame; ctx.setTransform(S,0,0,S,0,0);
+  paper(); header();
+  let ri=ROUNDS.findIndex(r=>frame<r.end); if (ri<0) ri=ROUNDS.length-1;
+  const round=ROUNDS[ri], lf=Math.min(frame, round.end-1)-round.start, broke=lf>round.A;
+  const p=lf/round.A, e=ease(clamp(p,0,1), round.style), ms=(round.A-lf)*1000/FPS;
+  const worry = broke?0:clamp(1-ms/900,0,1);
+  scene(ri, round, lf, e, broke, worry, frame);
+  postit(ri, ms, p, Math.round(100*e), broke);
+  progress(ri, broke);
+  if (frame>=OUTRO_START) outro(frame-OUTRO_START);
+}
+
+/* ================= CAPA ================= */
+function renderCover(){
+  FRAME = 0; ctx.setTransform(S,0,0,S,0,0);
+  paper();
+  ctx.save(); ctx.translate(360,110); ctx.rotate(-0.05); sketch(rectPts(-160,-30,320,60),true,301,RED,4,'rgba(255,255,255,0.6)'); hand('NÍVEL IMPOSSÍVEL', 0, 2, 38, RED); ctx.restore();
+  hand('SÓ 1 FRAME', 360, 210, 96, INK); scribbleLine(150,262,570,302,RED,6);
+  hand('REVELA A PALAVRA', 360, 310, 56, INK);
+  ctx.save(); ctx.translate(360,740); ctx.scale(1.1,1.1); ctx.translate(-400,-740); speedLines(0.9,8); wall(0,0); trail(0.9,8); const p=flightPos(0.9,8); plane(p.x,p.y,p.rot,1.2,'',1,8); ctx.restore();
+  ctx.save(); ctx.translate(560,470); ctx.rotate(0.06); sketch(rectPts(-110,-50,220,100),true,303,'#c9a400',3,YEL); hand('7 letras', 0, -14, 34, INK); hand('escondidas!', 0, 22, 34, INK); ctx.restore();
+  sketch(rectPts(120,1120,480,80),true,304,INK,4,'rgba(255,225,77,0.85)'); hand('VOCÊ CONSEGUE PAUSAR?', 360, 1162, 44, INK, 'center', 440);
+  return cv.toDataURL('image/png');
+}
+
+/* ================= EXPORT ================= */
+const EVENTS=[]; ROUNDS.forEach(r=>{ let last=0; for(let lf=0; lf<=r.A; lf++){ const n=Math.floor(ease(lf/r.A,r.style)*10); if(n>last){ EVENTS.push(r.start+lf); last=n; } } });
+window.TOTAL_FRAMES = TOTAL_FRAMES;
+window.META = { theme:'aviao', total: TOTAL_FRAMES, rounds: ROUNDS, outro: OUTRO_START, events: EVENTS };
+window.renderFrame = f => { render(f); return cv.toDataURL('image/png'); };
+window.renderCover = renderCover;
+
+if (!location.search.includes('export')){
+  let f=0, paused=false, last=performance.now(), acc=0;
+  const toggle=()=>paused=!paused; cv.addEventListener('click',toggle);
+  addEventListener('keydown',e=>{ if(e.code==='Space'){toggle();e.preventDefault();}
+    if(paused&&e.code==='ArrowRight'){f=(f+1)%TOTAL_FRAMES;render(f);} if(paused&&e.code==='ArrowLeft'){f=(f-1+TOTAL_FRAMES)%TOTAL_FRAMES;render(f);} });
+  document.fonts.load('40px Hand').then(()=>{ (function loop(now){ acc+=now-last; last=now;
+    if(!paused){ while(acc>=1000/FPS){ acc-=1000/FPS; f=(f+1)%TOTAL_FRAMES; } render(f);} else acc=0;
+    requestAnimationFrame(loop); })(performance.now()); });
+}
+</script>
+</body>
+</html>
